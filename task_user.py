@@ -13,6 +13,7 @@ menu = (
 "| h | Print help menu                                                          |\r\n"
 "| k | Enter new motor gain values, sensor gain = 3500                          |\r\n"
 "| s | CANNOT Choose a new setpoint!! Setpoint = 1200 ticks/s                   |\r\n"
+"| c | Calibrate line sensors                                                   |\r\n"
 "| g | Trigger step response and print results                                  |\r\n"
 "+---+--------------------------------------------------------------------------+\r\n"
 )
@@ -24,7 +25,7 @@ S2_COL  = micropython.const(2) # State 2 - wait for data collection to end
 S3_DIS  = micropython.const(3) # State 3 - display the collected data
 S4_GAIN  = micropython.const(4) # State 4 - gain values
 S5_digit  = micropython.const(5) # State 5 - check digit
-
+S6_Calibration = micropython.const(6) # state 6 - calibrate the sensors
 UI_prompt = ">: "
 
 
@@ -40,7 +41,8 @@ class task_user:
     #              rightDataValues, rightTimeValues, centroidData, centroidTime, statePredTime, statePredX, statePredY,
     #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
-                 rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime):
+                 rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
+                 share_calL, share_calD):
         '''
         Initializes a UI task object
         
@@ -66,6 +68,8 @@ class task_user:
                                                  # motor and encoder pair
         self._share_kp: Share = share_kp
         self._share_ki: Share = share_ki
+        self._calL: Share = share_calL          #calibration flag for light
+        self._calD: Share = share_calD          #calibration flag for dark
 
         self._share_setpoint: Share = share_setpoint
         
@@ -141,7 +145,11 @@ class task_user:
                         self._ser.write("Starting left motor loop...\r\n")
                         self._ser.write("Starting data collection...\r\n")
                         self._ser.write("Please wait... \r\n\n")
-                        self._state = S2_COL        
+                        self._state = S2_COL
+                    elif inChar in {"c","C"}:
+                        self._ser.write("Calibrate for Dark(d) or Light(l)\r\n")
+                        self._ser.write(UI_prompt)
+                        self._state=S6_Calibration         
                 
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) block out the
@@ -290,6 +298,19 @@ class task_user:
                         #self._state = S1_CMD
                         self._state = S0_INIT
                         self._ser.write(UI_prompt.encode())
+            elif self._state == S6_Calibration:
+                if self._ser.any():
+                    inChar=self._ser.read(1).decode()
+                    if inChar in {"d","D"}:
+                        self._calD.put(True)
+                        self._ser.write(f"{inChar}\r\n")
+                    elif inChar in {"l","L"}:
+                        self._calL.put(True)
+                        self._ser.write(f"{inChar}\r\n")
+                elif not self._calD.get() and not self._calL.get():    
+                    self._ser.write("Calibration Complete\r\n")
+                    self._ser.write(UI_prompt)
+                    self._state=S1_CMD
 
     
             yield self._state

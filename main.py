@@ -102,6 +102,8 @@ share_setpoint= Share("f",     name="setpoint")
 share_kp.put(0.05)         # default
 share_ki.put(0.00)         # default
 share_setpoint.put(0.00)   # default
+share_calD = Share("B", name="calibrate dark flag")
+share_calL = Share("B", name="calibrate light flag")
 sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
 
@@ -171,12 +173,13 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
 #                      statePredY, statePredSL, stateMeasXL)
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
                      leftDataValues, leftTimeValues,
-                     rightDataValues, rightTimeValues,
-                     centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime)
+                     rightDataValues, rightTimeValues, centroidData, centroidTime,
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD)
 linefollow_task = task_linefollow(sensors,
                                   leftMotorGo, rightMotorGo,
                                   sp_left, sp_right,
-                                  centroidData,centroidTime)
+                                  centroidData,centroidTime,
+                                  share_calL, share_calD)
 # observerTask = task_observer(
 #     leftEncoder, rightEncoder,
 #     share_heading, share_yaw_rate,
@@ -195,8 +198,7 @@ observerTask = task_observer(
     uL_share, uR_share,      # <-- applied motor effort, not setpoints
     observer_outputs, statePredX, statePredY,
     leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime,
-    publish_yhat=True,
-    Ts=0.03,
+    Ts=0.03, # Ts
     Ad=A_D,
     Bd=B_D,
     Cd=C_D,

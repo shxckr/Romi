@@ -20,14 +20,16 @@ class task_linefollow:
     def __init__(self,
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
-                 sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue):
+                 sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
+                 share_calL: Share, share_calD: Share):
 
         self._state = S0_INIT
 
         self._sensors = sensors
         self._leftGo  = leftGo
         self._rightGo = rightGo
-
+        self._calL = share_calL
+        self._calD = share_calD
         self._spL = sp_left
         self._spR = sp_right
         self._centroidData = centroidData
@@ -69,9 +71,12 @@ class task_linefollow:
                 self._state = S1_CAL
 
             elif self._state == S1_CAL:
-                # Blocking calibration (OK if your scheduler can tolerate it)
-                # Move robot so sensors see both line and background during this time.
-                self._sensors.calibrate(sample_number=100, sample_period_ms=10)
+                if self._calD.get():
+                    self._sensors.calibrateDark()
+                    self._calD.put(False)
+                elif self._calL.get():
+                    self._sensors.calibrateLight()
+                    self._calL.put(False)
                 self._state = S2_RUN
 
             elif self._state == S2_RUN:

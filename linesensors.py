@@ -19,54 +19,31 @@ class LineSensors:
                 s += adc.read()          # typically 0..4095
             vals.append(s // self.samples)
         return tuple(vals)
-
-    # def calibrate(self, ms=1500, sample_period_ms=10):
-    #     t_end = utime.ticks_add(utime.ticks_ms(), ms)
-    #     while utime.ticks_diff(t_end, utime.ticks_ms()) > 0:
-    #         vals = self.read_raw()
-    #         for i, v in enumerate(vals):
-    #             if v < self.mins[i]:
-    #                 self.mins[i] = v
-    #             if v > self.maxs[i]:
-    #                 self.maxs[i] = v
-    #         utime.sleep_ms(sample_period_ms)
             
-    def calibrate(self, sample_number=100, sample_period_ms=10):
-
+    def calibrateDark(self):
         # --- Dark calibration ---
-        calibrate = input("Dark calibration\r\nPlace on DARK surface and enter 'd': ")
-
-        if calibrate == "d":
-            totals = [0] * 7
-
-            for _ in range(sample_number):
-                vals = self.read_raw()   # tuple of 7 values
-                for i in range(7):
-                    totals[i] += vals[i]
-                #utime.sleep_ms(sample_period_ms)
-
-            self.mins = [totals[i] // sample_number for i in range(7)]
-
-            print("Dark calibration complete")
-            print(f"mins: {self.mins}")
-
-        # --- Light calibration ---
-        calibrate = input("Light calibration\r\nPlace on LIGHT surface and enter 'l': ")
-
-        if calibrate == "l":
-            totals = [0] * 7
-
+        sample_number=100
+        for _ in range(sample_number):
+            vals = self.read_raw()   # tuple of 7 values
+            for i in range(len(self.IN_PINS)):
+                self.mins[i] = min(self.mins[i], vals[i])
+        #print("Dark calibration complete")
+        #print(f"mins: {self.mins}")
+    def _getDark(self):
+        return self.mins
+    
+    def calibrateLight(self):
+            sample_number=100
             for _ in range(sample_number):
                 vals = self.read_raw()
-                for i in range(7):
-                    totals[i] += vals[i]
-                #utime.sleep_ms(sample_period_ms)
-
-            self.maxs = [totals[i] // sample_number for i in range(7)]
-
-            print("Light calibration complete")
-            print(f"mins: {self.maxs}")
-
+                for i in range(len(self.IN_PINS)):
+                    self.maxs[i] = max(self.maxs[i], vals[i])
+            #print("Light calibration complete")
+            #print(f"maxs: {self.maxs}")
+    
+    def _getLight(self):
+        return self.maxs
+    
     def _normalize(self, val, vmin, vmax):
         span = max(1, vmax - vmin)
         x = (val - vmin) / span

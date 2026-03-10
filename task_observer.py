@@ -48,9 +48,9 @@ class task_observer:
                  imu_heading_share, imu_yaw_share,
                  input_left_share, input_right_share,
                  out_shares,
-                 Ts=0.03,
-                 Ad=None, Bd=None, Cd=None, Dd=None,
-                 publish_yhat=False,
+                 Ts,
+                 Ad, Bd, Cd, Dd,
+                 #publish_yhat=False,
                  yhat_shares=None,
                  imu_in_degrees=True):
         self.left_enc = left_encoder
@@ -76,7 +76,7 @@ class task_observer:
         # Optional output model (debug)
         self.Cd = Cd
         self.Dd = Dd
-        self.publish_yhat = publish_yhat
+        self.publish_yhat = False
         self.yhat_shares = yhat_shares or {}
 
         # infer dimensions
