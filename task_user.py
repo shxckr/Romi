@@ -36,8 +36,11 @@ class task_user:
     on the user commands.
     '''
 
+    # def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
+    #              rightDataValues, rightTimeValues, centroidData, centroidTime, statePredTime, statePredX, statePredY,
+    #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
-                 rightDataValues, rightTimeValues, centroidData, centroidTime):
+                 rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime):
         '''
         Initializes a UI task object
         
@@ -75,7 +78,14 @@ class task_user:
         self._rightTimeValues: Queue   = rightTimeValues
         self._centroidData:    Queue   = centroidData 
         self._centroidTime:    Queue   = centroidTime
-                                              
+        # self._statePredTime = statePredTime
+        self._statePredX = statePredX
+        self._statePredY = statePredY
+        self._sL_yhat = sL_yhat
+        self._sL_meas = sL_meas
+        self._statetime = statetime
+        # self._statePredSL = statePredSL
+        # self._stateMeasXL = stateMeasXL                                      
                                                  
        ##### new adds 
         self._ser.write(b"User Task object instantiated\r\n")
@@ -154,6 +164,8 @@ class task_user:
                     self._state = S3_DIS
             
             elif self._state == S3_DIS:
+
+                # ---- Print Left Motor Data ----
                 if self._leftDataValues.any():
                     self._ser.write("Left Motor Data\r\n")
                     self._ser.write("Time, Velocity\r\n")
@@ -176,7 +188,8 @@ class task_user:
                             f"{self._rightTimeValues.get()},{self._rightDataValues.get()}\r\n"
                         )
                     self._ser.write("--------------------\r\n\n")
-
+                
+                # ---- Print Centroid Data ----
                 if self._centroidData.any():
                     self._ser.write("Centroid Data\r\n")
                     self._ser.write("Time, Normalized Centroid\r\n")
@@ -185,9 +198,26 @@ class task_user:
                         self._ser.write(
                             f"{self._centroidTime.get()},{self._centroidData.get()}\r\n"
                         )
+                # ---- Print X and Y Data ----
+                if self._statePredX.any():
+                     self._ser.write("State Prediction Data \r\n")
+                #     self._ser.write("Time, X, Y, xL, sL\r\n")
+                     self._ser.write("X, Y\r\n")
+                     while self._statePredX.any():
+                #         self._ser.write(f"{self._statePredTime.get()}, {self._statePredX.get()}, {self._statePredY.get()}, {self._stateMeasXL.get()}, {self._statePredSL.get()}\r\n")
+                         self._ser.write(f"{self._statePredX.get()}, {self._statePredY.get()}\r\n")
 
-                    self._ser.write("END\r\n")
-                    self._ser.write("--------------------\r\n")
+                # ---- Print sL Data ----
+                if self._sL_yhat.any():
+                     self._ser.write("State Prediction and Measured Data \r\n")
+                #     self._ser.write("Time, X, Y, xL, sL\r\n")
+                     self._ser.write("time, sL Estimated, sL Measured\r\n")
+                     while self._sL_yhat.any() and self._sL_meas.any() and self._statetime.any():
+                     # while self._sL_yhat.any():
+                         self._ser.write(f"{self._statetime.get()}, {self._sL_yhat.get()}, {self._sL_meas.get()}\r\n")
+
+                self._ser.write("END\r\n")
+                self._ser.write("--------------------\r\n")
 
                 # After printing both, go back to command state
                 self._ser.write(menu.encode())

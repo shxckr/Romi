@@ -41,8 +41,9 @@ class task_linefollow:
         # self.Kline = 900.0       # how aggressively you steer per unit error
         # self.max_turn = 2000.0   # clamp differential command
         # self.max_sp = 4000.0     # clamp absolute setpoint
-        self.base = 1200
-        self.Kline = 3500
+        self.base = 1200 # 1200
+        #self.Kline = 3500
+        self.Kline = 3600
         self.max_turn = 2000
         self.max_sp = 2500
 
@@ -70,7 +71,7 @@ class task_linefollow:
             elif self._state == S1_CAL:
                 # Blocking calibration (OK if your scheduler can tolerate it)
                 # Move robot so sensors see both line and background during this time.
-                # self._sensors.calibrate(sample_number=100, sample_period_ms=10)
+                self._sensors.calibrate(sample_number=100, sample_period_ms=10)
                 self._state = S2_RUN
 
             elif self._state == S2_RUN:

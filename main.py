@@ -23,10 +23,24 @@ rightMotor   = motor_driver(t, 2, 'PA9', 'PB8',  'PB9')
 leftEncoder  = encoder(2, 'PA1', 'PA0')
 rightEncoder = encoder(3, 'PA6', 'PA7')
 sensor_pins = ['PA4', 'PB0', 'PB1', 'PC0', 'PC1', 'PC2', 'PC3']
-sensors = LineSensors(*sensor_pins, samples=4)
+sensors = LineSensors(sensor_pins, samples=4)
+
+'''
+PINK PINS
+t = Timer(4,freq=10_000)
+leftMotor    = motor_driver(t,1,'PB6','PB2','PC7' )
+rightMotor   = motor_driver(t,2,'PB7','PC11','PC10')
+leftEncoder  = encoder(2,'PA1','PA0')
+rightEncoder = encoder(1, 'PA8', 'PA9')
+sensor_pins  = ['PC2','PC3','PC0','PC1','PB0','PA4','PC4']
+sensors      = LineSensors(sensor_pins, samples=4)
+i2c = pyb.I2C(1, pyb.I2C.CONTROLLER, baudrate=400000)   
+'''
 
 # --- IMU setup ---
-i2c = pyb.I2C(3, pyb.I2C.CONTROLLER, baudrate=400000)   # bus number might be 1 or 2 depending on your wiring
+i2c = pyb.I2C(3, pyb.I2C.CONTROLLER, baudrate=400000)   
+# PINK IMU
+
 print("I2C scan:", i2c.scan())
 # imu = IMU(i2c, addr=0x28)             # 0x28 is common; sometimes it's 0x29
 # imu.set_mode(IMU.NDOF)                # fusion mode for heading + gyro feedback
@@ -101,16 +115,20 @@ uR_share.put(0.0)
 share_heading  = Share("f", name="heading_deg")
 share_yaw_rate = Share("f", name="yaw_rate_dps")
 ####### Observer class ##################
-x_hat_share     = Share("f", name="x_hat")
-v_hat_share     = Share("f", name="v_hat")
-psi_hat_share   = Share("f", name="psi_hat")
-omega_hat_share = Share("f", name="omega_hat")
+s_hat_share     = Share("f", name="s_hat")
+psi_hat_share     = Share("f", name="psi_hat")
+omega_L_share   = Share("f", name="omega_L_hat")
+omega_R_share = Share("f", name="omega_R_hat")
+X_share         = Share("f", name="X")
+Y_share         = Share("f", name="Y")
 
 observer_outputs = {
-    'x': x_hat_share,
-    'v': v_hat_share,
+    's': s_hat_share,
     'psi': psi_hat_share,
-    'omega': omega_hat_share
+    'omega_L': omega_L_share,
+    'omega_R': omega_R_share,
+    'X': X_share,
+    'Y': Y_share
 }
 
 # dataValues    = Queue("f", 30, name="Data Collection Buffer")
@@ -119,13 +137,22 @@ observer_outputs = {
 centroidTime = Queue("L", 30, name="Centroid Time")
 
 
-leftDataValues   = Queue("f", 30, name="Left Data Buffer")
-leftTimeValues   = Queue("L", 30, name="Left Time Buffer")
+leftDataValues   = Queue("f", 300, name="Left Data Buffer")
+leftTimeValues   = Queue("L", 300, name="Left Time Buffer")
 
-rightDataValues  = Queue("f", 30, name="Right Data Buffer")
-rightTimeValues  = Queue("L", 30, name="Right Time Buffer")
+rightDataValues  = Queue("f", 300, name="Right Data Buffer")
+rightTimeValues  = Queue("L", 300, name="Right Time Buffer")
 
-centroidData = Queue("f", 30, name="Centroid")
+centroidData = Queue("f", 30, overwrite=True, name="Centroid")
+statePredTime = Queue("L", 30, overwrite=True, name="Prediction Time")
+statePredX = Queue("f", 100, overwrite=True, name="Prediction Global X")
+statePredY = Queue("f", 100, overwrite=True, name="Prediction Global Y")
+statePredSL = Queue("f", 30, overwrite=True, name="Prediction Arc Length Left")
+stateMeasXL = Queue("f", 30, overwrite=True, name="Measured Arc Length Left")
+statetime = Queue("f", 100, overwrite=True, name="State Time")
+sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
+sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
+
 
 # Build task class objects (generator functions?)
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
@@ -137,24 +164,43 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
                             rightDataValues, rightTimeValues,
                             uR_share)
+# userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
+#                      leftDataValues, leftTimeValues,
+#                      rightDataValues, rightTimeValues,
+#                      centroidData, centroidTime, statePredTime, statePredX,
+#                      statePredY, statePredSL, stateMeasXL)
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues,
-                     centroidData, centroidTime)
+                     centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime)
 linefollow_task = task_linefollow(sensors,
                                   leftMotorGo, rightMotorGo,
                                   sp_left, sp_right,
                                   centroidData,centroidTime)
+# observerTask = task_observer(
+#     leftEncoder, rightEncoder,
+#     share_heading, share_yaw_rate,
+#     uL_share, uR_share,      # <-- applied motor effort, not setpoints
+#     observer_outputs, statePredTime, statePredX, statePredY, statePredSL, stateMeasXL,
+#     Ts=0.03,
+#     Ad=A_D,
+#     Bd=B_D,
+#     Cd=C_D,
+#     Dd=D_D,   
+# )
+
 observerTask = task_observer(
     leftEncoder, rightEncoder,
     share_heading, share_yaw_rate,
     uL_share, uR_share,      # <-- applied motor effort, not setpoints
-    observer_outputs,
+    observer_outputs, statePredX, statePredY,
+    leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime,
+    publish_yhat=True,
     Ts=0.03,
     Ad=A_D,
     Bd=B_D,
     Cd=C_D,
-    Dd=D_D
+    Dd=D_D, 
 )
 
 ### imu
@@ -165,20 +211,20 @@ imuTask = task_imu(imu, share_heading, share_yaw_rate)
 ### imu
 
 task_list.append(Task(imuTask.run, name="IMU Task",
-                      priority=2, period=30, profile=False))
+                      priority=1, period=30, profile=False))
 
 ######
 task_list.append(Task(leftMotorTask.run, name="Left Mot. Task",  # this is where you call task and set priority/period
-                      priority = 1, period = 30, profile=True))  # messing with period
+                      priority = 2, period = 30, profile=True))  # messing with period
 task_list.append(Task(rightMotorTask.run, name="Right Mot. Task",
-                      priority = 1, period = 30, profile=True))
+                      priority = 2, period = 30, profile=True))
 task_list.append(Task(userTask.run, name="User Int. Task",
-                      priority = 0, period = 0, profile=False))
+                      priority = 0, period = 100, profile=False))
 task_list.append(Task(linefollow_task.run, name="Line Follow Task",
                       priority = 2, period = 30, profile=False))
 task_list.append(Task(observerTask.run,
                       name="Observer Task",
-                      priority=0,
+                      priority=1,
                       period=30,
                       profile=False))
 
@@ -212,12 +258,29 @@ collect()
 # rightMotor.disable() 
 
 # Run the scheduler until the user quits the program with Ctrl-C
+last = pyb.millis()
 while True:
     try:
         task_list.pri_sched()
         # if not centroidData.empty():
         #     print(f"yo homi this is the time{pyb.millis()} and this cen {centroidData.get()}")
-            
+        # now = pyb.millis()
+        # if now - last >= 500:
+        #     last = now
+
+        #     uL = uL_share.get()
+        #     uR = uR_share.get()
+        #     xL = leftEncoder.get_position()
+        #     xR = rightEncoder.get_position()
+
+        #     v  = v_hat_share.get()
+        #     psi_deg = share_heading.get()
+        #     om_deg  = share_yaw_rate.get()
+        #     X = X_share.get()
+        #     Y = Y_share.get()
+
+        #     print("u*: uL={:+6.1f} uR={:+6.1f}  xL={:+7.3f} xR={:+7.3f} \r\n psi={:+7.2f}deg  om={:+7.2f}deg/s  X={:+7.3f}  Y={:+7.3f} v={}"
+        #         .format(uL, uR, xL, xR, psi_deg, om_deg, X, Y, v))    
         
     except KeyboardInterrupt:
         print("Program Terminating")
