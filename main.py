@@ -174,8 +174,7 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
-                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, sensors)
-                    # remove sensors from argument list and replace with sensor reading queue eventually
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD)
 linefollow_task = task_linefollow(sensors,
                                   leftMotorGo, rightMotorGo,
                                   sp_left, sp_right,

@@ -4,8 +4,9 @@ from linesensors import LineSensors
 import pyb
 
 S0_INIT = micropython.const(0)
-S1_CAL  = micropython.const(1)
+S1_Wait  = micropython.const(1)
 S2_RUN  = micropython.const(2)
+S3_CAL  = micropython.const(3)
 
 class task_linefollow:
     """
@@ -68,16 +69,13 @@ class task_linefollow:
                 # Start stopped
                 self._spL.put(0.0)
                 self._spR.put(0.0)
-                self._state = S1_CAL
+                self._state = S1_Wait
 
-            elif self._state == S1_CAL:
-                if self._calD.get():
-                    self._sensors.calibrateDark()
-                    self._calD.put(False)
-                elif self._calL.get():
-                    self._sensors.calibrateLight()
-                    self._calL.put(False)
-                self._state = S2_RUN
+            elif self._state == S1_Wait:
+                if self._leftGo.get() and self._rightGo.get():
+                    self._state = S2_RUN
+                elif self._calD.get() or self._calL.get():
+                    self._state = S3_CAL
 
             elif self._state == S2_RUN:
                 if self._leftGo.get() and self._rightGo.get():
@@ -108,5 +106,13 @@ class task_linefollow:
                     # Disabled → stop
                     self._spL.put(0.0)
                     self._spR.put(0.0)
-
+            elif self._state == S3_CAL:
+                if self._calD.get():
+                    self._sensors.calibrateDark()
+                    self._calD.put(False)
+                elif self._calL.get():
+                    self._sensors.calibrateLight()
+                    self._calL.put(False)
+                self._state = S1_Wait
+                
             yield self._state

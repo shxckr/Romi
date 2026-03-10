@@ -4,7 +4,6 @@
 from pyb import USB_VCP
 from task_share import Share, Queue
 import micropython
-from linesensors import LineSensors
 
 
 menu = (
@@ -43,7 +42,7 @@ class task_user:
     #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD, sensors):
+                 share_calL, share_calD):
         '''
         Initializes a UI task object
         
@@ -150,7 +149,7 @@ class task_user:
                     elif inChar in {"c","C"}:
                         self._ser.write("Calibrate for Dark(d) or Light(l)\r\n")
                         self._ser.write(UI_prompt)
-                        self._state=S6_Calibration         
+                        self._state=S6_Calibration 
                 
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) block out the
@@ -305,12 +304,12 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._sensors._getDark()
+                        self._ser.write("Dark calibration complete\r\n")
                         self._ser.write(UI_prompt)
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._sensors._getLight()
+                        self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
                     self._state = S1_CMD
 
