@@ -75,7 +75,8 @@ class task_observer:
         self.sh_uR = input_right_share
 
         self.out = out_shares  # expects keys: 's','psi','omega_L','omega_R','X','Y'
-
+        if Ts <= 0:
+            Ts = 0.03
         self.Ts = Ts
         self.Ts_nom = Ts          # nominal sample time (e.g. 0.03)
         self._last_t_us = ticks_us()
@@ -131,11 +132,13 @@ class task_observer:
         # If your MATLAB export differs, we'll still build u_star to match Bd width.
         # But by default we build the assignment ordering.
         # You can adjust the packing in read_inputs() if needed.
-
+    
     def read_inputs(self):
         """Read encoder + IMU + inputs, return (u_star, y_meas_dict)."""
 
         # Encoder measurements
+        self.left_enc.update()
+        self.right_enc.update()
         xL = self.left_enc.get_position()
         xR = self.right_enc.get_position()
         vL = self.left_enc.get_velocity()
@@ -205,7 +208,7 @@ class task_observer:
         # Optional: clamp dt so one glitch doesn't explode your integration
         if dt <= 0 or dt > 5*self.Ts_nom:
             dt = self.Ts_nom
-
+        
         v = (self.xhat[0]-self.xhatPrev)/dt
         self.xhatPrev = self.xhat[0]
         
@@ -258,6 +261,7 @@ class task_observer:
         while True:
             try:
                 u_star, meas = self.read_inputs()
+                
                 self.step(u_star)
                 #self._stateMeasXL.put(meas['xL'])
                 if self._leftMotorGo.get() and self._rightMotorGo.get():

@@ -4,6 +4,7 @@
 from pyb import USB_VCP
 from task_share import Share, Queue
 import micropython
+from linesensors import LineSensors
 
 
 menu = (
@@ -42,7 +43,7 @@ class task_user:
     #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD):
+                 share_calL, share_calD, sensors):
         '''
         Initializes a UI task object
         
@@ -56,7 +57,7 @@ class task_user:
             timeValues (Queue):   A queue object used to store the time stamps
                                   associated with the collected encoder data
         '''
-        
+        self._sensors = sensors                 # Will replaced with sensor reading queue
         self._state: int          = S0_INIT      # The present state
         
         self._leftMotorGo: Share  = leftMotorGo  # The "go" flag to start data
@@ -304,13 +305,14 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
+                        self._sensors._getDark()
+                        self._ser.write(UI_prompt)
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                elif not self._calD.get() and not self._calL.get():    
-                    self._ser.write("Calibration Complete\r\n")
-                    self._ser.write(UI_prompt)
-                    self._state=S1_CMD
+                        self._sensors._getLight()
+                        self._ser.write(UI_prompt)
+                    self._state = S1_CMD
 
     
             yield self._state
