@@ -56,7 +56,7 @@ class task_user:
             timeValues (Queue):   A queue object used to store the time stamps
                                   associated with the collected encoder data
         '''
-        self._sensors = sensors                 # Will replaced with sensor reading queue
+        #self._sensors = sensors                 # Will replaced with sensor reading queue
         self._state: int          = S0_INIT      # The present state
         
         self._leftMotorGo: Share  = leftMotorGo  # The "go" flag to start data

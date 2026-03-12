@@ -22,7 +22,7 @@ leftMotor    = motor_driver(t, 1, 'PA8', 'PB4',  'PB10')
 rightMotor   = motor_driver(t, 2, 'PA9', 'PB8',  'PB9')
 leftEncoder  = encoder(2, 'PA1', 'PA0')
 rightEncoder = encoder(3, 'PA6', 'PA7')
-sensor_pins = ['PA4', 'PB0', 'PB1', 'PC0', 'PC1', 'PC2', 'PC3']
+sensor_pins = ['PA4', 'PB0', 'PB1', 'PC4', 'PC5', 'PC2', 'PC3']
 sensors = LineSensors(sensor_pins, samples=4)
 
 '''

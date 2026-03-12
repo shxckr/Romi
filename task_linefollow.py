@@ -44,11 +44,11 @@ class task_linefollow:
         # self.Kline = 900.0       # how aggressively you steer per unit error
         # self.max_turn = 2000.0   # clamp differential command
         # self.max_sp = 4000.0     # clamp absolute setpoint
-        self.base = 1200 # 1200
+        self.base = 183 # 1200
         #self.Kline = 3500
-        self.Kline = 3600
-        self.max_turn = 2000
-        self.max_sp = 2500
+        self.Kline = 450 ##300 #275 # 3600
+        self.max_turn = 305 # 2000
+        self.max_sp = 382 # 2500
 
         self.line_is_dark = True
         self.cal_ms = 1500

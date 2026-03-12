@@ -30,7 +30,8 @@ class LineSensors:
             for i in range(len(self.IN_PINS)):
                 self.maxs[i] = min(self.maxs[i], vals[i])
         #print("Dark calibration complete")
-        #print(f"mins: {self.mins}")
+        # self.maxs = [1908, 1706, 1725, 1725, 1725, 1369, 1807]
+        print(f"maxs: {self.maxs}")
     def _getDark(self):
         return self.maxs
     
@@ -42,7 +43,7 @@ class LineSensors:
                 for i in range(len(self.IN_PINS)):
                     self.mins[i] = max(self.mins[i], vals[i])
             #print("Light calibration complete")
-            #print(f"maxs: {self.maxs}")
+            print(f"mins: {self.mins}")
     
     def _getLight(self):
         return self.mins
@@ -56,7 +57,7 @@ class LineSensors:
 
     def read_normalized(self):
         raw = self.read_raw()
-        # print(raw) # tried to print?
+        print(raw) # tried to print?
         return [self._normalize(raw[i], self.mins[i], self.maxs[i]) for i in range(len(self.IN_PINS))]
 
     def line_error(self, line_is_dark=True):
@@ -68,7 +69,7 @@ class LineSensors:
             strengths = [1.0 - v for v in norm]
         else:
             strengths = norm
-        print(strengths)
+        # print(strengths)
 
         total = sum(strengths)
         if total < 1e-6:
