@@ -46,7 +46,7 @@ class task_linefollow:
         # self.max_sp = 4000.0     # clamp absolute setpoint
         self.base = 183 # 1200
         #self.Kline = 3500
-        self.Kline = 450 ##300 #275 # 3600
+        self.Kline = 375 ##300 #275 # 3600
         self.max_turn = 305 # 2000
         self.max_sp = 382 # 2500
 
@@ -73,6 +73,7 @@ class task_linefollow:
 
             elif self._state == S1_Wait:
                 if self._leftGo.get() and self._rightGo.get():
+                    
                     self._state = S2_RUN
                 elif self._calD.get() or self._calL.get():
                     self._state = S3_CAL
