@@ -22,10 +22,10 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 share_calL: Share, share_calD: Share):
+                 share_calL: Share, share_calD: Share, collision_mode:Share):
 
         self._state = S0_INIT
-
+        self.collision_mode = collision_mode
         self._sensors = sensors
         self._leftGo  = leftGo
         self._rightGo = rightGo
@@ -64,8 +64,14 @@ class task_linefollow:
 
     def run(self):
         while True:
-
-            if self._state == S0_INIT:
+            if self.collision_mode.get() == 1:
+                # bumper is in charge; do NOT write sp_left/sp_right
+                # self._spL.put(0.0) # may be redundant
+                # self._spR.put(0.0)
+                #print("you failed")
+                yield 0
+                continue
+            elif self._state == S0_INIT:
                 # Start stopped
                 self._spL.put(0.0)
                 self._spR.put(0.0)

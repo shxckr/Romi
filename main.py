@@ -1,3 +1,17 @@
+# import pyb
+# from motor_driver import motor_driver
+# from encoder      import encoder
+# from task_motor   import task_motor
+# from task_user    import task_user
+# from linesensors import LineSensors
+# from task_linefollow import task_linefollow
+# from task_share   import Share, Queue, show_all
+# from cotask       import Task, task_list
+# from gc           import collect
+# from IMU          import IMU
+# from task_imu     import task_imu
+# from task_observer import task_observer
+# from pyb import Timer, Pin
 import pyb
 from motor_driver import motor_driver
 from encoder      import encoder
@@ -10,6 +24,8 @@ from cotask       import Task, task_list
 from gc           import collect
 from IMU          import IMU
 from task_imu     import task_imu
+from task_bumpsensor    import task_bumpsensor
+from BumpSensor    import BumpDriver
 from task_observer import task_observer
 from pyb import Timer, Pin
 #import matplotlib.pyplot as plt
@@ -24,6 +40,16 @@ leftEncoder  = encoder(2, 'PA1', 'PA0')
 rightEncoder = encoder(3, 'PA6', 'PA7')
 sensor_pins = ['PA4', 'PB0', 'PB1', 'PC4', 'PC5', 'PC2', 'PC3']
 sensors = LineSensors(sensor_pins, samples=4)
+L0 = Pin('PB12', Pin.IN, pull=Pin.PULL_UP)  # bumper 3
+L1 = Pin('PC6', Pin.IN, pull=Pin.PULL_UP) # bumper 4
+L2 = Pin('PC8', Pin.IN, pull=Pin.PULL_UP) # bumper 5
+
+# RIGHT bump switches (3)
+R0 = Pin('PC11', Pin.IN, pull=Pin.PULL_UP) # bump 0
+R1 = Pin('PC12', Pin.IN, pull=Pin.PULL_UP) #bump 1
+R2 = Pin('PC10', Pin.IN, pull=Pin.PULL_UP) #bum[ 2]
+bump_left_pins  = [L0, L1, L2]
+bump_right_pins = [R0, R1, R2]
 
 '''
 PINK PINS
@@ -123,6 +149,8 @@ omega_L_share   = Share("f", name="omega_L_hat")
 omega_R_share = Share("f", name="omega_R_hat")
 X_share         = Share("f", name="X")
 Y_share         = Share("f", name="Y")
+collision_mode = Share("B", name="Collision Mode")  # 0=normal, 1=bumper override
+
 
 observer_outputs = {
     's': s_hat_share,
@@ -139,11 +167,11 @@ observer_outputs = {
 centroidTime = Queue("L", 30, name="Centroid Time")
 
 
-leftDataValues   = Queue("f", 300, name="Left Data Buffer")
-leftTimeValues   = Queue("L", 300, name="Left Time Buffer")
+leftDataValues   = Queue("f", 600, name="Left Data Buffer")
+leftTimeValues   = Queue("L", 600, name="Left Time Buffer")
 
-rightDataValues  = Queue("f", 300, name="Right Data Buffer")
-rightTimeValues  = Queue("L", 300, name="Right Time Buffer")
+rightDataValues  = Queue("f", 600, name="Right Data Buffer")
+rightTimeValues  = Queue("L", 600, name="Right Time Buffer")
 
 centroidData = Queue("f", 30, overwrite=True, name="Centroid")
 statePredTime = Queue("L", 30, overwrite=True, name="Prediction Time")
@@ -175,11 +203,20 @@ userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoi
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
                      statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD)
-linefollow_task = task_linefollow(sensors,
-                                  leftMotorGo, rightMotorGo,
-                                  sp_left, sp_right,
-                                  centroidData,centroidTime,
-                                  share_calL, share_calD)
+# linefollow_task = task_linefollow(sensors,
+#                                   leftMotorGo, rightMotorGo,
+#                                   sp_left, sp_right,
+#                                   centroidData,centroidTime,
+#                                   share_calL, share_calD)
+linefollow_task = task_linefollow(
+    sensors,
+    leftMotorGo, rightMotorGo,
+    sp_left, sp_right,
+    centroidData, centroidTime,
+    share_calL, share_calD,
+    collision_mode      # <-- add
+)
+
 # observerTask = task_observer(
 #     leftEncoder, rightEncoder,
 #     share_heading, share_yaw_rate,
@@ -209,7 +246,11 @@ observerTask = task_observer(
 imuTask = task_imu(imu, share_heading, share_yaw_rate)
 
 # Add tasks to task list
-
+bumpTask = task_bumpsensor(
+    bump_left_pins, bump_right_pins,
+    sp_left, sp_right, leftMotorGo, rightMotorGo,
+    collision_mode      # <-- add
+)
 ### imu
 
 task_list.append(Task(imuTask.run, name="IMU Task",
@@ -227,8 +268,10 @@ task_list.append(Task(linefollow_task.run, name="Line Follow Task",
 task_list.append(Task(observerTask.run,
                       name="Observer Task",
                       priority=1,
-                      period=30,
+                      period=20,
                       profile=False))
+task_list.append(Task(bumpTask.run, name="Bump Task", priority=3, period=20))
+
 
 # Run the garbage collector preemptively
 collect()
