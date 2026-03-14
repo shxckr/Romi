@@ -264,8 +264,8 @@ class task_observer:
                 
                 self.step(u_star)
                 #self._stateMeasXL.put(meas['xL'])
-                if self._leftMotorGo.get() and self._rightMotorGo.get():
-                    print(f"xhat:\n\r s:{self.xhat[0]} psi:{self.xhat[1]} omega_L:{self.xhat[2]}, omega_R:{self.xhat[3]}\n\r X:{self.X}, Y:{self.Y}\n\r\r")
+                #if self._leftMotorGo.get() and self._rightMotorGo.get():
+                    #print(f"xhat:\n\r s:{self.xhat[0]} psi:{self.xhat[1]} omega_L:{self.xhat[2]}, omega_R:{self.xhat[3]}\n\r X:{self.X}, Y:{self.Y}\n\r\r")
                 
                 self.publish()
                 #self._statePredX.put(self.X)

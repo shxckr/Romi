@@ -57,7 +57,7 @@ class LineSensors:
 
     def read_normalized(self):
         raw = self.read_raw()
-        print(raw) # tried to print?
+        #print(raw) # tried to print?
         return [self._normalize(raw[i], self.mins[i], self.maxs[i]) for i in range(len(self.IN_PINS))]
 
     def line_error(self, line_is_dark=True):

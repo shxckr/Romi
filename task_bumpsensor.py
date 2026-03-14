@@ -52,9 +52,9 @@ class task_bumpsensor:
                     continue
                 L = self._left_hit()
                 R = self._right_hit()
-                print("Left pins:", [p.value() for p in self.left_pins])
-                print("Right pins:", [p.value() for p in self.right_pins])
-                print("L:", L, "R:", R)
+                #print("Left pins:", [p.value() for p in self.left_pins], "\n\r")
+                #print("Right pins:", [p.value() for p in self.right_pins], "\n\r")
+                #print("L:", L, "R:", R, "\r\n")
 
                 if L and R:
                     self.collision_mode.put(1)
