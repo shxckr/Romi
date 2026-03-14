@@ -58,7 +58,7 @@ class task_observer:
                  left_encoder, right_encoder,
                  imu_heading_share, imu_yaw_share,
                  input_left_share, input_right_share,
-                 out_shares, statePredX, statePredY, leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime,
+                 out_shares, statePredX, statePredY, leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime,db_share,
                  Ts=0.03,
                  Ad=None, Bd=None, Cd=None, Dd=None,
                  publish_yhat=False,
@@ -73,7 +73,7 @@ class task_observer:
 
         self.sh_uL = input_left_share
         self.sh_uR = input_right_share
-
+        self._db_share = db_share
         self.out = out_shares  # expects keys: 's','psi','omega_L','omega_R','X','Y'
         if Ts <= 0:
             Ts = 0.03

@@ -1,8 +1,7 @@
 import micropython
 from task_share import Share, Queue
 from linesensors import LineSensors
-import pyb
-
+import pyb  
 S0_INIT = micropython.const(0)
 S1_Wait  = micropython.const(1)
 S2_RUN  = micropython.const(2)
@@ -12,7 +11,7 @@ class task_linefollow:
     """
     Line-follow task:
       e = sensors.line_error() in ~[-1, +1]
-      turn = Kline * e
+      turn = Kp_line * e
       spL = base - turn
       spR = base + turn
     Writes spL/spR into Shares used by motor controllers.
@@ -22,10 +21,11 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 share_calL: Share, share_calD: Share, collision_mode:Share):
+                 share_calL: Share, share_calD: Share, collision_mode:Share, db_share: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode
+        self._db_share = db_share
         self._sensors = sensors
         self._leftGo  = leftGo
         self._rightGo = rightGo
@@ -36,25 +36,17 @@ class task_linefollow:
         self._centroidData = centroidData
         #self._centroidData = centroidData
         self._centroidTime = centroidTime
-   # self._t0 = pyb.millis()
-        self._t0 = pyb.millis()
-
+        self.prevt = 0
+        self._tRun = 0
+        self._esum = 0
         # Tune these to your robot / motor units
-        # self.base = 2500.0       # (example) ticks/s or whatever your PI expects
-        # self.Kline = 900.0       # how aggressively you steer per unit error
-        # self.max_turn = 2000.0   # clamp differential command
-        # self.max_sp = 4000.0     # clamp absolute setpoint
         self.base = 183 # 1200
-        #self.Kline = 3500
-        self.Kline = 375 ##300 #275 # 3600
+        self.Kp_line = 375 ##300 #275 # 3600
+        self.Ki_line = 10
         self.max_turn = 305 # 2000
         self.max_sp = 382 # 2500
-
         self.line_is_dark = True
         self.cal_ms = 1500
-
-        # Optional: remember last valid error for lost-line behavior
-        self._last_e = 0.0
 
     @staticmethod
     def _clamp(x, lo, hi):
@@ -79,7 +71,7 @@ class task_linefollow:
 
             elif self._state == S1_Wait:
                 if self._leftGo.get() and self._rightGo.get():
-                    
+                    self._tRun = pyb.millis()
                     self._state = S2_RUN
                 elif self._calD.get() or self._calL.get():
                     self._state = S3_CAL
@@ -94,8 +86,9 @@ class task_linefollow:
                 if self._leftGo.get() and self._rightGo.get():
                     #ADC = self._sensors.read_normalized()
                     e = self._sensors.line_error(line_is_dark=self.line_is_dark)
-                    t = pyb.millis() - self._t0
-                        
+                    t = pyb.millis() - self._tRun
+                    dt = t-prevt
+                    prevt = t    
                     if not self._centroidData.full():
                         self._centroidData.put(e)
                         #print(f"yo this centroid {e} and this time {pyb.millis()}")
@@ -103,9 +96,10 @@ class task_linefollow:
                     # If you want: keep last error when line is lost
                     # (Our LineSensors returns 0.0 on lost line. If that’s ambiguous for you,
                     # change LineSensors to return None when lost and handle it here.)
-                    self._last_e = e
+                    
+                    self._esum += e*dt
 
-                    turn = self._clamp(self.Kline * e, -self.max_turn, self.max_turn)
+                    turn = self._clamp(self.Kp_line * e + self.Ki_line * self._esum, -self.max_turn, self.max_turn)
 
                     spL = self.base - turn
                     spR = self.base + turn

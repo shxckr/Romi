@@ -26,7 +26,7 @@ class task_motor:
              goFlag: Share, share_kp: Share, share_ki: Share,
              share_setpoint: Share,
              dataValues: Queue, timeValues: Queue,
-             share_effort: Share):
+             share_effort: Share, db_share):
         '''
         Initializes a motor task object
         
@@ -62,7 +62,7 @@ class task_motor:
                                              # time stamps associated with the
                                              # collected encoder data
         
-        
+        self._db_share: Share = db_share
         self._startTime: int    = 0          # The start time (in microseconds)
                                              # for a batch of collected data
         self._Kp: float = 0.05

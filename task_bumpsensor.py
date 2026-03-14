@@ -10,7 +10,7 @@ S5_COOLDOWN = micropython.const(5)
 class task_bumpsensor:
     def __init__(self, left_pins, right_pins,
                  sp_left, sp_right, leftGo, rightGo,
-                 collision_mode,
+                 collision_mode, db_share,
                  backup_ms=1000, turn_ms=1500, cooldown_ms=600):
         self.left_pins = left_pins      # list of 3 Pin objects
         self.right_pins = right_pins    # list of 3 Pin objects
@@ -24,7 +24,7 @@ class task_bumpsensor:
         self.backup_ms = backup_ms
         self.turn_ms = turn_ms
         self.cooldown_ms = cooldown_ms
-
+        self._db_share = db_share
         self._state = S0_INIT
         self._t0 = 0
 

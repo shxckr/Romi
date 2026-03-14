@@ -132,12 +132,11 @@ share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
-
 uL_share = Share("f", name="uL_effort")
-
 uR_share = Share("f", name="uR_effort")
 uL_share.put(0.0)
 uR_share.put(0.0)
+db_share = Share("f", name="Debug share")
 
 #### new IMU
 share_heading  = Share("f", name="heading_deg")
@@ -161,18 +160,11 @@ observer_outputs = {
     'Y': Y_share
 }
 
-# dataValues    = Queue("f", 30, name="Data Collection Buffer")
-# timeValues    = Queue("L", 30, name="Time Buffer")
-
 centroidTime = Queue("L", 30, name="Centroid Time")
-
-
 leftDataValues   = Queue("f", 600, name="Left Data Buffer")
 leftTimeValues   = Queue("L", 600, name="Left Time Buffer")
-
 rightDataValues  = Queue("f", 600, name="Right Data Buffer")
 rightTimeValues  = Queue("L", 600, name="Right Time Buffer")
-
 centroidData = Queue("f", 30, overwrite=True, name="Centroid")
 statePredTime = Queue("L", 30, overwrite=True, name="Prediction Time")
 statePredX = Queue("f", 100, overwrite=True, name="Prediction Global X")
@@ -183,17 +175,16 @@ statetime = Queue("f", 100, overwrite=True, name="State Time")
 sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
 sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
 
-
 # Build task class objects (generator functions?)
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
                             leftDataValues, leftTimeValues,
-                            uL_share)
+                            uL_share, db_share)
 
 rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
                             rightDataValues, rightTimeValues,
-                            uR_share)
+                            uR_share, db_share)
 # userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
 #                      leftDataValues, leftTimeValues,
 #                      rightDataValues, rightTimeValues,
@@ -202,7 +193,7 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
-                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD)
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share)
 # linefollow_task = task_linefollow(sensors,
 #                                   leftMotorGo, rightMotorGo,
 #                                   sp_left, sp_right,
@@ -214,7 +205,7 @@ linefollow_task = task_linefollow(
     sp_left, sp_right,
     centroidData, centroidTime,
     share_calL, share_calD,
-    collision_mode      # <-- add
+    collision_mode, db_share      # <-- add
 )
 
 # observerTask = task_observer(
@@ -234,7 +225,7 @@ observerTask = task_observer(
     share_heading, share_yaw_rate,
     uL_share, uR_share,      # <-- applied motor effort, not setpoints
     observer_outputs, statePredX, statePredY,
-    leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime,
+    leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime, db_share,
     Ts=0.03, # Ts
     Ad=A_D,
     Bd=B_D,
@@ -249,7 +240,7 @@ imuTask = task_imu(imu, share_heading, share_yaw_rate)
 bumpTask = task_bumpsensor(
     bump_left_pins, bump_right_pins,
     sp_left, sp_right, leftMotorGo, rightMotorGo,
-    collision_mode      # <-- add
+    collision_mode, db_share      # <-- add
 )
 ### imu
 
