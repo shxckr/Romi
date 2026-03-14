@@ -38,12 +38,13 @@ class task_linefollow:
         self._centroidTime = centroidTime
         self.prevt = 0
         self._tRun = 0
+        self.e     = 0
         self._esum = 0
         # Tune these to your robot / motor units
-        self.base = 183 # 1200
-        self.Kp_line = 375 ##300 #275 # 3600
-        self.Ki_line = 10
-        self.max_turn = 305 # 2000
+        self.base = 175 # 1200
+        self.Kp_line = 600 #400 
+        self.Ki_line = .07320 #.07325
+        self.max_turn = 400 # 2000
         self.max_sp = 382 # 2500
         self.line_is_dark = True
         self.cal_ms = 1500
@@ -72,6 +73,9 @@ class task_linefollow:
             elif self._state == S1_Wait:
                 if self._leftGo.get() and self._rightGo.get():
                     self._tRun = pyb.millis()
+                    self.e     = 0
+                    self._esum = 0
+                    prevt = 0
                     self._state = S2_RUN
                 elif self._calD.get() or self._calL.get():
                     self._state = S3_CAL
@@ -85,21 +89,21 @@ class task_linefollow:
                     continue
                 if self._leftGo.get() and self._rightGo.get():
                     #ADC = self._sensors.read_normalized()
-                    e = self._sensors.line_error(line_is_dark=self.line_is_dark)
+                    self.e = self._sensors.line_error(line_is_dark=self.line_is_dark)
                     t = pyb.millis() - self._tRun
                     dt = t-prevt
                     prevt = t    
                     if not self._centroidData.full():
-                        self._centroidData.put(e)
+                        self._centroidData.put(self.e)
                         #print(f"yo this centroid {e} and this time {pyb.millis()}")
                         self._centroidTime.put(t)
                     # If you want: keep last error when line is lost
                     # (Our LineSensors returns 0.0 on lost line. If that’s ambiguous for you,
                     # change LineSensors to return None when lost and handle it here.)
                     
-                    self._esum += e*dt
+                    self._esum += self.e*dt
 
-                    turn = self._clamp(self.Kp_line * e + self.Ki_line * self._esum, -self.max_turn, self.max_turn)
+                    turn = self._clamp(self.Kp_line * self.e + self.Ki_line * self._esum, -self.max_turn, self.max_turn)
 
                     spL = self.base - turn
                     spR = self.base + turn

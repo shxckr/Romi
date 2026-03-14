@@ -43,7 +43,7 @@ class task_user:
     #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD):
+                 share_calL, share_calD, db_share):
         '''
         Initializes a UI task object
         
@@ -95,6 +95,7 @@ class task_user:
        ##### new adds 
         self._ser.write(b"User Task object instantiated\r\n")
         self._out_share = None
+        self.db_share = db_share
 
 
         self.digits:   set(str) = set(map(str,range(10)))  
