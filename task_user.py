@@ -15,6 +15,7 @@ menu = (
 "| s | CANNOT Choose a new setpoint!! Setpoint = 1200 ticks/s                   |\r\n"
 "| c | Calibrate line sensors                                                   |\r\n"
 "| g | Trigger step response and print results                                  |\r\n"
+"| o | Select Optimized Gains                                                   |\r\n"
 "+---+--------------------------------------------------------------------------+\r\n"
 )
 
@@ -150,12 +151,23 @@ class task_user:
                         self._ser.write("Calibrate for Dark(d) or Light(l)\r\n")
                         self._ser.write(UI_prompt)
                         self._state=S6_Calibration 
-                
+                    elif inChar in {'o','O'}:
+                        self._share_kp.put(0.04)
+                        self._share_ki.put(0.01)
+                        self._ser.write("Optimized gains have been set\r\n")
+                        self._state = S1_CMD
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) block out the
                 # UI and discard any character entry so that commands don't
                 # queue up in the serial buffer
-                if self._ser.any(): self._ser.read(1)
+                self._ser.write(f"lGO:{str(self._leftMotorGo.get())} rGO:{str(self._rightMotorGo.get())}\r\n")
+                if self._ser.any():
+                    inChar = self._ser.read(1).decode()
+                    if inChar in {"q","Q"}:
+                        self._ser.write("Stopping Motors\r\n")
+                        self._leftMotorGo.put(False)
+                        self._rightMotorGo.put(False)
+                        # self._share_setpoint.put(0)
                 
                 # When both go flags are clear, the data collection must have
                 # ended and it is time to print the collected data.
@@ -306,12 +318,13 @@ class task_user:
                         self._ser.write(f"{inChar}\r\n")
                         self._ser.write("Dark calibration complete\r\n")
                         self._ser.write(UI_prompt)
+                        self._state = S1_CMD
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
                         self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
-                    self._state = S1_CMD
+                        self._state = S1_CMD
 
     
             yield self._state

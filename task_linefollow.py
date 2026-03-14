@@ -85,6 +85,12 @@ class task_linefollow:
                     self._state = S3_CAL
 
             elif self._state == S2_RUN:
+                if not (self._leftGo.get() and self._rightGo.get()):
+                    self._spL.put(0.0)
+                    self._spR.put(0.0)
+                    self._state = S1_Wait
+                    yield self._state
+                    continue
                 if self._leftGo.get() and self._rightGo.get():
                     #ADC = self._sensors.read_normalized()
                     e = self._sensors.line_error(line_is_dark=self.line_is_dark)
