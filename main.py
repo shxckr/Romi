@@ -100,10 +100,8 @@ leftMotorGo   = Share("B",     name="Left Mot. Go Flag")
 rightMotorGo  = Share("B",     name="Right Mot. Go Flag")
 share_kp      = Share("f",     name="kp value")
 share_ki      = Share("f",     name="ki value")
-share_setpoint= Share("f",     name="setpoint")
 share_kp.put(0.05)         # default
 share_ki.put(0.00)         # default
-share_setpoint.put(0.00)   # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 share_lineKp = Share("f", name="line follow kp")
@@ -155,7 +153,7 @@ statetime = Queue("f", 100, overwrite=True, name="State Time")
 sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
 sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
 
-# Build task class objects (generator functions?)
+# Build task class objects
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
                             leftDataValues, leftTimeValues,
@@ -165,14 +163,14 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
                             rightDataValues, rightTimeValues,
                             uR_share, db_share)
-userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
+userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
                      statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share,
                      share_lineKp, share_lineKi)
 linefollow_task = task_linefollow(sensors,leftMotorGo, rightMotorGo,
-    sp_left, sp_right,centroidData, centroidTime,share_calL, share_calD,
-    collision_mode, db_share, share_lineKp, share_lineKi)
+                    sp_left, sp_right,centroidData, centroidTime,share_calL, share_calD,
+                    collision_mode, db_share, share_lineKp, share_lineKi)
 
 observerTask = task_observer(
     leftEncoder, rightEncoder,
