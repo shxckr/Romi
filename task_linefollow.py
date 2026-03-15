@@ -21,7 +21,8 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 share_calL: Share, share_calD: Share, collision_mode:Share, db_share: Share):
+                 share_calL: Share, share_calD: Share, collision_mode:Share, db_share: Share, 
+                 share_lineKp: Share, share_lineKi: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode
@@ -34,16 +35,19 @@ class task_linefollow:
         self._spL = sp_left
         self._spR = sp_right
         self._centroidData = centroidData
-        #self._centroidData = centroidData
         self._centroidTime = centroidTime
+        self._share_lineKp = share_lineKp
+        self._share_lineKi = share_lineKi
         self.prevt = 0
         self._tRun = 0
         self.e     = 0
         self._esum = 0
         # Tune these to your robot / motor units
         self.base = 175 # 1200
+        '''
         self.Kp_line = 600 #400 
         self.Ki_line = .07320 #.07325
+        '''
         self.max_turn = 400 # 2000
         self.max_sp = 382 # 2500
         self.line_is_dark = True
@@ -103,8 +107,7 @@ class task_linefollow:
                     
                     self._esum += self.e*dt
 
-                    turn = self._clamp(self.Kp_line * self.e + self.Ki_line * self._esum, -self.max_turn, self.max_turn)
-
+                    turn = self._clamp(self._share_lineKp.get() * self.e + self._share_lineKi.get() * self._esum, -self.max_turn, self.max_turn)
                     spL = self.base - turn
                     spR = self.base + turn
 

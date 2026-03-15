@@ -12,10 +12,12 @@ menu = (
 "+---+--------------------------------------------------------------------------+\r\n"
 "| h | Print help menu                                                          |\r\n"
 "| k | Enter new motor gain values, sensor gain = 3500                          |\r\n"
-"| s | CANNOT Choose a new setpoint!! Setpoint = 1200 ticks/s                   |\r\n"
+"| s | CANNOT Choose a new setpoint!! Setpoint = 175 mm/s                       |\r\n"
 "| c | Calibrate line sensors                                                   |\r\n"
 "| g | Trigger step response and print results                                  |\r\n"
 "| o | Select Optimized Gains                                                   |\r\n"
+"| l | Select line follow Gains                                                 |\r\n"
+"| q | Stop Romi                                                                |\r\n"
 "+---+--------------------------------------------------------------------------+\r\n"
 )
 
@@ -43,10 +45,9 @@ class task_user:
     #              statePredSL, stateMeasXL):
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD, db_share):
+                 share_calL, share_calD, db_share, share_lineKp, share_lineKi):
         '''
         Initializes a UI task object
-        
         Args:
             leftMotorGo (Share):  A share object representing a boolean flag to
                                   start data collection on the left motor
@@ -63,20 +64,15 @@ class task_user:
         self._leftMotorGo: Share  = leftMotorGo  # The "go" flag to start data
                                                  # collection from the left
                                                  # motor and encoder pair
-        
         self._rightMotorGo: Share = rightMotorGo # The "go" flag to start data
                                                  # collection from the right
                                                  # motor and encoder pair
-        self._share_kp: Share = share_kp
-        self._share_ki: Share = share_ki
-        self._calL: Share = share_calL          #calibration flag for light
-        self._calD: Share = share_calD          #calibration flag for dark
-
+        self._share_kp: Share = share_kp         # motor Kp
+        self._share_ki: Share = share_ki         # motor Ki
+        self._calL: Share = share_calL           #calibration flag for light
+        self._calD: Share = share_calD           #calibration flag for dark
         self._share_setpoint: Share = share_setpoint
-        
-        #self._ser: stream         = USB_VCP()    # A serial port object used to
-        self._ser = USB_VCP()                                         # read character entry and to
-                                                 # print output
+        self._ser = USB_VCP()                    # serial object for usb communication                     
         self._leftDataValues:  Queue   = leftDataValues
         self._leftTimeValues:  Queue   = leftTimeValues 
         self._rightDataValues: Queue   = rightDataValues
@@ -91,13 +87,12 @@ class task_user:
         self._statetime = statetime
         # self._statePredSL = statePredSL
         # self._stateMeasXL = stateMeasXL                                      
-                                                 
-       ##### new adds 
+        self._share_lineKp = share_lineKp
+        self._share_lineKi = share_lineKi            
         self._ser.write(b"User Task object instantiated\r\n")
         self._out_share = None
         self.db_share = db_share
-
-
+        self.lineFollowGain = False # flag whether line follow gains are set or motor gains
         self.digits:   set(str) = set(map(str,range(10)))  
         self._char_buf: str      = ""
         self._term:     set(str) = {"\r", "\n"}
@@ -132,12 +127,15 @@ class task_user:
                     elif inChar in {"k","K"}:
                         self._ser.write(f"ooo {inChar} was hit for a new gain\r\n")
                         self._ser.write("What type of k value would you like (i or p): \r\n")
+                        self._ser.write(UI_prompt)
+                        self.lineFollowGain = False
                         self._state = S4_GAIN
                     elif inChar in {"s","S"}:
                         self._ser.write(f" coolio {inChar} was hit\r\n")
                         self._out_share = self._share_setpoint
                         self._char_buf = ""
                         self._ser.write(f"What setpoint value would you like?\r\n")
+                        self._ser.write(UI_prompt)
                         self._state = S5_digit
                     elif inChar in {"g","G"}:   
                         self._ser.write(f" Fantastic! {inChar} was hit. Time to go :)\r\n\n") 
@@ -149,6 +147,7 @@ class task_user:
                         self._ser.write("Please wait... \r\n\n")
                         self._state = S2_COL
                     elif inChar in {"c","C"}:
+                        self._ser.write(f"{inChar} was hit for calibration\r\n")
                         self._ser.write("Calibrate for Dark(d) or Light(l)\r\n")
                         self._ser.write(UI_prompt)
                         self._state=S6_Calibration 
@@ -156,7 +155,14 @@ class task_user:
                         self._share_kp.put(0.04)
                         self._share_ki.put(0.01)
                         self._ser.write("Optimized gains have been set\r\n")
+                        self._ser.write(UI_prompt)
                         self._state = S1_CMD
+                    elif inChar in {"l","L"}:
+                        self._ser.write(f"ooo {inChar} was hit for a line follow gain\r\n")
+                        self._ser.write("What type of k value would you like (i or p): \r\n")
+                        self._ser.write(UI_prompt)
+                        self.lineFollowGain = True
+                        self._state = S4_GAIN
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) block out the
                 # UI and discard any character entry so that commands don't
@@ -169,7 +175,6 @@ class task_user:
                         self._leftMotorGo.put(False)
                         self._rightMotorGo.put(False)
                         # self._share_setpoint.put(0)
-                
                 # When both go flags are clear, the data collection must have
                 # ended and it is time to print the collected data.
                 if not self._leftMotorGo.get() and not self._rightMotorGo.get():
@@ -251,54 +256,45 @@ class task_user:
 
                 if self._ser.any():
                     k_choose = self._ser.read(1).decode()
-
                     if k_choose in {"p", "P"}:
-                        self._out_share = self._share_kp
+                        self._ser.write(f"{k_choose})\r\n")
+                        if self.lineFollowGain: self._out_share = self._share_lineKp
+                        else: self._out_share = self._share_kp
                         self._kp_new = True
                     elif k_choose in {"i", "I"}:
-                        self._out_share = self._share_ki
+                        self._ser.write(f"{k_choose})\r\n")
+                        if self.lineFollowGain: self._out_share = self._share_lineKi
+                        else: self._out_share = self._share_ki
                         self._ki_new = True
                     else:
                         self._ser.write("Pick p or i\r\n")
                         yield self._state
                         continue
-
                     self._char_buf = ""
                     self._ser.write(f"What k{k_choose} value would you like?\r\n")
                     self._state = S5_digit
-
-
             elif self._state == S5_digit:
                 if self._ser.any():
                     ch = self._ser.read(1).decode()
-
                     if ch in self.digits:
                         self._ser.write(ch)
                         self._char_buf += ch
-
                     elif ch == "." and "." not in self._char_buf:
                         self._ser.write(ch)
                         self._char_buf += ch
-
                     elif ch == "-" and len(self._char_buf) == 0:
                         self._ser.write(ch)
                         self._char_buf += ch
-
-
                     # treat either DEL (0x7f) or BS (0x08) as backspace (some terminals send one or the other)
                     if ch in ("\x7f", "\x08"):
                         if len(self._char_buf) > 0:
                             # remove last char from buffer
                             self._char_buf = self._char_buf[:-1]
                             # echo a backspace sequence to the terminal so the user sees the deletion
-                            # \x08 is backspace; some terminals need "\x08 \x08" to erase the character
                             try:
                                 self._ser.write(b"\x08 \x08")
                             except TypeError:
-                                # if .write() expects str on this build, fall back to encoded str
                                 self._ser.write("\x08 \x08".encode())
-                        # else: nothing to delete, silently ignore
-
                     elif ch in self._term:
                         if len(self._char_buf) == 0:
                             self._ser.write("\r\nValue not changed\r\n")
@@ -306,10 +302,8 @@ class task_user:
                             val = float(self._char_buf)
                             self._out_share.put(val)
                             self._ser.write("\r\nValue set to {}\r\n".format(val))
-
                         self._char_buf = ""
-                        #self._state = S1_CMD
-                        self._state = S0_INIT
+                        self._state = S1_CMD
                         self._ser.write(UI_prompt.encode())
             elif self._state == S6_Calibration:
                 if self._ser.any():
@@ -326,7 +320,5 @@ class task_user:
                         self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
-
-    
             yield self._state
 

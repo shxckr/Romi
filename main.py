@@ -51,28 +51,9 @@ R2 = Pin('PC10', Pin.IN, pull=Pin.PULL_UP) #bum[ 2]
 bump_left_pins  = [L0, L1, L2]
 bump_right_pins = [R0, R1, R2]
 
-'''
-PINK PINS
-t = Timer(4,freq=10_000)
-leftMotor    = motor_driver(t,1,'PB6','PB2','PC7' )
-rightMotor   = motor_driver(t,2,'PB7','PC11','PC10')
-leftEncoder  = encoder(2,'PA1','PA0')
-rightEncoder = encoder(1, 'PA8', 'PA9')
-sensor_pins  = ['PC2','PC3','PC0','PC1','PB0','PA4','PC4']
-sensors      = LineSensors(sensor_pins, samples=4)
-i2c = pyb.I2C(1, pyb.I2C.CONTROLLER, baudrate=400000)   
-'''
-
 # --- IMU setup ---
 i2c = pyb.I2C(3, pyb.I2C.CONTROLLER, baudrate=400000)   
-# PINK IMU
-
 print("I2C scan:", i2c.scan())
-# imu = IMU(i2c, addr=0x28)             # 0x28 is common; sometimes it's 0x29
-# imu.set_mode(IMU.NDOF)                # fusion mode for heading + gyro feedback
-# imu = IMU(i2c, addr=0x28)
-# pyb.delay(700)
-# imu.set_mode(IMU.NDOF)
 
 imu = IMU(i2c)
 pyb.delay(700)
@@ -84,12 +65,7 @@ CAL = bytes([246, 255, 7, 0, 242, 255, 0, 0, 0, 0, 0, 0,
              255, 255, 254, 255, 1, 0, 232, 3, 0, 0])
 imu.set_cal_coeffs(CAL)
 print("Loaded saved calibration.")
-
-
-# -----------------------------------
 # Observer matrices (precomputed offline)
-# -----------------------------------
-
 A_D = ([
 [0.6132, 0.0000, 0.3113, 0.3113],
 [0.0000, 0.0005, 0.0000, 0.0000],
@@ -130,6 +106,10 @@ share_ki.put(0.00)         # default
 share_setpoint.put(0.00)   # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
+share_lineKp = Share("f", name="line follow kp")
+share_lineKi = Share("f", name="line follow ki")
+share_lineKi.put(0.07320)  # initial
+share_lineKp.put(600)      # initial
 sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
 uL_share = Share("f", name="uL_effort")
@@ -185,40 +165,14 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
                             rightDataValues, rightTimeValues,
                             uR_share, db_share)
-# userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
-#                      leftDataValues, leftTimeValues,
-#                      rightDataValues, rightTimeValues,
-#                      centroidData, centroidTime, statePredTime, statePredX,
-#                      statePredY, statePredSL, stateMeasXL)
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki, share_setpoint,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
-                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share)
-# linefollow_task = task_linefollow(sensors,
-#                                   leftMotorGo, rightMotorGo,
-#                                   sp_left, sp_right,
-#                                   centroidData,centroidTime,
-#                                   share_calL, share_calD)
-linefollow_task = task_linefollow(
-    sensors,
-    leftMotorGo, rightMotorGo,
-    sp_left, sp_right,
-    centroidData, centroidTime,
-    share_calL, share_calD,
-    collision_mode, db_share      # <-- add
-)
-
-# observerTask = task_observer(
-#     leftEncoder, rightEncoder,
-#     share_heading, share_yaw_rate,
-#     uL_share, uR_share,      # <-- applied motor effort, not setpoints
-#     observer_outputs, statePredTime, statePredX, statePredY, statePredSL, stateMeasXL,
-#     Ts=0.03,
-#     Ad=A_D,
-#     Bd=B_D,
-#     Cd=C_D,
-#     Dd=D_D,   
-# )
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share,
+                     share_lineKp, share_lineKi)
+linefollow_task = task_linefollow(sensors,leftMotorGo, rightMotorGo,
+    sp_left, sp_right,centroidData, centroidTime,share_calL, share_calD,
+    collision_mode, db_share, share_lineKp, share_lineKi)
 
 observerTask = task_observer(
     leftEncoder, rightEncoder,
@@ -242,12 +196,8 @@ bumpTask = task_bumpsensor(
     sp_left, sp_right, leftMotorGo, rightMotorGo,
     collision_mode, db_share      # <-- add
 )
-### imu
-
 task_list.append(Task(imuTask.run, name="IMU Task",
                       priority=1, period=30, profile=False))
-
-######
 task_list.append(Task(leftMotorTask.run, name="Left Mot. Task",  # this is where you call task and set priority/period
                       priority = 2, period = 30, profile=True))  # messing with period
 task_list.append(Task(rightMotorTask.run, name="Right Mot. Task",
@@ -267,100 +217,13 @@ task_list.append(Task(bumpTask.run, name="Bump Task", priority=3, period=20))
 # Run the garbage collector preemptively
 collect()
 
-################ sammie try #################################33
-# leftMotor.enable()
-# rightMotor.enable()
-# # #### run #########
-# rightMotor.set_effort(10)  
-# leftMotor.set_effort(10) 
-
-# start = pyb.millis()
-
-# while pyb.millis() - start < 1000:
-#     rightEncoder.update()
-#     leftEncoder.update()
-
-#     print("R pos:", rightEncoder.get_position(),
-#           "R vel:", rightEncoder.get_velocity(),
-#           " | L pos:", leftEncoder.get_position(),
-#           "L vel:", leftEncoder.get_velocity())
-    
-# # pyb.delay(2000)
-# rightMotor.set_effort(0)  
-# leftMotor.set_effort(0) 
-# pyb.delay(500)
-
-# leftMotor.disable()        # stops and sleeps
-# rightMotor.disable() 
-
 # Run the scheduler until the user quits the program with Ctrl-C
 last = pyb.millis()
 while True:
     try:
         task_list.pri_sched()
-        # if not centroidData.empty():
-        #     print(f"yo homi this is the time{pyb.millis()} and this cen {centroidData.get()}")
-        # now = pyb.millis()
-        # if now - last >= 500:
-        #     last = now
-
-        #     uL = uL_share.get()
-        #     uR = uR_share.get()
-        #     xL = leftEncoder.get_position()
-        #     xR = rightEncoder.get_position()
-
-        #     v  = v_hat_share.get()
-        #     psi_deg = share_heading.get()
-        #     om_deg  = share_yaw_rate.get()
-        #     X = X_share.get()
-        #     Y = Y_share.get()
-
-        #     print("u*: uL={:+6.1f} uR={:+6.1f}  xL={:+7.3f} xR={:+7.3f} \r\n psi={:+7.2f}deg  om={:+7.2f}deg/s  X={:+7.3f}  Y={:+7.3f} v={}"
-        #         .format(uL, uR, xL, xR, psi_deg, om_deg, X, Y, v))    
-        
     except KeyboardInterrupt:
         print("Program Terminating")
         leftMotor.disable()
         rightMotor.disable()
         break
-
-#print("\n")
-#print(task_list)
-#print(show_all())
-print("Time,Centroid")
-
-# while not centroidData.empty():
-#     t = centroidTime.get()
-#     c = centroidData.get()
-#     print("{},{}".format(t, c))
-########  plotting #########################3
-
-
-# time_us = []
-# velocity = []
-
-# # Paste your serial output into a file called data.txt
-# with open("data.txt", "r") as f:
-#     for line in f:
-#         line = line.strip()
-#         if not line:
-#             continue
-#         if line.startswith("Time"):
-#             continue
-#         if "," not in line:
-#             continue
-
-#         t, v = line.split(",")
-#         time_us.append(int(t))
-#         velocity.append(float(v))
-
-# # Convert microseconds to seconds
-# time_s = [(t - time_us[0]) / 1e6 for t in time_us]
-
-# plt.figure()
-# plt.plot(time_s, velocity)
-# plt.xlabel("Time (s)")
-# plt.ylabel("Velocity (ticks/s)")
-# plt.title("Motor Velocity vs Time")
-# plt.grid(True)
-# plt.show()
