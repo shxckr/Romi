@@ -25,33 +25,28 @@ class task_linefollow:
                  share_lineKp: Share, share_lineKi: Share):
 
         self._state = S0_INIT
-        self.collision_mode = collision_mode
-        self._db_share = db_share
-        self._sensors = sensors
-        self._leftGo  = leftGo
-        self._rightGo = rightGo
-        self._calL = share_calL
-        self._calD = share_calD
-        self._spL = sp_left
-        self._spR = sp_right
-        self._centroidData = centroidData
-        self._centroidTime = centroidTime
-        self._share_lineKp = share_lineKp
-        self._share_lineKi = share_lineKi
-        self.prevt = 0
-        self._tRun = 0
-        self.e     = 0
-        self._esum = 0
-        # Tune these to your robot / motor units
-        self.base = 175 # 1200
-        '''
-        self.Kp_line = 600 #400 
-        self.Ki_line = .07320 #.07325
-        '''
-        self.max_turn = 400 # 2000
-        self.max_sp = 382 # 2500
+        self.collision_mode = collision_mode    # collision detection flag
+        self._db_share = db_share               # debug share for sending data
+        self._sensors = sensors                 # IR sensor object
+        self._leftGo  = leftGo                  # left motor go flag
+        self._rightGo = rightGo                 # right motor go flag
+        self._calL = share_calL                 # calibration flag for light
+        self._calD = share_calD                 # calibration flag for dark
+        self._spL = sp_left                     # share for left motor set point
+        self._spR = sp_right                    # share for right motor set point
+        self._centroidData = centroidData       # queue for centroid data
+        self._centroidTime = centroidTime       # queue for centroid time stamp
+        self._share_lineKp = share_lineKp       # share for line follow Kp
+        self._share_lineKi = share_lineKi       # share for line follow Ki
+        self.prevt = 0                          # previous time initialized to zero
+        self._tRun = 0                          # initial run timestamp
+        self.e     = 0                          # error
+        self._esum = 0                          # integral of error
+        
+        self.base = 175 # 1200  # base speed for line following
+        self.max_turn = 400 # 2000 # maximum turn speed
+        self.max_sp = 382 # 2500 # maximum wheel speed
         self.line_is_dark = True
-        self.cal_ms = 1500
 
     @staticmethod
     def _clamp(x, lo, hi):
@@ -63,18 +58,14 @@ class task_linefollow:
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
-                # self._spL.put(0.0) # may be redundant
-                # self._spR.put(0.0)
-                #print("you failed")
                 yield 0
                 continue
-            elif self._state == S0_INIT:
-                # Start stopped
+            elif self._state == S0_INIT: # initialize wheel setpoints to 0
                 self._spL.put(0.0)
                 self._spR.put(0.0)
                 self._state = S1_Wait
 
-            elif self._state == S1_Wait:
+            elif self._state == S1_Wait: # wait for go of both motors or calibration
                 if self._leftGo.get() and self._rightGo.get():
                     self._tRun = pyb.millis()
                     self.e     = 0
@@ -84,29 +75,25 @@ class task_linefollow:
                 elif self._calD.get() or self._calL.get():
                     self._state = S3_CAL
 
-            elif self._state == S2_RUN:
+            elif self._state == S2_RUN: # run line follow control
                 if not (self._leftGo.get() and self._rightGo.get()):
+                    # stop both motoer when both go flags are off 
                     self._spL.put(0.0)
                     self._spR.put(0.0)
                     self._state = S1_Wait
                     yield self._state
                     continue
                 if self._leftGo.get() and self._rightGo.get():
-                    #ADC = self._sensors.read_normalized()
+                    # While both motor flags are still running calcualte error
                     self.e = self._sensors.line_error(line_is_dark=self.line_is_dark)
                     t = pyb.millis() - self._tRun
                     dt = t-prevt
                     prevt = t    
                     if not self._centroidData.full():
                         self._centroidData.put(self.e)
-                        #print(f"yo this centroid {e} and this time {pyb.millis()}")
                         self._centroidTime.put(t)
-                    # If you want: keep last error when line is lost
-                    # (Our LineSensors returns 0.0 on lost line. If that’s ambiguous for you,
-                    # change LineSensors to return None when lost and handle it here.)
-                    
                     self._esum += self.e*dt
-
+                    # calculate how much to turn based on PI error and saturation
                     turn = self._clamp(self._share_lineKp.get() * self.e + self._share_lineKi.get() * self._esum, -self.max_turn, self.max_turn)
                     spL = self.base - turn
                     spR = self.base + turn

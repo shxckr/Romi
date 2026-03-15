@@ -43,17 +43,6 @@ class task_observer:
     - If MATLAB used radians, you MUST convert IMU deg -> rad here (default does).
     - Encoders should be in meters (or radians) consistently with MATLAB.
     """
-
-    # def __init__(self,
-    #              left_encoder, right_encoder,
-    #              imu_heading_share, imu_yaw_share,
-    #              input_left_share, input_right_share,
-    #              out_shares, statePredTime, statePredX, statePredY, statePredSL, stateMeasXL,
-    #              Ts=0.03,
-    #              Ad=None, Bd=None, Cd=None, Dd=None,
-    #              publish_yhat=False,
-    #              yhat_shares=None,
-    #              imu_in_degrees=True):
     def __init__(self,
                  left_encoder, right_encoder,
                  imu_heading_share, imu_yaw_share,
