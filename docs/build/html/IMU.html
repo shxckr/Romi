@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMU &mdash; Romi mecha32 3/20/2026 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=926f0b96"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cotask" href="cotask.html" />
+    <link rel="prev" title="BumpSensor" href="BumpSensor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Romi mecha32
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Romi</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">IMU</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#IMU.IMU"><code class="docutils literal notranslate"><span class="pre">IMU</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.OPR_MODE"><code class="docutils literal notranslate"><span class="pre">IMU.OPR_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.CALIB_STAT"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_STAT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.EULER_START"><code class="docutils literal notranslate"><span class="pre">IMU.EULER_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.GYRO_START"><code class="docutils literal notranslate"><span class="pre">IMU.GYRO_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.CALIB_START"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.CALIB_LEN"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.CONFIG_MODE"><code class="docutils literal notranslate"><span class="pre">IMU.CONFIG_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.NDOF"><code class="docutils literal notranslate"><span class="pre">IMU.NDOF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.IMUPLUS"><code class="docutils literal notranslate"><span class="pre">IMU.IMUPLUS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.COMPASS"><code class="docutils literal notranslate"><span class="pre">IMU.COMPASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.M4G"><code class="docutils literal notranslate"><span class="pre">IMU.M4G</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.NDOF_FMC_OFF"><code class="docutils literal notranslate"><span class="pre">IMU.NDOF_FMC_OFF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.set_mode"><code class="docutils literal notranslate"><span class="pre">IMU.set_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.get_cal_status"><code class="docutils literal notranslate"><span class="pre">IMU.get_cal_status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.get_cal_coeffs"><code class="docutils literal notranslate"><span class="pre">IMU.get_cal_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.set_cal_coeffs"><code class="docutils literal notranslate"><span class="pre">IMU.set_cal_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.read_euler"><code class="docutils literal notranslate"><span class="pre">IMU.read_euler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.heading"><code class="docutils literal notranslate"><span class="pre">IMU.heading()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.read_gyro"><code class="docutils literal notranslate"><span class="pre">IMU.read_gyro()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#IMU.IMU.yaw_rate"><code class="docutils literal notranslate"><span class="pre">IMU.yaw_rate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cotask.html">cotask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoder.html">encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_imu.html">task_imu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_motor.html">task_motor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_observer.html">task_observer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_share.html">task_share</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_user.html">task_user</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Romi mecha32</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Romi</a></li>
+      <li class="breadcrumb-item active">IMU</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/IMU.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-IMU">
+<span id="imu"></span><h1>IMU<a class="headerlink" href="#module-IMU" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="IMU.IMU">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">IMU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i2c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>BNO055 IMU Driver</p>
+<p>Takes in a pyb.I2C object preconfigured in CONTROLLER mode.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.OPR_MODE">
+<span class="sig-name descname"><span class="pre">OPR_MODE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">61</span></span><a class="headerlink" href="#IMU.IMU.OPR_MODE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.CALIB_STAT">
+<span class="sig-name descname"><span class="pre">CALIB_STAT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></span><a class="headerlink" href="#IMU.IMU.CALIB_STAT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.EULER_START">
+<span class="sig-name descname"><span class="pre">EULER_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></span><a class="headerlink" href="#IMU.IMU.EULER_START" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.GYRO_START">
+<span class="sig-name descname"><span class="pre">GYRO_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></span><a class="headerlink" href="#IMU.IMU.GYRO_START" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.CALIB_START">
+<span class="sig-name descname"><span class="pre">CALIB_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">85</span></span><a class="headerlink" href="#IMU.IMU.CALIB_START" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.CALIB_LEN">
+<span class="sig-name descname"><span class="pre">CALIB_LEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></span><a class="headerlink" href="#IMU.IMU.CALIB_LEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.CONFIG_MODE">
+<span class="sig-name descname"><span class="pre">CONFIG_MODE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#IMU.IMU.CONFIG_MODE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.NDOF">
+<span class="sig-name descname"><span class="pre">NDOF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></span><a class="headerlink" href="#IMU.IMU.NDOF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.IMUPLUS">
+<span class="sig-name descname"><span class="pre">IMUPLUS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></span><a class="headerlink" href="#IMU.IMU.IMUPLUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.COMPASS">
+<span class="sig-name descname"><span class="pre">COMPASS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></span><a class="headerlink" href="#IMU.IMU.COMPASS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.M4G">
+<span class="sig-name descname"><span class="pre">M4G</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></span><a class="headerlink" href="#IMU.IMU.M4G" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="IMU.IMU.NDOF_FMC_OFF">
+<span class="sig-name descname"><span class="pre">NDOF_FMC_OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></span><a class="headerlink" href="#IMU.IMU.NDOF_FMC_OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.set_mode">
+<span class="sig-name descname"><span class="pre">set_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.set_mode" title="Link to this definition"></a></dt>
+<dd><p>Change IMU operating mode (fusion modes included).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.get_cal_status">
+<span class="sig-name descname"><span class="pre">get_cal_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.get_cal_status" title="Link to this definition"></a></dt>
+<dd><p>Retrieve and parse calibration status.
+Returns (sys, gyr, acc, mag) each from 0–3.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.get_cal_coeffs">
+<span class="sig-name descname"><span class="pre">get_cal_coeffs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.get_cal_coeffs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.set_cal_coeffs">
+<span class="sig-name descname"><span class="pre">set_cal_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.set_cal_coeffs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.read_euler">
+<span class="sig-name descname"><span class="pre">read_euler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.read_euler" title="Link to this definition"></a></dt>
+<dd><p>Returns (heading, roll, pitch) in degrees.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.heading">
+<span class="sig-name descname"><span class="pre">heading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.heading" title="Link to this definition"></a></dt>
+<dd><p>Returns heading (yaw) in degrees.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.read_gyro">
+<span class="sig-name descname"><span class="pre">read_gyro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.read_gyro" title="Link to this definition"></a></dt>
+<dd><p>Returns (gx, gy, gz) in degrees/second.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="IMU.IMU.yaw_rate">
+<span class="sig-name descname"><span class="pre">yaw_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU.yaw_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="BumpSensor.html" class="btn btn-neutral float-left" title="BumpSensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cotask.html" class="btn btn-neutral float-right" title="cotask" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Fred Agregado, Samantha Kenney, Sara Chamness.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

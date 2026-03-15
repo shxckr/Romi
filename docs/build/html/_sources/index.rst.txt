@@ -1,17 +1,39 @@
-.. Romi mecha32 documentation master file, created by
-   sphinx-quickstart on Thu Mar 12 23:24:15 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Romi mecha32 Robot Documentation
+================================
 
-Romi mecha32 documentation
-==========================
+Overview
+--------
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+This project implements a modular control system for the Pololu
+Romi robot using MicroPython.
 
+Subsystems
+----------
+
+The robot software is divided into several subsystems:
+
+- Motor driver
+- Encoder interface
+- Line sensors
+- IMU driver
+- Task scheduling
+
+Repository Structure
+--------------------
+
+.. code-block:: text
+
+   Romi/
+   ├── motor_driver.py
+   ├── encoder.py
+   ├── linesensors.py
+   ├── IMU.py
+   └── tasks/
+
+Module Reference
+----------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
+   modules
