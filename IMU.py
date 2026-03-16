@@ -5,7 +5,7 @@ class IMU:
     BNO055 IMU Driver
     """
 
-    # --- Device Registers ---
+    '''--- Device Registers ---'''
     OPR_MODE      = 0x3D
     CALIB_STAT    = 0x35
 

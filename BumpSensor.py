@@ -1,4 +1,4 @@
-"""
+'''
 bump_driver.py
 
 Romi Bumper Switch Kit driver (Pololu #3674) with ISR callbacks + software debounce.
@@ -12,7 +12,7 @@ Debounce strategy (per ME405 Week 10 PDF):
 Assumptions:
 - MicroPython on STM32 with `pyb` module available.
 - Switches are wired active-low with pull-ups enabled.
-"""
+'''
 
 from pyb import Pin, ExtInt, disable_irq, enable_irq
 from array import array
