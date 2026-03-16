@@ -261,14 +261,14 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors._getDark()))
+                        self._ser.write(str(self._sensors._getDark())+"\r\n")
                         self._ser.write("Dark calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors._getLight()))
+                        self._ser.write(str(self._sensors._getLight())+"\r\n")
                         self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
