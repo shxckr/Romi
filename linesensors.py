@@ -27,8 +27,8 @@ class LineSensors:
             vals = self.read_raw()   # tuple of 7 values
             for i in range(len(self.IN_PINS)):
                 self.maxs[i] = max(self.maxs[i], vals[i])
-        print(f"maxs: {self.maxs}")
     def _getDark(self):
+        '''Return stored Dark values'''
         return self.maxs
     
     def calibrateLight(self):
@@ -38,9 +38,9 @@ class LineSensors:
                 vals = self.read_raw()
                 for i in range(len(self.IN_PINS)):
                     self.mins[i] = min(self.mins[i], vals[i])
-            print(f"mins: {self.mins}")
-    
+            
     def _getLight(self):
+        '''Return stored Light values'''
         return self.mins
     
     def _normalize(self, val, vmin, vmax):

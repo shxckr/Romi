@@ -41,7 +41,7 @@ class task_user:
     '''
     def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD, db_share, share_lineKp, share_lineKi):
+                 share_calL, share_calD, db_share, share_lineKp, share_lineKi, sensors):
         '''
         Initializes a UI task object
         Args:
@@ -92,6 +92,7 @@ class task_user:
         self._share_lineKi = share_lineKi            
         self._out_share = None
         self.db_share = db_share
+        self._sensors = sensors
         self.lineFollowGain = False # flag whether line follow gains are set or motor gains
         self.digits:   set(str) = set(map(str,range(10)))  
         self._char_buf: str      = ""
@@ -278,12 +279,14 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
+                        self._ser.write(str(self._sensors.getDark()))
                         self._ser.write("Dark calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
+                        self._ser.write(str(self._sensors.getLight()))
                         self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD

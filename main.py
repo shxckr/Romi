@@ -158,7 +158,7 @@ userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
                      share_lineKp, share_lineKi)
 linefollow_task = task_linefollow(sensors,leftMotorGo, rightMotorGo,
                     sp_left, sp_right,centroidData, centroidTime,
-                    collision_mode, db_share, share_lineKp, share_lineKi)
+                    collision_mode, db_share, share_lineKp, share_lineKi, sensors)
 
 observerTask = task_observer(
     leftEncoder, rightEncoder,
