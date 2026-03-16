@@ -22,25 +22,25 @@ class LineSensors:
     def calibrateDark(self):
         # --- Dark calibration ---
         sample_number=100
-        self.maxs = [0] * len(self.IN_PINS)  # reset maxs before calibration
+        self.maxs = [4095] * len(self.IN_PINS)  # reset maxs before calibration
         for _ in range(sample_number):
             vals = self.read_raw()   # tuple of 7 values
             for i in range(len(self.IN_PINS)):
                 self.maxs[i] = min(self.maxs[i], vals[i])
+        print(f"maxs: {self.maxs}")
     def _getDark(self):
         '''Return stored Dark values'''
         return self.maxs
     
     def calibrateLight(self):
             sample_number=100
-            self.mins = [4095] * len(self.IN_PINS)  # reset mins before calibration
+            self.mins = [0] * len(self.IN_PINS)  # reset mins before calibration
             for _ in range(sample_number):
                 vals = self.read_raw()
                 for i in range(len(self.IN_PINS)):
                     self.mins[i] = max(self.mins[i], vals[i])
-            
+            print(f"mins: {self.mins}")
     def _getLight(self):
-        '''Return stored Light values'''
         return self.mins
     
     def _normalize(self, val, vmin, vmax):

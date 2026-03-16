@@ -16,8 +16,8 @@ from pyb import Timer, Pin, delay, USB_VCP, I2C, millis
 from task_course import task_course
 
 collect()
-# Build Driver Objects
-t = Timer(1, freq=10000) # timer created outside 
+# Build all driver objects first
+t = Timer(1, freq=10000)   # create shared Timer outside
 leftMotor    = motor_driver(t, 1, 'PA8', 'PB4',  'PB10')
 rightMotor   = motor_driver(t, 2, 'PA9', 'PB8',  'PB9')
 leftEncoder  = encoder(2, 'PA1', 'PA0')
@@ -88,17 +88,14 @@ share_kp.put(0.05)         # default
 share_ki.put(0.00)         # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
-share_lineKp = Share("f", name="line follow kp")
-share_lineKi = Share("f", name="line follow ki")
-share_lineKi.put(0.07320)  # initial
-share_lineKp.put(600)      # initial
+share_lineKp = Share("f", name="line following Kp")
+share_lineKi = Share("f", name="line following Ki")
 sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
 uL_share = Share("f", name="uL_effort")
 uR_share = Share("f", name="uR_effort")
 uL_share.put(0.0)
 uR_share.put(0.0)
-db_share = Share("f", name="Debug share")
 
 #### new IMU
 share_heading  = Share("f", name="heading_deg")
@@ -127,6 +124,14 @@ observer_outputs = {
 }
 
 centroidTime = Queue("L", 30, name="Centroid Time")
+
+
+leftDataValues   = Queue("f", 60, name="Left Data Buffer")
+leftTimeValues   = Queue("L", 60, name="Left Time Buffer")
+
+rightDataValues  = Queue("f", 60, name="Right Data Buffer")
+rightTimeValues  = Queue("L", 60, name="Right Time Buffer")
+
 centroidData = Queue("f", 30, overwrite=True, name="Centroid")
 statePredTime = Queue("L", 30, overwrite=True, name="Prediction Time")
 statePredX = Queue("f", 100, overwrite=True, name="Prediction Global X")
@@ -137,33 +142,42 @@ statetime = Queue("f", 100, overwrite=True, name="State Time")
 sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
 sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
 initHeadSh = Share("f", name="Initial heading")
-# Build task class objects
+
+# Build task class objects (generator functions?)
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
-                            uL_share, db_share)
+                            leftDataValues, leftTimeValues,
+                            uL_share)
+
 rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
-                            uR_share, db_share)
+                            rightDataValues, rightTimeValues,
+                            uR_share)
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
-                     centroidData, centroidTime,
-                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share,
-                     share_lineKp, share_lineKi, sensors)
-linefollow_task = task_linefollow(sensors, leftMotorGo, rightMotorGo,
-                    sp_left, sp_right,centroidData, centroidTime,
-                    collision_mode, db_share, share_lineKp, share_lineKi)
+                     leftDataValues, leftTimeValues,
+                     rightDataValues, rightTimeValues, centroidData, centroidTime,
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, ser)
+linefollow_task = task_linefollow(
+    sensors,
+    leftMotorGo, rightMotorGo,
+    sp_left, sp_right,
+    centroidData, centroidTime,
+    collision_mode, share_lineKp, share_lineKi      # <-- add
+)
 
 observerTask = task_observer(
     leftEncoder, rightEncoder,
     share_heading, share_yaw_rate,
-    uL_share, uR_share,      # <-- applied motor effort, not setpoints
+    uL_share, uR_share,
     observer_outputs, statePredX, statePredY,
-    leftMotorGo, rightMotorGo, sL_yhat, sL_meas, statetime, db_share,
-    Ts=0.03, # Ts
+    leftMotorGo, rightMotorGo,
+    sL_yhat, sL_meas, statetime,
+    sL_share, sR_share,
+     Ts=0.03, # Ts
     Ad=A_D,
     Bd=B_D,
     Cd=C_D,
-    Dd=D_D, 
-)
+    Dd=D_D, )
 
 ### imu
 imuTask = task_imu(imu, share_heading, share_yaw_rate)
@@ -172,7 +186,7 @@ imuTask = task_imu(imu, share_heading, share_yaw_rate)
 bumpTask = task_bumpsensor(
     bump_left_pins, bump_right_pins,
     sp_left, sp_right, leftMotorGo, rightMotorGo,
-    collision_mode, db_share      # <-- add
+    collision_mode      # <-- add
 )
 courseTask = task_course(
     sL_share,
@@ -189,6 +203,7 @@ courseTask = task_course(
     ser,
     initHeadSh
 )
+### imu
 task_list.append(Task(imuTask.run, name="IMU Task",
                       priority=1, period=30, profile=False))
 task_list.append(Task(leftMotorTask.run, name="Left Mot. Task",  # this is where you call task and set priority/period
