@@ -94,6 +94,7 @@ sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
 uL_share = Share("f", name="uL_effort")
 uR_share = Share("f", name="uR_effort")
+DoneCalSh = Share("B", name="Calibration done flag")
 uL_share.put(0.0)
 uR_share.put(0.0)
 
@@ -156,13 +157,14 @@ rightMotorTask = task_motor(rightMotor, rightEncoder,
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
                      leftDataValues, leftTimeValues,
                      rightDataValues, rightTimeValues, centroidData, centroidTime,
-                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, ser)
+                     statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, 
+                     ser,share_lineKp, share_lineKi, sensors, DoneCalSh, share_heading)
 linefollow_task = task_linefollow(
     sensors,
     leftMotorGo, rightMotorGo,
     sp_left, sp_right,
-    centroidData, centroidTime,
-    collision_mode, share_lineKp, share_lineKi      # <-- add
+    centroidData, centroidTime, share_calL, share_calD,
+    collision_mode, share_lineKp, share_lineKi, DoneCalSh      # <-- add
 )
 
 observerTask = task_observer(

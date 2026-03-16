@@ -106,7 +106,7 @@ class task_course:
                 self._headingCur = self.imu_heading_share.get() - self._heading0
                 self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
                 
-                if deltaR >= 30 and self._headingCur >= 160:
+                if deltaR >= 30 and self._headingCur >= 155:
                     self.leftGo.put(0)
                     self.rightGo.put(0)
                     self._sR_start = self.sR_share.get()

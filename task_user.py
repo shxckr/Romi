@@ -39,9 +39,9 @@ class task_user:
     and then manipulating shared variables to communicate with other tasks based
     on the user commands.
     '''
-    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
+    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, leftDataValues, leftTimeValues,
                  rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD, ser,share_lineKp, share_lineKi, sensors):
+                 share_calL, share_calD, ser,share_lineKp, share_lineKi, sensors, DoneCalSh, shareHeading):
         '''
         Initializes a UI task object
         
@@ -85,8 +85,6 @@ class task_user:
         self._share_ki: Share = share_ki
         self._calL: Share = share_calL          #calibration flag for light
         self._calD: Share = share_calD          #calibration flag for dark
-
-        self._share_setpoint: Share = share_setpoint
         self._ser = ser                          # read character entry and to
                                                  # print output
         self._leftDataValues:  Queue   = leftDataValues
@@ -109,13 +107,14 @@ class task_user:
         self.digits:   set(str) = set(map(str,range(10)))  
         self._char_buf: str      = ""
         self._term:     set(str) = {"\r", "\n"}
-        self._done = False
+        self._DoneCalSh = DoneCalSh
         self._kp: str      = ""
         self._kI: str      = ""
         self._kd: str      = ""
         self._kp_new = False
         self._ki_new = False
         self._valid_dig = False
+        self._headingSh = shareHeading
         
     def run(self):
         '''
@@ -159,6 +158,7 @@ class task_user:
                     elif inChar in {"c","C"}: # calibrate sensors
                         self._ser.write(f"{inChar} was hit for calibration\r\n")
                         self._ser.write("Calibrate for Dark(d) or Light(l)\r\n")
+                        self._DoneCalSh.put(False)
                         self._ser.write(UI_prompt)
                         self._state=S6_Calibration 
                     elif inChar in {'o','O'}: # load optimized motor gains
@@ -173,6 +173,8 @@ class task_user:
                         self._ser.write(UI_prompt)
                         self.lineFollowGain = True
                         self._state = S4_GAIN
+                    elif inChar in {'r','R'}:
+                        self._ser.write("Heading: "+str(self._headingSh.get())+"\r\n")
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) check the
                 # characters for a quit command to stop data collection
@@ -310,15 +312,13 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors._getDark())+"\r\n")
-                        self._ser.write("Dark calibration complete\r\n")
-                        self._ser.write(UI_prompt)
-                        self._state = S1_CMD
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors._getLight())+"\r\n")
-                        self._ser.write("Light calibration complete\r\n")
+                elif not (self._calL.get() or self._calD.get()) and self._DoneCalSh.get():  
+                        self._ser.write("calibration complete\r\n")
+                        self._ser.write("Light Calibration: "+str(self._sensors._getLight())+"\r\n")
+                        self._ser.write("Dark Calibration: "+str(self._sensors._getDark())+"\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
             yield self._state

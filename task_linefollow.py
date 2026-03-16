@@ -22,7 +22,8 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 collision_mode:Share, share_lineKp: Share, share_lineKi: Share):
+                 share_calL, share_calD, collision_mode:Share, share_lineKp: Share, share_lineKi: Share,
+                 DoneCalSh: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode    # collision detection flag
@@ -31,10 +32,13 @@ class task_linefollow:
         self._rightGo = rightGo                 # right motor go flag
         self._spL = sp_left                     # share for left motor set point
         self._spR = sp_right                    # share for right motor set point
+        self._calL = share_calL
+        self._calD = share_calD
         self._centroidData = centroidData       # queue for centroid data
         self._centroidTime = centroidTime       # queue for centroid time stamp
         self._share_lineKp = share_lineKp       # share for line follow Kp
         self._share_lineKi = share_lineKi       # share for line follow Ki
+        self._DoneCalSh = DoneCalSh
         self.prevt = 0                          # previous time initialized to zero
         self._tRun = 0                          # initial run timestamp
         self.e     = 0                          # error
@@ -68,6 +72,8 @@ class task_linefollow:
                     self._esum = 0
                     prevt = 0
                     self._state = S2_RUN
+                elif self._calL.get() or self._calD.get():
+                    self._state=S3_CAL
             elif self._state == S2_RUN:
                 if self._leftGo.get() and self._rightGo.get():
                     #ADC = self._sensors.read_normalized()
@@ -93,5 +99,16 @@ class task_linefollow:
                     # Disabled → stop
                     self._spL.put(0.0)
                     self._spR.put(0.0)
+                    self._state = S1_Wait
+            elif self._state == S3_CAL:
+                if self._calD.get():
+                    self._sensors.calibrateDark()
+                    self._calD.put(False)
+                    self._DoneCalSh.put(True)
+                    self._state = S1_Wait
+                elif self._calL.get():
+                    self._sensors.calibrateLight()
+                    self._calL.put(False)
+                    self._DoneCalSh.put(True)
                     self._state = S1_Wait
             yield self._state
