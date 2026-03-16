@@ -25,7 +25,6 @@ class task_motor:
              mot: motor_driver, enc: encoder,
              goFlag: Share, share_kp: Share, share_ki: Share,
              share_setpoint: Share,
-             dataValues: Queue, timeValues: Queue,
              share_effort: Share, db_share):
         '''
         Initializes a motor task object
@@ -54,13 +53,6 @@ class task_motor:
         self._share_effort = share_effort
 
         self._share_setpoint: Share  = share_setpoint
-        
-        self._dataValues: Queue = dataValues # A queue object used to store
-                                             # collected encoder position
-        
-        self._timeValues: Queue = timeValues # A queue object used to store the
-                                             # time stamps associated with the
-                                             # collected encoder data
         
         self._db_share: Share = db_share
         self._startTime: int    = 0          # The start time (in microseconds)
@@ -136,9 +128,6 @@ class task_motor:
 
                  # Collect a timestamp to use for this sample
                 t   = ticks_us()
-                if not self._dataValues.full():
-                    self._dataValues.put(self._vel_filt)
-                    self._timeValues.put(ticks_diff(t, self._startTime))
 
                 if not self._goFlag.get():
                     self._mot.set_effort(0)

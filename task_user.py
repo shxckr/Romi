@@ -39,8 +39,8 @@ class task_user:
     and then manipulating shared variables to communicate with other tasks based
     on the user commands.
     '''
-    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, leftDataValues, leftTimeValues,
-                 rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
+    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki,
+                 centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
                  share_calL, share_calD, db_share, share_lineKp, share_lineKi, sensors):
         '''
         Initializes a UI task object
@@ -77,10 +77,6 @@ class task_user:
         self._share_ki: Share = share_ki                    
         self._calL: Share = share_calL                      
         self._calD: Share = share_calD                                           
-        self._leftDataValues:  Queue   = leftDataValues     
-        self._leftTimeValues:  Queue   = leftTimeValues     
-        self._rightDataValues: Queue   = rightDataValues    
-        self._rightTimeValues: Queue   = rightTimeValues
         self._centroidData:    Queue   = centroidData 
         self._centroidTime:    Queue   = centroidTime
         self._statePredX = statePredX
@@ -179,20 +175,6 @@ class task_user:
                     self._state = S3_DIS
             
             elif self._state == S3_DIS:    
-                # ---- Print Left Motor Data ----
-                if self._leftDataValues.any():
-                    self._ser.write("Left Motor Data\r\n")
-                    self._ser.write("Time, Velocity\r\n")
-                    while self._leftDataValues.any():
-                        self._ser.write(f"{self._leftTimeValues.get()},{self._leftDataValues.get()}\r\n")
-                    self._ser.write("--------------------\r\n\n")
-                # ---- Print Right Motor Data ----
-                if self._rightDataValues.any():
-                    self._ser.write("Right Motor Data\r\n")
-                    self._ser.write("Time, Velocity\r\n")
-                    while self._rightDataValues.any():
-                        self._ser.write(f"{self._rightTimeValues.get()},{self._rightDataValues.get()}\r\n")
-                    self._ser.write("--------------------\r\n\n")
                 # ---- Print Centroid Data ----
                 if self._centroidData.any():
                     self._ser.write("Centroid Data\r\n")
@@ -279,14 +261,14 @@ class task_user:
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors.getDark()))
+                        self._ser.write(str(self._sensors._getDark()))
                         self._ser.write("Dark calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD
                     elif inChar in {"l","L"}:
                         self._calL.put(True)
                         self._ser.write(f"{inChar}\r\n")
-                        self._ser.write(str(self._sensors.getLight()))
+                        self._ser.write(str(self._sensors._getLight()))
                         self._ser.write("Light calibration complete\r\n")
                         self._ser.write(UI_prompt)
                         self._state = S1_CMD

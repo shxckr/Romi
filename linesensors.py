@@ -26,7 +26,7 @@ class LineSensors:
         for _ in range(sample_number):
             vals = self.read_raw()   # tuple of 7 values
             for i in range(len(self.IN_PINS)):
-                self.maxs[i] = max(self.maxs[i], vals[i])
+                self.maxs[i] = min(self.maxs[i], vals[i])
     def _getDark(self):
         '''Return stored Dark values'''
         return self.maxs
@@ -37,7 +37,7 @@ class LineSensors:
             for _ in range(sample_number):
                 vals = self.read_raw()
                 for i in range(len(self.IN_PINS)):
-                    self.mins[i] = min(self.mins[i], vals[i])
+                    self.mins[i] = max(self.mins[i], vals[i])
             
     def _getLight(self):
         '''Return stored Light values'''

@@ -127,10 +127,6 @@ observer_outputs = {
 }
 
 centroidTime = Queue("L", 30, name="Centroid Time")
-leftDataValues   = Queue("f", 600, name="Left Data Buffer")
-leftTimeValues   = Queue("L", 600, name="Left Time Buffer")
-rightDataValues  = Queue("f", 600, name="Right Data Buffer")
-rightTimeValues  = Queue("L", 600, name="Right Time Buffer")
 centroidData = Queue("f", 30, overwrite=True, name="Centroid")
 statePredTime = Queue("L", 30, overwrite=True, name="Prediction Time")
 statePredX = Queue("f", 100, overwrite=True, name="Prediction Global X")
@@ -144,21 +140,17 @@ initHeadSh = Share("f", name="Initial heading")
 # Build task class objects
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
-                            leftDataValues, leftTimeValues,
                             uL_share, db_share)
-
 rightMotorTask = task_motor(rightMotor, rightEncoder,
                             rightMotorGo, share_kp, share_ki, sp_right,
-                            rightDataValues, rightTimeValues,
                             uR_share, db_share)
 userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
-                     leftDataValues, leftTimeValues,
-                     rightDataValues, rightTimeValues, centroidData, centroidTime,
+                     centroidData, centroidTime,
                      statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share,
-                     share_lineKp, share_lineKi)
-linefollow_task = task_linefollow(sensors,leftMotorGo, rightMotorGo,
+                     share_lineKp, share_lineKi, sensors)
+linefollow_task = task_linefollow(sensors, leftMotorGo, rightMotorGo,
                     sp_left, sp_right,centroidData, centroidTime,
-                    collision_mode, db_share, share_lineKp, share_lineKi, sensors)
+                    collision_mode, db_share, share_lineKp, share_lineKi)
 
 observerTask = task_observer(
     leftEncoder, rightEncoder,
