@@ -38,6 +38,7 @@ class motor_driver:
             eff = float(effort)
         except Exception:
             return   # or raise ValueError if your instructor wants
+        ### sets limit between - 100 to 100
         if eff < -100 or eff > 100:
             return   # or raise ValueError
         if not self.enabled:
