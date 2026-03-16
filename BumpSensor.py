@@ -43,27 +43,10 @@ class BumpDriver:
         self.debounce_ms = int(debounce_ms)
 
         # Map ISR line number (0-15) -> (ExtInt object, Pin object)
-        # NOTE: ISR lines are based on pin number, not port (PA0/PB0/PC0 share line 0).
         self._lines = {}
 
         # Debounce masks: [current_window_mask, previous_window_mask]
-        # Each bit i corresponds to ISR line i (0..15)
         self._db_mask = array("H", [0x0000, 0x0000])
-
-        # Build ExtInt objects for each pin and hook them to our ISR dispatcher.
-        # Trigger on falling edge because bump press pulls the line low (active-low).
-        
-        # for p in self._pins:
-        #     line = p.pin()  # 0..15
-        #     if line in self._lines:
-        #         raise ValueError(
-        #             "Two pins share the same ExtInt line {}. "
-        #             "On STM32, PA{}, PB{}, PC{} share the same ISR line; choose different pin numbers."
-        #             .format(line, line, line, line)
-        #         )
-
-            # ext = ExtInt(p, ExtInt.IRQ_FALLING, pull, self._isr)
-            # self._lines[line] = (ext, p)
         for p in self._pins:   
             ext = ExtInt(p, ExtInt.IRQ_FALLING, Pin.PULL_UP, self._isr)
             self._lines[p.pin()] = (ext, p)

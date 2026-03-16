@@ -69,8 +69,6 @@ class IMU:
         gyr = (b >> 4)  & 0b11
         sys = (b >> 6)  & 0b11
 
-        #print("get_cal_status complete")
-
         return sys, gyr, acc, mag
 
     # -------------------------------------------------

@@ -86,18 +86,11 @@ class task_motor:
         while True:
             
             if self._state == S0_INIT: # Init state (can be removed if unneeded)
-                # print("Initializing motor task")
                 self._state = S1_WAIT
                 
             elif self._state == S1_WAIT: # Wait for "go command" state
-                if self._goFlag.get():
-                   
-                    
-                    # Capture a start time in microseconds so that each sample
-                    # can be timestamped with respect to this start time. The
-                    # start time will be off by however long it takes to
-                    # transition and run the next state, so the time values may
-                    # need to be zeroed out again during data processing.
+                if self._goFlag.get():   
+                    # Captur start time and reset errors
                     self._startTime = ticks_us()
                     self._e_prev = 0.0
                     self._e_int = 0.0
@@ -114,18 +107,13 @@ class task_motor:
                     self._e_int = 0.0
                     self._state = S1_WAIT
                     yield self._state
-                    #continue
-                # Run the encoder update algorithm and then capture the present
-                # position of the encoder. You will eventually need to capture
-                # the motor speed instead of position here.
+                # Update encoder and get velocity
                 self._enc.update()
                 vel_raw = self._enc.get_velocity()
                 dt = self._enc.dt
                 if dt <= 0:
                     yield self._state
-                    #continue
                  
-                # filter
                 self._vel_filt = (self._vel_alpha * vel_raw) + ((1 - self._vel_alpha) * self._vel_filt)
 
                  # controller
@@ -148,17 +136,6 @@ class task_motor:
 
                  # Collect a timestamp to use for this sample
                 t   = ticks_us()
-
-                 # maybe a fix?
-
-                # if self._dataValues.full():
-                    # self._mot.set_effort(0)
-                    # self._mot.disable()
-                    # self._state = S1_WAIT
-                    # self._goFlag.put(False)
-                    # yield self._state
-                    # continue
-                
                 if not self._dataValues.full():
                     self._dataValues.put(self._vel_filt)
                     self._timeValues.put(ticks_diff(t, self._startTime))
@@ -168,22 +145,5 @@ class task_motor:
                     self._mot.disable()
                     self._state = S1_WAIT
                     yield self._state
-                    #continue
-
-                # self._dataValues.put(self._vel_filt)
-                # self._timeValues.put(ticks_diff(t, self._startTime))
-
-                # if self._dataValues.full():
-                #     self._mot.set_effort(0)  # sammie add
-                #     self._mot.disable()       # sammie add
-                #     self._state = S1_WAIT
-                #     self._goFlag.put(False)
-            
-                
-                # Actuate the motor using a control law. The one used here in
-                # the example is a "bang bang" controller, and will work very
-                # poorly in practice. Note that the set position is zero. You
-                # will replace this with the output of your PID controller that
-                # uses feedback from the velocity measurement.
                 
             yield self._state

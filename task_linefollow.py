@@ -21,7 +21,7 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 share_calL: Share, share_calD: Share, collision_mode:Share, db_share: Share, 
+                 collision_mode:Share, db_share: Share, 
                  share_lineKp: Share, share_lineKi: Share):
 
         self._state = S0_INIT
@@ -30,8 +30,6 @@ class task_linefollow:
         self._sensors = sensors                 # IR sensor object
         self._leftGo  = leftGo                  # left motor go flag
         self._rightGo = rightGo                 # right motor go flag
-        self._calL = share_calL                 # calibration flag for light
-        self._calD = share_calD                 # calibration flag for dark
         self._spL = sp_left                     # share for left motor set point
         self._spR = sp_right                    # share for right motor set point
         self._centroidData = centroidData       # queue for centroid data
@@ -41,11 +39,10 @@ class task_linefollow:
         self.prevt = 0                          # previous time initialized to zero
         self._tRun = 0                          # initial run timestamp
         self.e     = 0                          # error
-        self._esum = 0                          # integral of error
-        
-        self.base = 175 # 1200  # base speed for line following
-        self.max_turn = 400 # 2000 # maximum turn speed
-        self.max_sp = 382 # 2500 # maximum wheel speed
+        self._esum = 0                          # integral of error        
+        self.base = 175                         # 1200  # base speed for line following
+        self.max_turn = 400                     # 2000 # maximum turn speed
+        self.max_sp = 382                       # 2500 # maximum wheel speed
         self.line_is_dark = True
 
     @staticmethod
@@ -58,8 +55,7 @@ class task_linefollow:
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
-                yield 0
-                continue
+                pass
             elif self._state == S0_INIT: # initialize wheel setpoints to 0
                 self._spL.put(0.0)
                 self._spR.put(0.0)
@@ -72,18 +68,13 @@ class task_linefollow:
                     self._esum = 0
                     prevt = 0
                     self._state = S2_RUN
-                elif self._calD.get() or self._calL.get():
-                    self._state = S3_CAL
-
             elif self._state == S2_RUN: # run line follow control
                 if not (self._leftGo.get() and self._rightGo.get()):
                     # stop both motoer when both go flags are off 
                     self._spL.put(0.0)
                     self._spR.put(0.0)
                     self._state = S1_Wait
-                    yield self._state
-                    continue
-                if self._leftGo.get() and self._rightGo.get():
+                elif self._leftGo.get() and self._rightGo.get():
                     # While both motor flags are still running calcualte error
                     self.e = self._sensors.line_error(line_is_dark=self.line_is_dark)
                     t = pyb.millis() - self._tRun
@@ -107,13 +98,5 @@ class task_linefollow:
                     # Disabled → stop
                     self._spL.put(0.0)
                     self._spR.put(0.0)
-            elif self._state == S3_CAL:
-                if self._calD.get():
-                    self._sensors.calibrateDark()
-                    self._calD.put(False)
-                elif self._calL.get():
-                    self._sensors.calibrateLight()
-                    self._calL.put(False)
-                self._state = S1_Wait
                 
             yield self._state

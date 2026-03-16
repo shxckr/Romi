@@ -1,18 +1,3 @@
-# import pyb
-# from motor_driver import motor_driver
-# from encoder      import encoder
-# from task_motor   import task_motor
-# from task_user    import task_user
-# from linesensors import LineSensors
-# from task_linefollow import task_linefollow
-# from task_share   import Share, Queue, show_all
-# from cotask       import Task, task_list
-# from gc           import collect
-# from IMU          import IMU
-# from task_imu     import task_imu
-# from task_observer import task_observer
-# from pyb import Timer, Pin
-import pyb
 from motor_driver import motor_driver
 from encoder      import encoder
 from task_motor   import task_motor
@@ -27,13 +12,12 @@ from task_imu     import task_imu
 from task_bumpsensor    import task_bumpsensor
 from BumpSensor    import BumpDriver
 from task_observer import task_observer
-from pyb import Timer, Pin
-#import matplotlib.pyplot as plt
+from pyb import Timer, Pin, delay, USB_VCP, I2C, millis
+from task_course import task_course
 
-# Build all driver objects first
-### maybe timer here?
-t = Timer(1, freq=10000)   # create shared Timer outside
-### Charlie's outline ##########
+collect()
+# Build Driver Objects
+t = Timer(1, freq=10000) # timer created outside 
 leftMotor    = motor_driver(t, 1, 'PA8', 'PB4',  'PB10')
 rightMotor   = motor_driver(t, 2, 'PA9', 'PB8',  'PB9')
 leftEncoder  = encoder(2, 'PA1', 'PA0')
@@ -52,14 +36,14 @@ bump_left_pins  = [L0, L1, L2]
 bump_right_pins = [R0, R1, R2]
 
 # --- IMU setup ---
-i2c = pyb.I2C(3, pyb.I2C.CONTROLLER, baudrate=400000)   
+i2c = I2C(3, I2C.CONTROLLER, baudrate=400000)   
 print("I2C scan:", i2c.scan())
 
 imu = IMU(i2c)
-pyb.delay(700)
+delay(700)
 
 imu.set_mode(IMU.IMUPLUS)   # or NDOF
-pyb.delay(100)
+delay(100)
 
 CAL = bytes([246, 255, 7, 0, 242, 255, 0, 0, 0, 0, 0, 0,
              255, 255, 254, 255, 1, 0, 232, 3, 0, 0])
@@ -128,7 +112,11 @@ X_share         = Share("f", name="X")
 Y_share         = Share("f", name="Y")
 collision_mode = Share("B", name="Collision Mode")  # 0=normal, 1=bumper override
 
-
+yolo_mode = Share("B", name="YOLO Mode")
+yolo_mode.put(0)
+ser = USB_VCP()
+sL_share = Share("f", name="sL")
+sR_share = Share("f", name="sR")
 observer_outputs = {
     's': s_hat_share,
     'psi': psi_hat_share,
@@ -152,7 +140,7 @@ stateMeasXL = Queue("f", 30, overwrite=True, name="Measured Arc Length Left")
 statetime = Queue("f", 100, overwrite=True, name="State Time")
 sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
 sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
-
+initHeadSh = Share("f", name="Initial heading")
 # Build task class objects
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
@@ -169,7 +157,7 @@ userTask = task_user(leftMotorGo, rightMotorGo, share_kp, share_ki,
                      statePredX, statePredY, sL_yhat, sL_meas, statetime, share_calL, share_calD, db_share,
                      share_lineKp, share_lineKi)
 linefollow_task = task_linefollow(sensors,leftMotorGo, rightMotorGo,
-                    sp_left, sp_right,centroidData, centroidTime,share_calL, share_calD,
+                    sp_left, sp_right,centroidData, centroidTime,
                     collision_mode, db_share, share_lineKp, share_lineKi)
 
 observerTask = task_observer(
@@ -194,6 +182,21 @@ bumpTask = task_bumpsensor(
     sp_left, sp_right, leftMotorGo, rightMotorGo,
     collision_mode, db_share      # <-- add
 )
+courseTask = task_course(
+    sL_share,
+    sR_share,
+    collision_mode,
+    yolo_mode,
+    sp_left,
+    sp_right,
+    leftMotorGo,
+    rightMotorGo,
+    sensors,
+    share_heading,
+    share_yaw_rate,
+    ser,
+    initHeadSh
+)
 task_list.append(Task(imuTask.run, name="IMU Task",
                       priority=1, period=30, profile=False))
 task_list.append(Task(leftMotorTask.run, name="Left Mot. Task",  # this is where you call task and set priority/period
@@ -210,13 +213,16 @@ task_list.append(Task(observerTask.run,
                       period=20,
                       profile=False))
 task_list.append(Task(bumpTask.run, name="Bump Task", priority=3, period=20))
-
+task_list.append(Task(courseTask.run,
+                      name="Course Task",
+                      priority=3,
+                      period=30))
 
 # Run the garbage collector preemptively
 collect()
 
 # Run the scheduler until the user quits the program with Ctrl-C
-last = pyb.millis()
+last = millis()
 while True:
     try:
         task_list.pri_sched()
