@@ -6,11 +6,11 @@ S1_WAIT = micropython.const(1)
 class task_bumpsensor:
     def __init__(self, left_pins, right_pins,
                  sp_left, sp_right, leftGo, rightGo,
-                 collision_mode, db_share):
+                 collision_mode):
         self.left_pins = left_pins
         self.right_pins = right_pins
         self.collision_mode = collision_mode
-        self.db_share = db_share
+
         self.sp_left = sp_left
         self.sp_right = sp_right
         self._leftGo = leftGo
