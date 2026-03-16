@@ -39,11 +39,12 @@ class task_user:
     and then manipulating shared variables to communicate with other tasks based
     on the user commands.
     '''
-    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki,
-                 centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
-                 share_calL, share_calD, db_share, share_lineKp, share_lineKi, sensors):
+    def __init__(self, leftMotorGo, rightMotorGo,share_kp, share_ki, share_setpoint, leftDataValues, leftTimeValues,
+                 rightDataValues, rightTimeValues, centroidData, centroidTime, statePredX, statePredY, sL_yhat, sL_meas, statetime,
+                 share_calL, share_calD, ser,share_lineKp, share_lineKi, sensors):
         '''
         Initializes a UI task object
+        
         Args:
             leftMotorGo (Share):    A share object representing a boolean flag to
                                     start data collection on the left motor
@@ -70,31 +71,52 @@ class task_user:
             share_lineKp(Share):    A share object to store Kp value for line follow control
             share_lineKi(Share):    A share object to store Ki value for line follow control
         '''
-        self._state: int          = S0_INIT                 
-        self._leftMotorGo: Share  = leftMotorGo                                                                         
-        self._rightMotorGo: Share = rightMotorGo            
-        self._share_kp: Share = share_kp                    
-        self._share_ki: Share = share_ki                    
-        self._calL: Share = share_calL                      
-        self._calD: Share = share_calD                                           
+        self._sensors = sensors                 # Will replaced with sensor reading queue
+        self._state: int          = S0_INIT      # The present state
+        
+        self._leftMotorGo: Share  = leftMotorGo  # The "go" flag to start data
+                                                 # collection from the left
+                                                 # motor and encoder pair
+        
+        self._rightMotorGo: Share = rightMotorGo # The "go" flag to start data
+                                                 # collection from the right
+                                                 # motor and encoder pair
+        self._share_kp: Share = share_kp
+        self._share_ki: Share = share_ki
+        self._calL: Share = share_calL          #calibration flag for light
+        self._calD: Share = share_calD          #calibration flag for dark
+
+        self._share_setpoint: Share = share_setpoint
+        self._ser = ser                          # read character entry and to
+                                                 # print output
+        self._leftDataValues:  Queue   = leftDataValues
+        self._leftTimeValues:  Queue   = leftTimeValues 
+        self._rightDataValues: Queue   = rightDataValues
+        self._rightTimeValues: Queue   = rightTimeValues
         self._centroidData:    Queue   = centroidData 
         self._centroidTime:    Queue   = centroidTime
         self._statePredX = statePredX
         self._statePredY = statePredY
         self._sL_yhat = sL_yhat
         self._sL_meas = sL_meas
-        self._statetime = statetime                                      
+        self._statetime = statetime
         self._share_lineKp = share_lineKp
-        self._share_lineKi = share_lineKi            
+        self._share_lineKi = share_lineKi        
+        self._ser.write(b"User Task object instantiated\r\n")
         self._out_share = None
-        self.db_share = db_share
         self._sensors = sensors
         self.lineFollowGain = False # flag whether line follow gains are set or motor gains
         self.digits:   set(str) = set(map(str,range(10)))  
         self._char_buf: str      = ""
         self._term:     set(str) = {"\r", "\n"}
-        self._ser = USB_VCP()                               # serial object for usb communication
-        self._ser.write(b"User Task object instantiated\r\n")
+        self._done = False
+        self._kp: str      = ""
+        self._kI: str      = ""
+        self._kd: str      = ""
+        self._kp_new = False
+        self._ki_new = False
+        self._valid_dig = False
+        
     def run(self):
         '''
         Runs one iteration of the task
@@ -174,7 +196,32 @@ class task_user:
                     self._ser.write("Time, Velocity\r\n")
                     self._state = S3_DIS
             
-            elif self._state == S3_DIS:    
+            elif self._state == S3_DIS:
+
+                # ---- Print Left Motor Data ----
+                if self._leftDataValues.any():
+                    self._ser.write("Left Motor Data\r\n")
+                    self._ser.write("Time, Velocity\r\n")
+                    while self._leftDataValues.any():
+                        #c_left = self._centroidData.get() if self._centroidData.any() else 0.0
+                        # self._ser.write(
+                        #     f"{self._leftTimeValues.get()},{self._leftDataValues.get()},{c_left}\r\n"
+                        # )
+                        self._ser.write(
+                            f"{self._leftTimeValues.get()},{self._leftDataValues.get()}\r\n"
+                        )
+                    self._ser.write("--------------------\r\n\n")
+
+                # ---- Print Right Motor Data ----
+                if self._rightDataValues.any():
+                    self._ser.write("Right Motor Data\r\n")
+                    self._ser.write("Time, Velocity\r\n")
+                    while self._rightDataValues.any():
+                        self._ser.write(
+                            f"{self._rightTimeValues.get()},{self._rightDataValues.get()}\r\n"
+                        )
+                    self._ser.write("--------------------\r\n\n")
+                
                 # ---- Print Centroid Data ----
                 if self._centroidData.any():
                     self._ser.write("Centroid Data\r\n")
@@ -201,7 +248,10 @@ class task_user:
                 self._ser.write(UI_prompt.encode())
                 self._state = S1_CMD
             elif self._state == S4_GAIN:
-                # check characters for valid imputs
+                # reset each time
+                self._kp_new = False
+                self._ki_new = False
+
                 if self._ser.any():
                     k_choose = self._ser.read(1).decode()
                     if k_choose in {"p", "P"}:
@@ -236,7 +286,6 @@ class task_user:
                         self._ser.write(ch)
                         self._char_buf += ch
                     if ch in ("\x7f", "\x08"):
-                        # if delete or backspace is hit, check if buffer has characters
                         if len(self._char_buf) > 0:
                             # remove last char from buffer
                             self._char_buf = self._char_buf[:-1]
