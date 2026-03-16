@@ -1,7 +1,8 @@
 import micropython
 from task_share import Share, Queue
 from linesensors import LineSensors
-import pyb  
+import pyb
+
 S0_INIT = micropython.const(0)
 S1_Wait  = micropython.const(1)
 S2_RUN  = micropython.const(2)
@@ -11,7 +12,7 @@ class task_linefollow:
     """
     Line-follow task:
       e = sensors.line_error() in ~[-1, +1]
-      turn = Kp_line * e
+      turn = Kline * e
       spL = base - turn
       spR = base + turn
     Writes spL/spR into Shares used by motor controllers.
@@ -21,12 +22,10 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 collision_mode:Share, db_share: Share, 
-                 share_lineKp: Share, share_lineKi: Share):
+                 collision_mode:Share, share_lineKp: Share, share_lineKi: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode    # collision detection flag
-        self._db_share = db_share               # debug share for sending data
         self._sensors = sensors                 # IR sensor object
         self._leftGo  = leftGo                  # left motor go flag
         self._rightGo = rightGo                 # right motor go flag
@@ -56,26 +55,22 @@ class task_linefollow:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
                 pass
-            elif self._state == S0_INIT: # initialize wheel setpoints to 0
+            elif self._state == S0_INIT:
+                # Start stopped
                 self._spL.put(0.0)
                 self._spR.put(0.0)
                 self._state = S1_Wait
 
-            elif self._state == S1_Wait: # wait for go of both motors or calibration
+            elif self._state == S1_Wait:
                 if self._leftGo.get() and self._rightGo.get():
                     self._tRun = pyb.millis()
                     self.e     = 0
                     self._esum = 0
                     prevt = 0
                     self._state = S2_RUN
-            elif self._state == S2_RUN: # run line follow control
-                if not (self._leftGo.get() and self._rightGo.get()):
-                    # stop both motoer when both go flags are off 
-                    self._spL.put(0.0)
-                    self._spR.put(0.0)
-                    self._state = S1_Wait
-                elif self._leftGo.get() and self._rightGo.get():
-                    # While both motor flags are still running calcualte error
+            elif self._state == S2_RUN:
+                if self._leftGo.get() and self._rightGo.get():
+                    #ADC = self._sensors.read_normalized()
                     self.e = self._sensors.line_error(line_is_dark=self.line_is_dark)
                     t = pyb.millis() - self._tRun
                     dt = t-prevt
@@ -98,5 +93,5 @@ class task_linefollow:
                     # Disabled → stop
                     self._spL.put(0.0)
                     self._spR.put(0.0)
-                
+                    self._state = S1_Wait
             yield self._state

@@ -25,7 +25,8 @@ class task_motor:
              mot: motor_driver, enc: encoder,
              goFlag: Share, share_kp: Share, share_ki: Share,
              share_setpoint: Share,
-             share_effort: Share, db_share):
+             dataValues: Queue, timeValues: Queue,
+             share_effort: Share):
         '''
         Initializes a motor task object
         
@@ -54,7 +55,14 @@ class task_motor:
 
         self._share_setpoint: Share  = share_setpoint
         
-        self._db_share: Share = db_share
+        self._dataValues: Queue = dataValues # A queue object used to store
+                                             # collected encoder position
+        
+        self._timeValues: Queue = timeValues # A queue object used to store the
+                                             # time stamps associated with the
+                                             # collected encoder data
+        
+        
         self._startTime: int    = 0          # The start time (in microseconds)
                                              # for a batch of collected data
         self._Kp: float = 0.05
@@ -82,7 +90,7 @@ class task_motor:
                 
             elif self._state == S1_WAIT: # Wait for "go command" state
                 if self._goFlag.get():   
-                    # Captur start time and reset errors
+                    # Capture start time and reset errors
                     self._startTime = ticks_us()
                     self._e_prev = 0.0
                     self._e_int = 0.0
@@ -105,7 +113,9 @@ class task_motor:
                 dt = self._enc.dt
                 if dt <= 0:
                     yield self._state
+                    continue
                  
+                # filter
                 self._vel_filt = (self._vel_alpha * vel_raw) + ((1 - self._vel_alpha) * self._vel_filt)
 
                  # controller
@@ -129,10 +139,15 @@ class task_motor:
                  # Collect a timestamp to use for this sample
                 t   = ticks_us()
 
-                if not self._goFlag.get():
+                if not self._dataValues.full():
+                    self._dataValues.put(self._vel_filt)
+                    self._timeValues.put(ticks_diff(t, self._startTime))
+
+                if self._goFlag == False:
                     self._mot.set_effort(0)
                     self._mot.disable()
                     self._state = S1_WAIT
                     yield self._state
+                    continue
                 
             yield self._state
