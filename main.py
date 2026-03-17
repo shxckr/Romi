@@ -171,7 +171,7 @@ linefollow_task = task_linefollow(
     leftMotorGo, rightMotorGo,
     sp_left, sp_right,
     centroidData, centroidTime, share_calL, share_calD,
-    collision_mode, share_lineKp, share_lineKi, DoneCalSh       # <-- add
+    collision_mode, yolo_mode, share_lineKp, share_lineKi, DoneCalSh       # <-- add
 )
 
 observerTask = task_observer(

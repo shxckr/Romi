@@ -22,11 +22,12 @@ class task_linefollow:
                  sensors: LineSensors,
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
-                 share_calL, share_calD, collision_mode:Share, share_lineKp: Share, share_lineKi: Share,
+                 share_calL, share_calD, collision_mode:Share, yolo_mode:Share, share_lineKp: Share, share_lineKi: Share,
                  DoneCalSh: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode    # collision detection flag
+        self.yolo_mode = yolo_mode
         self._sensors = sensors                 # IR sensor object
         self._leftGo  = leftGo                  # left motor go flag
         self._rightGo = rightGo                 # right motor go flag
@@ -58,7 +59,9 @@ class task_linefollow:
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
-                pass
+                continue
+            elif self.yolo_mode.get() == 1:
+                continue
             elif self._state == S0_INIT:
                 # Start stopped
                 self._spL.put(0.0)

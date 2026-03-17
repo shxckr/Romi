@@ -119,7 +119,7 @@ class task_course:
                     self._sL_start = self.sL_share.get()
                     self._t0 = pyb.millis()
                     self._ser.write("State 3 Complete"+"\r\n")
-                    self._state = S0_INIT # only testing state 3
+                    self._state = S4_GARAGESTRAIGHT # only testing state 3
 
             elif self._state == S4_GARAGESTRAIGHT:
                 left_cmd, right_cmd, heading_error = self.heading_hold.get_wheel_speeds()
