@@ -173,12 +173,18 @@ class task_user:
                         self._ser.write(UI_prompt)
                         self.lineFollowGain = True
                         self._state = S4_GAIN
-                    elif inChar in {'r','R'}:
-                        self._ser.write("Heading: "+str(self._headingSh.get())+"\r\n")
+                    elif inChar in {"q","Q"}:
+                        self._ser.write("Stopping Motors\r\n")
+                        self._leftMotorGo.put(False)
+                        self._rightMotorGo.put(False)
+                    elif inChar in {"y","Y"}:
+                        self._headingSh.get()
+                        self._ser.write("Current Heading: "+str(self._headingSh.get())+"\r\n")
+                        self._state = S1_CMD
             elif self._state == S2_COL:
                 # While the data is collecting (in the motor task) check the
                 # characters for a quit command to stop data collection
-                self._ser.write(f"lGO:{str(self._leftMotorGo.get())} rGO:{str(self._rightMotorGo.get())}\r\n")
+                #self._ser.write(f"lGO:{str(self._leftMotorGo.get())} rGO:{str(self._rightMotorGo.get())}\r\n")
                 if self._ser.any():
                     inChar = self._ser.read(1).decode()
                     if inChar in {"q","Q"}:
@@ -188,15 +194,14 @@ class task_user:
                 # When both go flags are clear, the data collection must have
                 # ended and it is time to print the collected data.
                 if not self._leftMotorGo.get() and not self._rightMotorGo.get():
-                    self._ser.write("Step response complete...\r\n")
+                    '''self._ser.write("Step response complete...\r\n")
                     self._ser.write("Printing data...\r\n\n")
                     self._ser.write("--------------------\r\n")
-                    self._ser.write(f"Setpoint: {self._share_setpoint.get()} mm/s\r\n")
                     self._ser.write(f"Kp:       {self._share_kp.get()} %*s/mm\r\n")
                     self._ser.write(f"Ki:       {self._share_ki.get()} %/mm\r\n")
                     self._ser.write("--------------------\r\n\n")
-                    self._ser.write("Time, Velocity\r\n")
-                    self._state = S3_DIS
+                    self._ser.write("Time, Velocity\r\n")'''
+                    self._state = S1_CMD
             
             elif self._state == S3_DIS:
 
@@ -309,6 +314,8 @@ class task_user:
             elif self._state == S6_Calibration:
                 if self._ser.any():
                     inChar=self._ser.read(1).decode()
+                    #Light Calibration: [970, 866, 762, 324, 322, 382, 683]
+                    #Dark Calibration: [2780, 2532, 2428, 2417, 2420, 2188, 2416]
                     if inChar in {"d","D"}:
                         self._calD.put(True)
                         self._ser.write(f"{inChar}\r\n")
