@@ -6,9 +6,11 @@ class LineSensors:
         self.IN_PINS = IN_PINS
         self.adcs = [pyb.ADC(pyb.Pin(pin)) for pin in IN_PINS]
         self.samples = max(1, int(samples))
-        self.mins = [0] * len(self.IN_PINS)
-        self.maxs = [4095] * len(self.IN_PINS)
+        self.mins = [970, 866, 762, 324, 322, 382, 683]
+        self.maxs = [2780, 2532, 2428, 2417, 2420, 2188, 2416]
         # line sensors read lower numbers for white
+        # Light Calibration: [970, 866, 762, 324, 322, 382, 683]
+        # Dark Calibration: [2780, 2532, 2428, 2417, 2420, 2188, 2416]
 
     def read_raw(self):
         vals = []
