@@ -40,21 +40,21 @@ class task_course:
          self._initHeadSh = initHeadSh
          self.UB_flag = shUB_flag
          self.heading_hold = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
-                                          target_heading=155,
+                                          target_heading=180,
                                           base_speed=183.0,
-                                          kp=4,ki=0.22,
+                                          kp=3.8,ki=0.22,
                                           min_speed=60.0,
                                           max_speed=400.0)
          self.heading_hold_ninety = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
                                           target_heading=85.0,
                                           base_speed=183.0,
-                                          kp=4,
+                                          kp=4,ki=0.2,
                                           min_speed=60.0,
                                           max_speed=400.0)
          self.heading_hold_5 = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
-                                          target_heading=0.0,
+                                          target_heading=90.0,
                                           base_speed=-183.0,
-                                          kp=2,
+                                          kp=2,ki=0,
                                           min_speed=60.0,
                                           max_speed=400.0)
          self._ser = ser
@@ -84,30 +84,30 @@ class task_course:
                     deltaL = abs(self.sL_share.get() - self._sL_start)
 
                     if deltaL >= 1735:
-                        self._leftGo.put(0)
-                        self._rightGo.put(0)
                         self.yolo_mode.put(1)
                         self._t0 = pyb.millis()
                         self._sL_start = self.sL_share.get()
                         self._ser.write("State 1 Complete"+"\r\n")
                         self._state = S2_EnterGarage
-                        
+
             elif self._state == S2_EnterGarage:
-                        if pyb.millis() - self._t0 >= 2000:
-                            deltaL = abs(self.sL_share.get() - self._sL_start)
-                            left_cmd, right_cmd, heading_error = self.heading_hold_ninety.get_wheel_speeds()
-                            self.sp_left.put(left_cmd)
-                            self.sp_right.put(right_cmd)
-                            self._ser.write("Heading: "+str(self.imu_heading_share.get())+"\r\n")
-                            self._leftGo.put(1)
-                            self._rightGo.put(1)
-                            if deltaL >= 150:
-                                self._leftGo.put(0)
-                                self._rightGo.put(0)
-                                self._sL_start = self.sL_share.get()
-                                self._sR_start = self.sR_share.get()
-                                self._ser.write("State 2 Complete"+"\r\n")
-                                self._state= S3_GARAGETURN
+                        self._ser.write("state 2 waiting\r\n")
+                        
+                        self._ser.write("State 2 Wait has ended\r\n")
+                        deltaL = abs(self.sL_share.get() - self._sL_start)
+                        left_cmd, right_cmd, heading_error = self.heading_hold_ninety.get_wheel_speeds()
+                        self.sp_left.put(left_cmd)
+                        self.sp_right.put(right_cmd)
+                        self._ser.write("Heading: "+str(self.imu_heading_share.get())+"\r\n")
+                        self._leftGo.put(1)
+                        self._rightGo.put(1)
+                        if deltaL >= 150:
+                            self._leftGo.put(0)
+                            self._rightGo.put(0)
+                            self._sL_start = self.sL_share.get()
+                            self._sR_start = self.sR_share.get()
+                            self._ser.write("State 2 Complete"+"\r\n")
+                            self._state= S3_GARAGETURN
             elif self._state == S3_GARAGETURN:
                 deltaR = abs(self.sR_share.get() - self._sR_start)
                 self.sp_left.put(300)
@@ -153,6 +153,7 @@ class task_course:
                     self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
                     # new idea
                     self._ser.write("Collision Detected! Heading: "+str(self._headingCur)+"\r\n")
+                    self._ser.write("State 4 Complete\r\n")
                     self._state = S5_BACKUP
             elif self._state == S5_BACKUP:
 
