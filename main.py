@@ -92,7 +92,7 @@ share_ki.put(0.01)         # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 share_lineKp = Share("f", name="line following Kp")
-share_lineKp.put(375)
+share_lineKp.put(400)
 share_lineKi = Share("f", name="line following Ki")
 share_lineKi.put(0.1)
 sp_left  = Share("f", name="sp_left")
