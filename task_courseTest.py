@@ -35,9 +35,9 @@ class task_course:
          self._initHeadSh = initHeadSh
          self.UB_flag = shUB_flag
          self.heading_hold = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
-                                          target_heading=140.0,
+                                          target_heading=155,
                                           base_speed=183.0,
-                                          kp=5,ki=1,
+                                          kp=4,ki=0.22,
                                           min_speed=60.0,
                                           max_speed=400.0)
          self.heading_hold_ninety = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
@@ -69,6 +69,7 @@ class task_course:
                     self._heading0 = self.imu_heading_share.get()
                     self._initHeadSh.put(self._heading0)
                     self._ser.write("State 0 Complete"+"\r\n")
+                    self._sR_start = self.sR_share.get()
                     self._state = S1_LINE
                     
             elif self._state == S1_LINE:
