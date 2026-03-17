@@ -59,9 +59,9 @@ class task_linefollow:
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
-                continue
+                pass
             elif self.yolo_mode.get() == 1:
-                continue
+                pass
             elif self._state == S0_INIT:
                 # Start stopped
                 self._spL.put(0.0)
