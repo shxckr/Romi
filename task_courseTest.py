@@ -10,7 +10,12 @@ S3_GARAGETURN      = micropython.const(3)
 S4_GARAGESTRAIGHT = micropython.const(4)
 S5_BACKUP            = micropython.const(5)
 S6_OUTTURN            = micropython.const(6)
-S7_NEXT                = micropython.const(7)
+S7_FOUNDLINE                = micropython.const(7)
+S8_TURN                = micropython.const(8)
+S9_WIGGLE                = micropython.const(9)
+S10_ENDWIGGLE                = micropython.const(10)
+S11_TURN                = micropython.const(11)
+S12_TOSTART                = micropython.const(12)
 
 class task_course:
 
@@ -188,11 +193,27 @@ class task_course:
                     self._sR_start = self.sR_share.get()
                     self._sL_start = self.sL_share.get()
                     self._t0 = pyb.millis()
-                    self._state = S7_NEXT
-            elif self._state == S7_NEXT:
+                    self._state = S7_FOUNDLINE
+            elif self._state == S9_WIGGLE:
+                # sL = self.sL_share.get()
+                self.yolo_mode.put(0)
+                # norm_vals = self.line_sensor.read_normalized()
+                deltaL = abs(self.sL_share.get() - self._sL_start)
+                self._ser.write(f"deltaL: {deltaL}\r\n")
+                if deltaL >= 2000:
+                    self._leftGo.put(0)
+                    self._rightGo.put(0)
+                    self.yolo_mode.put(1)
+                    self._t0 = pyb.millis()
+                    self._sL_start = self.sL_share.get()
+                    self._ser.write("State 7 Complete"+"\r\n")
+                    self._state = S10_ENDWIGGLE
+            elif self._state == S10_ENDWIGGLE:
                 self.sp_left.put(0)
                 self.sp_right.put(0)
                 self._leftGo.put(0)
                 self._rightGo.put(0)
+            
+                 
 
             yield self._state
