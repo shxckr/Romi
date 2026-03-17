@@ -13,7 +13,8 @@ from task_bumpsensor    import task_bumpsensor
 from BumpSensor    import BumpDriver
 from task_observer import task_observer
 from pyb import Timer, Pin, delay, USB_VCP, I2C, millis
-from task_course import task_course
+from task_courseTest import task_course
+from task_UserButton import task_UButton
 
 collect()
 # Build all driver objects first
@@ -34,6 +35,8 @@ R1 = Pin('PC12', Pin.IN, pull=Pin.PULL_UP) #bump 1
 R2 = Pin('PC10', Pin.IN, pull=Pin.PULL_UP) #bum[ 2]
 bump_left_pins  = [L0, L1, L2]
 bump_right_pins = [R0, R1, R2]
+# User button pin
+USER_BUTTON = Pin('PC13', Pin.IN, pull=Pin.PULL_UP)
 
 # --- IMU setup ---
 i2c = I2C(3, I2C.CONTROLLER, baudrate=400000)   
@@ -84,12 +87,14 @@ leftMotorGo   = Share("B",     name="Left Mot. Go Flag")
 rightMotorGo  = Share("B",     name="Right Mot. Go Flag")
 share_kp      = Share("f",     name="kp value")
 share_ki      = Share("f",     name="ki value")
-share_kp.put(0.05)         # default
-share_ki.put(0.00)         # default
+share_kp.put(0.04)         # default
+share_ki.put(0.01)         # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 share_lineKp = Share("f", name="line following Kp")
+share_lineKp.put(375)
 share_lineKi = Share("f", name="line following Ki")
+share_lineKi.put(0.01)
 sp_left  = Share("f", name="sp_left")
 sp_right = Share("f", name="sp_right")
 uL_share = Share("f", name="uL_effort")
@@ -97,7 +102,7 @@ uR_share = Share("f", name="uR_effort")
 DoneCalSh = Share("B", name="Calibration done flag")
 uL_share.put(0.0)
 uR_share.put(0.0)
-
+UB_share = Share("B", name="User Button Flag")
 #### new IMU
 share_heading  = Share("f", name="heading_deg")
 share_yaw_rate = Share("f", name="yaw_rate_dps")
@@ -114,7 +119,9 @@ yolo_mode = Share("B", name="YOLO Mode")
 yolo_mode.put(0)
 ser = USB_VCP()
 sL_share = Share("f", name="sL")
+sL_share.put(0.0)
 sR_share = Share("f", name="sR")
+sR_share.put(0.0)
 observer_outputs = {
     's': s_hat_share,
     'psi': psi_hat_share,
@@ -164,7 +171,7 @@ linefollow_task = task_linefollow(
     leftMotorGo, rightMotorGo,
     sp_left, sp_right,
     centroidData, centroidTime, share_calL, share_calD,
-    collision_mode, share_lineKp, share_lineKi, DoneCalSh      # <-- add
+    collision_mode, share_lineKp, share_lineKi, DoneCalSh       # <-- add
 )
 
 observerTask = task_observer(
@@ -203,8 +210,10 @@ courseTask = task_course(
     share_heading,
     share_yaw_rate,
     ser,
-    initHeadSh
+    initHeadSh,
+    UB_share
 )
+userButtonTask = task_UButton(USER_BUTTON, UB_share)
 ### imu
 task_list.append(Task(imuTask.run, name="IMU Task",
                       priority=1, period=30, profile=False))
@@ -226,6 +235,7 @@ task_list.append(Task(courseTask.run,
                       name="Course Task",
                       priority=3,
                       period=30))
+task_list.append(Task(userButtonTask.run, name="User Button Task", priority=2, period=100))
 
 # Run the garbage collector preemptively
 collect()
