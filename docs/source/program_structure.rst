@@ -7,7 +7,7 @@ This project implements a modular control system for the robot using MicroPython
 
 Course Strategy
 --------------
-BB uses a task to navigate the course. This task, "course task," is implemented as a finite state machine. Our team split the course up into several segments, and each segment has its own state in the finite state machine. Each state monitors a specific output, variable, or measurement and triggers transition to the next state when a specified condition is met. To start the run, the user must hit the blue user button on the Nuelceo. This moves the task from the intialization state to the first run state. The design of the run states and the conditions that trigger transition are detailed in the sections below. Many transitions are conditioned based on the arc length swept by the wheel. To avoid error accumulation in the measurement, this value is reset upon transition to the next state.
+The program has a specific task designed to navigate the course. This task, "course task," is implemented as a finite state machine. Our team split the course up into several segments, and each segment has its own state in the finite state machine. Each state waits for a specific input to reach a specified condition and trigger the transition to the next state. To start the run, the user hits the blue user button on the Nuelceo. This moves the task from the intialization state to the first run state. The design of the run states and the conditions that trigger transition are detailed in the sections below. Most transition conditions are based on the encoder ticks/ the arc length swept by either the left or right wheel. To avoid error accumulation in the measurement, this value is reset upon transition to the next state.
 
 
 Diagrams
