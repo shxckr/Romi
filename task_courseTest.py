@@ -10,7 +10,7 @@ S3_GARAGETURN      = micropython.const(3)
 S4_GARAGESTRAIGHT = micropython.const(4)
 S5_BACKUP            = micropython.const(5)
 S6_OUTTURN            = micropython.const(6)
-S7_FOUNDLINE                = micropython.const(7)
+S7_CHECK2                = micropython.const(7)
 S8_TURN                = micropython.const(8)
 S9_WIGGLE                = micropython.const(9)
 S10_ENDWIGGLE                = micropython.const(10)
@@ -46,7 +46,7 @@ class task_course:
                                           min_speed=60.0,
                                           max_speed=400.0)
          self.heading_hold_ninety = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
-                                          target_heading=85.0,
+                                          target_heading=90.0,
                                           base_speed=183.0,
                                           kp=4,ki=0.2,
                                           min_speed=60.0,
@@ -54,7 +54,13 @@ class task_course:
          self.heading_hold_5 = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
                                           target_heading=90.0,
                                           base_speed=-183.0,
-                                          kp=2,ki=0,
+                                          kp=4,ki=0.2,
+                                          min_speed=60.0,
+                                          max_speed=400.0)
+         self.heading_hold_6 = HeadingHoldController(self.imu_heading_share, self._initHeadSh,
+                                          target_heading=0.0, # change back to 90 when full testing
+                                          base_speed=183*2,
+                                          kp=5,ki=0.5,
                                           min_speed=60.0,
                                           max_speed=400.0)
          self._ser = ser
@@ -75,10 +81,9 @@ class task_course:
                     self._initHeadSh.put(self._heading0)
                     self._ser.write("State 0 Complete"+"\r\n")
                     self._sR_start = self.sR_share.get()
-                    self._state = S1_LINE
+                    self._state = S7_CHECK2
                     
             elif self._state == S1_LINE:
-                    sL = self.sL_share.get()
                     self.yolo_mode.put(0)
                     norm_vals = self.line_sensor.read_normalized()
                     deltaL = abs(self.sL_share.get() - self._sL_start)
@@ -91,9 +96,6 @@ class task_course:
                         self._state = S2_EnterGarage
 
             elif self._state == S2_EnterGarage:
-                        self._ser.write("state 2 waiting\r\n")
-                        
-                        self._ser.write("State 2 Wait has ended\r\n")
                         deltaL = abs(self.sL_share.get() - self._sL_start)
                         left_cmd, right_cmd, heading_error = self.heading_hold_ninety.get_wheel_speeds()
                         self.sp_left.put(left_cmd)
@@ -118,7 +120,7 @@ class task_course:
                 self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
                 self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
                 
-                if deltaR >= 30 and self._headingCur >= 155:
+                if deltaR >= 30 and self._headingCur >= 180:
                     self._leftGo.put(0)
                     self._rightGo.put(0)
                     self._sR_start = self.sR_share.get()
@@ -128,6 +130,8 @@ class task_course:
                     self._state = S4_GARAGESTRAIGHT # only testing state 3
 
             elif self._state == S4_GARAGESTRAIGHT:
+                '''This shouldn't be calculating before we start moving because it accumulates error
+                    but it works to counter the fact that we're overshooting 180 and close to a pillar'''
                 left_cmd, right_cmd, heading_error = self.heading_hold.get_wheel_speeds()
 
                 # if we just entered this state we expect self._t0 to be set when leaving previous state
@@ -142,6 +146,7 @@ class task_course:
                 else:
                     self.sp_left.put(0)
                     self.sp_right.put(0)
+                    self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
                     self._ser.write("Heading: "+str(self._headingCur)+"\r\n")                
                 if self.collision_mode.get() == 1:
                 #if deltaL >= 100:
@@ -161,19 +166,21 @@ class task_course:
 
                 left_cmd, right_cmd, heading_error = self.heading_hold_5.get_wheel_speeds()
 
-                # reverse the commands
                 self.sp_left.put(left_cmd)
                 self.sp_right.put(right_cmd)
 
                 self._leftGo.put(1)
                 self._rightGo.put(1)
+                self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
                 self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
                 if deltaL >= 100:
-                    self.yolo_mode.put(0)
                     self._leftGo.put(0)
                     self._rightGo.put(0)
                     self._sL_start = self.sL_share.get()
                     self._sR_start = self.sR_share.get()
+                    self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
+                    self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
+                    self._ser.write("State 5 Completed\r\n")
                     self._state = S6_OUTTURN
 
             elif self._state == S6_OUTTURN:
@@ -184,17 +191,39 @@ class task_course:
                 self._rightGo.put(1)
                 self._headingCur = (self.imu_heading_share.get() - self._heading0)%360
                 self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
-                #if pyb.millis() - self._t0 >= 1500:
                 
-                if self._headingCur >= 250:  # no idea if this is correct, this where i stopped
-                    # self.sp_left.put(0)
-                    # self.sp_right.put(0)
+                if self._headingCur <= 90:
                     self._leftGo.put(0)
                     self._rightGo.put(0)
                     self._sR_start = self.sR_share.get()
                     self._sL_start = self.sL_share.get()
-                    self._t0 = pyb.millis()
-                    self._state = S7_FOUNDLINE
+                    self.collision_mode.put(0)
+                    self._ser.write("State 6 Complete\r\n")
+                    self._ser.write("Yolo: "+str(self.yolo_mode.get())+"\r\n")
+                    self._ser.write("Collision: "+str(self.collision_mode.get())+"\r\n")
+                    self._state = S7_CHECK2
+
+            elif self._state == S7_CHECK2:
+                    spl, spr, errr = self.heading_hold_6.get_wheel_speeds()
+                    self.sp_left.put(spl)
+                    self.sp_right.put(spr)
+                    self._leftGo.put(1)
+                    self._rightGo.put(1)
+                    self._headingCur = (self.imu_heading_share.get()-self._heading0)%360
+                    self._ser.write("Heading: "+str(self._headingCur)+"\r\n")
+                    deltaL = abs(self.sL_share.get() - self._sL_start)
+                    #read norm vals and detect when centroid is only in the right
+                    if deltaL >= 270 :
+                        self._t0 = pyb.millis()
+                        self._ser.write("State 7 Complete"+"\r\n")
+                        self._state = S8_TURN
+            elif self._state == S8_TURN:
+                 self.yolo_mode.put(1)
+                 self.sp_left.put(0)
+                 self.sp_right.put(0)
+                 self._leftGo.put(0)
+                 self._rightGo.put(0)
+                 pass
             elif self._state == S9_WIGGLE:
                 # sL = self.sL_share.get()
                 self.yolo_mode.put(0)

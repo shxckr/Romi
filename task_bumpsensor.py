@@ -31,10 +31,9 @@ class task_bumpsensor:
 
             elif self._state == S1_WAIT:
                 if not (self._leftGo.get() and self._rightGo.get()):
-                    yield self._state
-                    continue
+                    pass
 
-                if self._left_hit() or self._right_hit():
+                elif self._left_hit() or self._right_hit():
                     self.collision_mode.put(1)
 
             yield self._state

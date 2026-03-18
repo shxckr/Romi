@@ -99,21 +99,15 @@ class task_motor:
                 
             elif self._state == S2_RUN: # Closed-loop control state
                
-                if not self._goFlag.get():
-                    self._mot.set_effort(0)
-                    self._mot.disable()
-                    self._share_effort.put(0)
+
                     
-                    self._e_int = 0.0
-                    self._state = S1_WAIT
-                    yield self._state
                 # Update encoder and get velocity
                 self._enc.update()
                 vel_raw = self._enc.get_velocity()
                 dt = self._enc.dt
                 if dt <= 0:
                     yield self._state
-                    continue
+                    
                  
                 # filter
                 self._vel_filt = (self._vel_alpha * vel_raw) + ((1 - self._vel_alpha) * self._vel_filt)
@@ -143,11 +137,11 @@ class task_motor:
                     self._dataValues.put(self._vel_filt)
                     self._timeValues.put(ticks_diff(t, self._startTime))
 
-                if self._goFlag == False:
+                if not self._goFlag.get():
                     self._mot.set_effort(0)
                     self._mot.disable()
+                    self._share_effort.put(0)
+                    self._e_int = 0.0
                     self._state = S1_WAIT
-                    yield self._state
-                    continue
                 
             yield self._state

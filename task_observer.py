@@ -282,4 +282,4 @@ class task_observer:
                 # Don’t let the task silently die — print once per failure
                 print("Observer error:", e)
 
-            yield 0
+            yield

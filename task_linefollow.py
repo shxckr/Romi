@@ -59,6 +59,7 @@ class task_linefollow:
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
+                
                 pass
             elif self.yolo_mode.get() == 1:
                 pass
@@ -102,7 +103,10 @@ class task_linefollow:
                     # Disabled → stop
                     self._spL.put(0.0)
                     self._spR.put(0.0)
+                    self.e = 0
+                    self._esum = 0
                     self._state = S1_Wait
+                    
             elif self._state == S3_CAL:
                 if self._calD.get():
                     self._sensors.calibrateDark()

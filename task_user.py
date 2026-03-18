@@ -274,8 +274,7 @@ class task_user:
                     else:
                         # if invalid character, prompt again
                         self._ser.write("Pick p or i\r\n")
-                        yield self._state
-                        continue
+                        pass
                     self._char_buf = ""
                     self._ser.write(f"What k{k_choose} value would you like?\r\n")
                     self._state = S5_digit

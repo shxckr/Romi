@@ -32,14 +32,14 @@ class HeadingHoldController:
         error = self._wrap_angle(self.target_heading - heading)
         self._errSum += error
         correction = self.kp * error + self.ki * self._errSum
-        if self.base_speed >= 0:
+        #if self.base_speed >= 0:
             # forward driving
-            left_speed = self.base_speed + correction
-            right_speed = self.base_speed - correction
-        else:
+        left_speed = self.base_speed + correction
+        right_speed = self.base_speed - correction
+        '''else:
             # reverse driving: flip correction
             left_speed = self.base_speed - correction
-            right_speed = self.base_speed + correction
+            right_speed = self.base_speed + correction'''
 
         left_speed = self._clamp(left_speed)
         right_speed = self._clamp(right_speed)
