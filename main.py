@@ -7,6 +7,7 @@ from task_linefollow import task_linefollow
 from task_share   import Share, Queue, show_all
 from cotask       import Task, task_list
 from gc           import collect
+collect()
 from IMU          import IMU
 from task_imu     import task_imu
 from task_bumpsensor    import task_bumpsensor
@@ -92,7 +93,7 @@ share_ki.put(0.01)         # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 share_lineKp = Share("f", name="line following Kp")
-share_lineKp.put(350) #400
+share_lineKp.put(400) #400
 share_lineKi = Share("f", name="line following Ki")
 share_lineKi.put(0.1)
 sp_left  = Share("f", name="sp_left")
@@ -103,6 +104,9 @@ DoneCalSh = Share("B", name="Calibration done flag")
 uL_share.put(0.0)
 uR_share.put(0.0)
 UB_share = Share("B", name="User Button Flag")
+baseSh = Share("f", name="Base Speed")
+baseSh.put(180.0)
+baseChShare = Share("f", name="flag to signify speed change")
 #### new IMU
 share_heading  = Share("f", name="heading_deg")
 share_yaw_rate = Share("f", name="yaw_rate_dps")
@@ -171,7 +175,7 @@ linefollow_task = task_linefollow(
     leftMotorGo, rightMotorGo,
     sp_left, sp_right,
     centroidData, centroidTime, share_calL, share_calD,
-    collision_mode, yolo_mode, share_lineKp, share_lineKi, DoneCalSh       # <-- add
+    collision_mode, yolo_mode, share_lineKp, share_lineKi, DoneCalSh, baseSh       # <-- add
 )
 
 observerTask = task_observer(
@@ -211,7 +215,8 @@ courseTask = task_course(
     share_yaw_rate,
     ser,
     initHeadSh,
-    UB_share
+    UB_share,
+    baseSh
 )
 userButtonTask = task_UButton(USER_BUTTON, UB_share)
 ### imu
