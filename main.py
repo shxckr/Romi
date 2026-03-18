@@ -92,7 +92,7 @@ share_ki.put(0.01)         # default
 share_calD = Share("B", name="calibrate dark flag")
 share_calL = Share("B", name="calibrate light flag")
 share_lineKp = Share("f", name="line following Kp")
-share_lineKp.put(350) #400
+share_lineKp.put(400) #400
 share_lineKi = Share("f", name="line following Ki")
 share_lineKi.put(0.1)
 sp_left  = Share("f", name="sp_left")
@@ -103,6 +103,9 @@ DoneCalSh = Share("B", name="Calibration done flag")
 uL_share.put(0.0)
 uR_share.put(0.0)
 UB_share = Share("B", name="User Button Flag")
+baseSh = Share("f", name="Base Speed")
+baseSh.put(180.0)
+baseChShare = Share("f", name="flag to signify speed change")
 #### new IMU
 share_heading  = Share("f", name="heading_deg")
 share_yaw_rate = Share("f", name="yaw_rate_dps")
