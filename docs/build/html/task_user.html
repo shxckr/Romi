@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>task_user &mdash; Romi mecha32 3/20/2026 documentation</title>
+  <title>task_user &mdash; ME 405 Term Project 3/20/2026 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,6 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Performance" href="performance.html" />
     <link rel="prev" title="task_share" href="task_share.html" /> 
 </head>
 
@@ -31,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            Romi mecha32
+            ME 405 Term Project
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,29 +44,29 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Romi</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="IMU.html">IMU</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cotask.html">cotask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="main.html">main</a></li>
-<li class="toctree-l2"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_imu.html">task_imu</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_motor.html">task_motor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_share.html">task_share</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">task_user</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#task_user.task_user"><code class="docutils literal notranslate"><span class="pre">task_user</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#task_user.task_user.run"><code class="docutils literal notranslate"><span class="pre">task_user.run()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">ME 405 Term Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_share.html">task_share</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">task_user</a></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
 </ul>
 
         </div>
@@ -74,7 +75,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Romi mecha32</a>
+          <a href="index.html">ME 405 Term Project</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -82,7 +83,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">Romi</a></li>
+          <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
+          <li class="breadcrumb-item"><a href="tasks.html">Tasks</a></li>
       <li class="breadcrumb-item active">task_user</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/task_user.rst.txt" rel="nofollow"> View page source</a>
@@ -99,7 +101,7 @@
 run method implemented as a generator</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_user.task_user">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leftMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_setpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_meas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_share</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_user.task_user" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leftMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_meas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoneCalSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shareHeading</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_user.task_user" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class that represents a UI task. The task is responsible for reading user
 input over a serial port, parsing the input for single-character commands,
@@ -113,10 +115,26 @@ on the user commands.</p>
 start data collection on the left motor</p></li>
 <li><p><strong>rightMotorGo</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object representing a boolean flag to
 start data collection on the right motor</p></li>
-<li><p><strong>dataValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store collected encoder
-position values</p></li>
-<li><p><strong>timeValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store the time stamps
-associated with the collected encoder data</p></li>
+<li><p><strong>shareKp</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object to store Kp value for motor control</p></li>
+<li><p><strong>shareKi</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object to store Ki value for motor control</p></li>
+<li><p><strong>leftDataValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the left motor data values</p></li>
+<li><p><strong>leftTimeValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the left motor time values</p></li>
+<li><p><strong>rightDataValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the right motor data values</p></li>
+<li><p><strong>rightTimeValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the right motor time values</p></li>
+<li><p><strong>centroidData</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the line centroid data values</p></li>
+<li><p><strong>centroidTime</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the line centroid time values</p></li>
+<li><p><strong>statePredX</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the X state prediction values</p></li>
+<li><p><strong>statePredY</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the Y state prediction values</p></li>
+<li><p><strong>sL_yhat</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the sL state prediction values</p></li>
+<li><p><strong>sL_meas</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the sL measured values</p></li>
+<li><p><strong>statetime</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object to share the state time values</p></li>
+<li><p><strong>share_calL</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object storing a boolean which determines
+when calibration for light</p></li>
+<li><p><strong>share_calD</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object storing a boolean which determines
+when calibration for dark</p></li>
+<li><p><strong>db_share</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object for debugging purposes</p></li>
+<li><p><strong>share_lineKp</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object to store Kp value for line follow control</p></li>
+<li><p><strong>share_lineKi</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object to store Ki value for line follow control</p></li>
 </ul>
 </dd>
 </dl>
@@ -135,6 +153,7 @@ associated with the collected encoder data</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="task_share.html" class="btn btn-neutral float-left" title="task_share" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance.html" class="btn btn-neutral float-right" title="Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
