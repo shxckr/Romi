@@ -48,11 +48,11 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Program Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">bump_sensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line_sensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
@@ -95,19 +95,11 @@
              
   <section id="program-structure">
 <h1>Program Structure<a class="headerlink" href="#program-structure" title="Link to this heading"></a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files that were provided by Dr. John Ridgely and are available on his ME 405 repository. The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot’s behavior. All objects are  in a single main file. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely.</p>
+<section id="program-overview">
+<h2>Program Overview<a class="headerlink" href="#program-overview" title="Link to this heading"></a></h2>
 </section>
-<section id="course-strategy">
-<h2>Course Strategy<a class="headerlink" href="#course-strategy" title="Link to this heading"></a></h2>
-<p>BB uses a task to navigate the course. This task, titled “course task” is implemented as a finite state machine with separate states for various segments of the course.</p>
-</section>
-<section id="diagrams">
-<h2>Diagrams<a class="headerlink" href="#diagrams" title="Link to this heading"></a></h2>
-<p>task diagram</p>
-<p>course task STM
-maybe other STM</p>
+<section id="course-design">
+<h2>Course Design<a class="headerlink" href="#course-design" title="Link to this heading"></a></h2>
 </section>
 <section id="tasks-and-drivers">
 <h2>Tasks and Drivers<a class="headerlink" href="#tasks-and-drivers" title="Link to this heading"></a></h2>

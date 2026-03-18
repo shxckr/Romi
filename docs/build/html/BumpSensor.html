@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bump_sensor &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+  <title>BumpSensor &mdash; ME 405 Term Project 3/20/2026 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="imu" href="IMU.html" />
+    <link rel="next" title="IMU" href="IMU.html" />
     <link rel="prev" title="Drivers" href="drivers.html" /> 
 </head>
 
@@ -48,11 +48,11 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="drivers.html">Drivers</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">bump_sensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line_sensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">BumpSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
@@ -85,7 +85,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
           <li class="breadcrumb-item"><a href="drivers.html">Drivers</a></li>
-      <li class="breadcrumb-item active">bump_sensor</li>
+      <li class="breadcrumb-item active">BumpSensor</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/BumpSensor.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,68 +95,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-BumpSensor">
-<span id="bump-sensor"></span><h1>bump_sensor<a class="headerlink" href="#module-BumpSensor" title="Link to this heading"></a></h1>
-<p>bump_driver.py</p>
-<p>Romi Bumper Switch Kit driver (Pololu #3674) with ISR callbacks + software debounce.</p>
-<p>Debounce strategy (per ME405 Week 10 PDF):
-- Each falling edge interrupt (active-low press) triggers an ISR.
-- ISR disables that interrupt line and records it in a debounce mask.
-- A periodic task (update()) runs every debounce interval (~10–20ms),</p>
-<blockquote>
-<div><p>re-enables any lines that were disabled in the previous interval.</p>
-</div></blockquote>
-<p>Assumptions:
-- MicroPython on STM32 with <cite>pyb</cite> module available.
-- Switches are wired active-low with pull-ups enabled.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="BumpSensor.BumpDriver">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BumpDriver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debounce_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BumpSensor.BumpDriver" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Driver for one or more bumper switches using external interrupts + debounce.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pins</strong> (<em>list</em><em>[</em><em>pyb.Pin</em><em>]</em>) – List of Pin objects for the bumper switches.
-Example: [Pin(‘PC0’, Pin.IN), Pin(‘PC1’, Pin.IN), …]</p></li>
-<li><p><strong>callback</strong> (<em>function</em>) – User function called on a press event: callback(isr_line, pin_obj).
-IMPORTANT: Keep it short/fast (it runs in interrupt context).</p></li>
-<li><p><strong>debounce_ms</strong> (<em>int</em>) – Debounce window. Call update() at about this interval.</p></li>
-<li><p><strong>pull</strong> (<em>int</em>) – Pin pull configuration (defaults to Pin.PULL_UP since bumpers are active-low).</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="BumpSensor.BumpDriver.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BumpSensor.BumpDriver.update" title="Link to this definition"></a></dt>
-<dd><p>Call this periodically (e.g., every 10–20ms) to re-enable lines that were
-disabled during the previous debounce window.</p>
-<p>This matches the PDF pattern:
-- Re-enable any channels whose bit was set in _db_mask[1]
-- Atomically shift current-&gt;previous and clear current</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="BumpSensor.BumpDriver.enable_all">
-<span class="sig-name descname"><span class="pre">enable_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BumpSensor.BumpDriver.enable_all" title="Link to this definition"></a></dt>
-<dd><p>Enable all configured interrupt lines.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="BumpSensor.BumpDriver.disable_all">
-<span class="sig-name descname"><span class="pre">disable_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BumpSensor.BumpDriver.disable_all" title="Link to this definition"></a></dt>
-<dd><p>Disable all configured interrupt lines.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="BumpSensor.BumpDriver.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BumpSensor.BumpDriver.read" title="Link to this definition"></a></dt>
-<dd><p>Read current raw pin states.</p>
-<p>Returns dict: {isr_line: 0/1} where 0 means pressed (active-low).</p>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="bumpsensor">
+<h1>BumpSensor<a class="headerlink" href="#bumpsensor" title="Link to this heading"></a></h1>
 </section>
 
 
@@ -164,7 +104,7 @@ disabled during the previous debounce window.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="drivers.html" class="btn btn-neutral float-left" title="Drivers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="IMU.html" class="btn btn-neutral float-right" title="imu" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="IMU.html" class="btn btn-neutral float-right" title="IMU" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

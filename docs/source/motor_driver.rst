@@ -1,4 +1,4 @@
-motors
+motor\_driver
 ====================
 
 .. automodule:: motor_driver
