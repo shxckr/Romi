@@ -46,11 +46,11 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="program_structure.html">Program Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">bump_sensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line_sensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
@@ -91,41 +91,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-task_motor">
-<span id="task-motor"></span><h1>task_motor<a class="headerlink" href="#module-task_motor" title="Link to this heading"></a></h1>
-<p>This file demonstrates an example motor task using a custom class with a
-run method implemented as a generator</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="task_motor.task_motor">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="motor_driver.html#motor_driver.motor_driver" title="motor_driver.motor_driver"><span class="pre">motor_driver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">enc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="encoder.html#encoder.encoder" title="encoder.encoder"><span class="pre">encoder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">goFlag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_setpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_effort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_motor.task_motor" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class that represents a motor task. The task is responsible for reading
-data from an encoder, performing closed loop control, and actuating a motor.
-Multiple objects of this class can be created to work with multiple motors
-and encoders.</p>
-<p>Initializes a motor task object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mot</strong> (<a class="reference internal" href="motor_driver.html#motor_driver.motor_driver" title="motor_driver.motor_driver"><em>motor_driver</em></a>) – A motor driver object</p></li>
-<li><p><strong>enc</strong> (<a class="reference internal" href="encoder.html#encoder.encoder" title="encoder.encoder"><em>encoder</em></a>) – An encoder object</p></li>
-<li><p><strong>goFlag</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object representing a boolean flag to
-start data collection</p></li>
-<li><p><strong>dataValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store collected encoder
-position values</p></li>
-<li><p><strong>timeValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store the time stamps
-associated with the collected encoder data</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="task_motor.task_motor.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_motor.task_motor.run" title="Link to this definition"></a></dt>
-<dd><p>Runs one iteration of the task</p>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="task-motor">
+<h1>task_motor<a class="headerlink" href="#task-motor" title="Link to this heading"></a></h1>
 </section>
 
 

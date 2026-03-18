@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>encoders &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+  <title>encoder &mdash; ME 405 Term Project 3/20/2026 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="line_sensors" href="linesensors.html" />
-    <link rel="prev" title="imu" href="IMU.html" /> 
+    <link rel="next" title="linesensors" href="linesensors.html" />
+    <link rel="prev" title="IMU" href="IMU.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,11 +48,11 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="drivers.html">Drivers</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">bump_sensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">encoders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line_sensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
@@ -85,7 +85,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
           <li class="breadcrumb-item"><a href="drivers.html">Drivers</a></li>
-      <li class="breadcrumb-item active">encoders</li>
+      <li class="breadcrumb-item active">encoder</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/encoder.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,67 +95,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-encoder">
-<span id="encoders"></span><h1>encoders<a class="headerlink" href="#module-encoder" title="Link to this heading"></a></h1>
-<p>This file implements a “dummy” class to use in place of encoder objects</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="encoder.ticks_us">
-<span class="sig-name descname"><span class="pre">ticks_us</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encoder.ticks_us" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="encoder.ticks_diff">
-<span class="sig-name descname"><span class="pre">ticks_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder.ticks_diff" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="encoder.encoder">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chA_pin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chB_pin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder.encoder" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A dummy class that can be instantiated in place of encoder objects</p>
-<p>Initializes an encoder object</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="encoder.encoder.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cbSRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder.encoder.update" title="Link to this definition"></a></dt>
-<dd><p>Update the encoder count. This function is meant to be called
-periodically in a task or using a Timer</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="encoder.encoder.get_position">
-<span class="sig-name descname"><span class="pre">get_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encoder.encoder.get_position" title="Link to this definition"></a></dt>
-<dd><p>Returns the current position of the encoder</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int The current position of the encoder in units of ticks</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="encoder.encoder.get_velocity">
-<span class="sig-name descname"><span class="pre">get_velocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encoder.encoder.get_velocity" title="Link to this definition"></a></dt>
-<dd><p>Returns a measure of velocity using the the most recently updated
-value of delta as determined within the update() method</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="encoder.encoder.zero">
-<span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encoder.encoder.zero" title="Link to this definition"></a></dt>
-<dd><p>Zeros the encoder position at the current orientation. Used to
-reestablish a new datum position for the encoder</p>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="encoder">
+<h1>encoder<a class="headerlink" href="#encoder" title="Link to this heading"></a></h1>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="IMU.html" class="btn btn-neutral float-left" title="imu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="linesensors.html" class="btn btn-neutral float-right" title="line_sensors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="IMU.html" class="btn btn-neutral float-left" title="IMU" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="linesensors.html" class="btn btn-neutral float-right" title="linesensors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,4 +1,4 @@
-line_sensors
+linesensors
 ==================
 
 .. automodule:: linesensors
