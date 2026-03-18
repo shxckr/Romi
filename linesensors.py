@@ -7,10 +7,15 @@ class LineSensors:
         self.adcs = [pyb.ADC(pyb.Pin(pin)) for pin in IN_PINS]
         self.samples = max(1, int(samples))
         self.mins = [970, 866, 762, 324, 322, 382, 683]
-        self.maxs = [2780, 2532, 2428, 2417, 2420, 2188, 2416]
+        self.maxs = [3309, 3344, 3128, 3203, 3146, 3305, 3303]
         # line sensors read lower numbers for white
+        
         # Light Calibration: [970, 866, 762, 324, 322, 382, 683]
         # Dark Calibration: [2780, 2532, 2428, 2417, 2420, 2188, 2416]
+        '''Light Calibration: [1381, 974, 840, 383, 503, 670, 1044]
+        Dark Calibration: [3309, 3344, 3128, 3203, 3146, 3305, 3303]
+        '''
+
 
     def read_raw(self):
         vals = []
@@ -73,6 +78,10 @@ class LineSensors:
         pos = sum(w * s for w, s in zip(pos_weights, strengths)) / total
         return pos
     
+    def set_emitter_power(self, percent):
+        percent = max(0, min(100, percent))
+        self.led_ch.pulse_width_percent(percent)
+
 
 
     # Yellow pins = ['PA4', 'PB0', 'PB1', 'PC0', 'PC1', 'PC2', 'PC3']

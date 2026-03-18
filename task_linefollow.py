@@ -23,7 +23,7 @@ class task_linefollow:
                  leftGo: Share, rightGo: Share,
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
                  share_calL, share_calD, collision_mode:Share, yolo_mode:Share, share_lineKp: Share, share_lineKi: Share,
-                 DoneCalSh: Share):
+                 DoneCalSh: Share, baseSh: Share):
 
         self._state = S0_INIT
         self.collision_mode = collision_mode    # collision detection flag
@@ -44,7 +44,8 @@ class task_linefollow:
         self._tRun = 0                          # initial run timestamp
         self.e     = 0                          # error
         self._esum = 0                          # integral of error        
-        self.base = 175                         # 1200  # base speed for line following
+        self.baseSh = baseSh
+        self.base = self.baseSh.get()           # 1200  # base speed for line following
         self.max_turn = 400                     # 2000 # maximum turn speed
         self.max_sp = 382                       # 2500 # maximum wheel speed
         self.line_is_dark = True
@@ -67,6 +68,7 @@ class task_linefollow:
                 # Start stopped
                 self._spL.put(0.0)
                 self._spR.put(0.0)
+                self.base = self.baseSh.get()
                 self._state = S1_Wait
 
             elif self._state == S1_Wait:

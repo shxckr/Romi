@@ -10,6 +10,7 @@ class HeadingHoldController:
         self.max_speed = max_speed
         self._initHeadSh = initHeadSh
         self._errSum = 0.0
+        self.dt = 0
     def _wrap_angle(self, angle):
         if angle >= 180:
             angle -= 360
