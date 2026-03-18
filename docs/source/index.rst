@@ -16,8 +16,7 @@ The course is defined by black marks printed on white grid paper. For most of th
 .. figure:: _static/images/game_track_print.jpg
    :width: 400px
    :align: center
-   :height: 300px
-   :scale: 50%
+   :scale: 150%
 
    Game track
 
@@ -40,3 +39,4 @@ The GitHub repsoitory with all project files can be found here *add link*
    hardware
    program_structure
    performance
+   media

@@ -44,4 +44,10 @@ html_static_path = ['_static']
 autodoc_member_order = "bysource"
 add_module_names = False
 autoclass_content = "both"
-autodoc_mock_imports = ["pyb", "utime", "micropython"]
+autodoc_mock_imports = [
+    "pyb",
+    "machine",
+    "micropython",
+    "utime",
+    "time",
+]

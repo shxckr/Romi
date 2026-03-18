@@ -45,11 +45,11 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="program_structure.html">Program Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">bump_sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line_sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
@@ -110,8 +110,10 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -131,6 +133,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="task_share.html#task_share.BaseShare">BaseShare (class in task_share)</a>
 </li>
+      <li><a href="BumpSensor.html#BumpSensor.BumpDriver">BumpDriver (class in BumpSensor)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    BumpSensor
+
+      <ul>
+        <li><a href="BumpSensor.html#module-BumpSensor">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -170,6 +183,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="BumpSensor.html#BumpSensor.BumpDriver.disable_all">disable_all() (BumpDriver method)</a>
+</li>
       <li><a href="task_observer.html#task_observer.dot_mv">dot_mv() (in module task_observer)</a>
 </li>
   </ul></td>
@@ -180,9 +195,20 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="task_share.html#task_share.Queue.empty">empty() (Queue method)</a>
 </li>
+      <li><a href="motor_driver.html#motor_driver.motor_driver.enable">enable() (motor_driver method)</a>
+</li>
+      <li><a href="BumpSensor.html#BumpSensor.BumpDriver.enable_all">enable_all() (BumpDriver method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="motor_driver.html#motor_driver.motor_driver.enable">enable() (motor_driver method)</a>
+      <li>
+    encoder
+
+      <ul>
+        <li><a href="encoder.html#module-encoder">module</a>
+</li>
+      </ul></li>
+      <li><a href="encoder.html#encoder.encoder">encoder (class in encoder)</a>
 </li>
       <li><a href="IMU.html#IMU.IMU.EULER_START">EULER_START (IMU attribute)</a>
 </li>
@@ -208,11 +234,15 @@
       </ul></li>
       <li><a href="IMU.html#IMU.IMU.get_cal_coeffs">get_cal_coeffs() (IMU method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="IMU.html#IMU.IMU.get_cal_status">get_cal_status() (IMU method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="encoder.html#encoder.encoder.get_position">get_position() (encoder method)</a>
+</li>
       <li><a href="cotask.html#cotask.Task.get_trace">get_trace() (Task method)</a>
+</li>
+      <li><a href="encoder.html#encoder.encoder.get_velocity">get_velocity() (encoder method)</a>
 </li>
       <li><a href="cotask.html#cotask.Task.go">go() (Task method)</a>
 </li>
@@ -257,7 +287,11 @@
     module
 
       <ul>
+        <li><a href="BumpSensor.html#module-BumpSensor">BumpSensor</a>
+</li>
         <li><a href="cotask.html#module-cotask">cotask</a>
+</li>
+        <li><a href="encoder.html#module-encoder">encoder</a>
 </li>
         <li><a href="IMU.html#module-IMU">IMU</a>
 </li>
@@ -266,6 +300,8 @@
         <li><a href="task_bumpsensor.html#module-task_bumpsensor">task_bumpsensor</a>
 </li>
         <li><a href="task_imu.html#module-task_imu">task_imu</a>
+</li>
+        <li><a href="task_motor.html#module-task_motor">task_motor</a>
 </li>
         <li><a href="task_observer.html#module-task_observer">task_observer</a>
 </li>
@@ -341,6 +377,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="BumpSensor.html#BumpSensor.BumpDriver.read">read() (BumpDriver method)</a>
+</li>
       <li><a href="IMU.html#IMU.IMU.read_euler">read_euler() (IMU method)</a>
 </li>
       <li><a href="IMU.html#IMU.IMU.read_gyro">read_gyro() (IMU method)</a>
@@ -359,6 +397,8 @@
 
       <ul>
         <li><a href="task_imu.html#task_imu.task_imu.run">(task_imu method)</a>
+</li>
+        <li><a href="task_motor.html#task_motor.task_motor.run">(task_motor method)</a>
 </li>
         <li><a href="task_observer.html#task_observer.task_observer.run">(task_observer method)</a>
 </li>
@@ -422,14 +462,23 @@
       <li><a href="task_imu.html#task_imu.task_imu">task_imu (class in task_imu)</a>
 </li>
       <li>
+    task_motor
+
+      <ul>
+        <li><a href="task_motor.html#module-task_motor">module</a>
+</li>
+      </ul></li>
+      <li><a href="task_motor.html#task_motor.task_motor">task_motor (class in task_motor)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     task_observer
 
       <ul>
         <li><a href="task_observer.html#module-task_observer">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="task_observer.html#task_observer.task_observer">task_observer (class in task_observer)</a>
 </li>
       <li>
@@ -450,6 +499,22 @@
 </li>
       <li><a href="cotask.html#cotask.TaskList">TaskList (class in cotask)</a>
 </li>
+      <li><a href="encoder.html#encoder.ticks_diff">ticks_diff() (in module encoder)</a>
+</li>
+      <li><a href="encoder.html#encoder.ticks_us">ticks_us() (in module encoder)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="BumpSensor.html#BumpSensor.BumpDriver.update">update() (BumpDriver method)</a>
+
+      <ul>
+        <li><a href="encoder.html#encoder.encoder.update">(encoder method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -465,6 +530,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="IMU.html#IMU.IMU.yaw_rate">yaw_rate() (IMU method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="encoder.html#encoder.encoder.zero">zero() (encoder method)</a>
 </li>
   </ul></td>
 </tr></table>
