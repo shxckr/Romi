@@ -1,13 +1,13 @@
 ME 405 Term Project
 ================================
 
-Overview
---------
+Project Overview
+----------------
 This project and the documentation on this website were created by Cal Poly students in ME 405 as their final deliverable for the term project. Students were tasked with programming a Pololu Romi robot to complete a printed course/track autonomously. The track has 5 checkpoints that the robot is required to reach and optional bonus challenges. Student groups implemented strategies of their choice to program their robot to reach each checkpoint.
 
-Robot Components
------------------
-*The Pololu Romi chassis kit was configured with an STM32 Nucleo MCU and access via an ST Link shoe of Brian. All coding was done in python, downloaded via firmware on...*
+Robot Overview
+--------------
+The robots in this course use the Romi kit from Pololu and several other Pololu accessories. The microcontroller is an STM32 Nucleo-L476RG board configured to run micropython.
 
 Course Description
 ------------------
@@ -16,15 +16,14 @@ The course is defined by black marks printed on white grid paper. For most of th
 .. figure:: _static/images/game_track_print.jpg
    :width: 400px
    :align: center
-   :height: 300px
-   :scale: 50%
+   :scale: 150%
 
    Game track
 
 
 Robot Design and Repository
 ---------------------------
-Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or BumbleBee) and its performance on the course!
+Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!
 
 The GitHub repsoitory with all project files can be found here *add link*
 

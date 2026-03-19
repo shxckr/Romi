@@ -16,15 +16,14 @@ The course is defined by black marks printed on white grid paper. For most of th
 .. figure:: _static/images/game_track_print.jpg
    :width: 400px
    :align: center
-   :height: 300px
-   :scale: 50%
+   :scale: 150%
 
    Game track
 
 
 Robot Design and Repository
 ---------------------------
-Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or BumbleBee) and its performance on the course!
+Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!
 
 The GitHub repsoitory with all project files can be found here *add link*
 
