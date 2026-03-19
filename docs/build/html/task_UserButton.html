@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tasks &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+  <title>task_UserButton &mdash; ME 405 Term Project 3/20/2026 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="task_bumpsensor" href="task_bumpsensor.html" />
-    <link rel="prev" title="motors" href="motor_driver.html" /> 
+    <link rel="next" title="Performance" href="performance.html" />
+    <link rel="prev" title="task_user" href="task_user.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,7 +54,7 @@
 <li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Tasks</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_courseTest.html">task_courseTest</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
@@ -62,7 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="task_motor.html">task_motor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_user.html">task_user</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_UserButton.html">task_UserButton</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">task_UserButton</a></li>
 </ul>
 </li>
 </ul>
@@ -85,9 +85,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
-      <li class="breadcrumb-item active">Tasks</li>
+          <li class="breadcrumb-item"><a href="tasks.html">Tasks</a></li>
+      <li class="breadcrumb-item active">task_UserButton</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/tasks.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/task_UserButton.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -95,28 +96,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tasks">
-<h1>Tasks<a class="headerlink" href="#tasks" title="Link to this heading"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_courseTest.html">task_courseTest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_imu.html">task_imu</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_motor.html">task_motor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_user.html">task_user</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_UserButton.html">task_UserButton</a></li>
-</ul>
-</div>
+  <section id="module-task_UserButton">
+<span id="task-userbutton"></span><h1>task_UserButton<a class="headerlink" href="#module-task_UserButton" title="Link to this heading"></a></h1>
+<p>File to detect when the user button is pressed and set a flag in a share to be read by other tasks</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="task_UserButton.task_UButton">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_UButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyb.Pin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_share</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_UserButton.task_UButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="task_UserButton.task_UButton.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_UserButton.task_UButton.update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="task_UserButton.task_UButton.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_UserButton.task_UButton.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="motor_driver.html" class="btn btn-neutral float-left" title="motors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="task_bumpsensor.html" class="btn btn-neutral float-right" title="task_bumpsensor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="task_user.html" class="btn btn-neutral float-left" title="task_user" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance.html" class="btn btn-neutral float-right" title="Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

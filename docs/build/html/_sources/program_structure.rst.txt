@@ -52,7 +52,7 @@ maybe other STD*
 
 Tasks and Drivers
 ----------
-The drivers and tasks created for this program can be explored in depth using the navigation tree on the left. The methods and attributes that belong to each class are each described in breif.
+The drivers and tasks created for this program can be explored in depth using the navigation tree on the left or the links below. The methods and attributes that belong to each class are each described in breif in each tab.
 
 .. toctree::
    :maxdepth: 1

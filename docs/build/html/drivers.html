@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="BumpSensor" href="BumpSensor.html" />
+    <link rel="next" title="heading" href="HeadingHoldController.html" />
     <link rel="prev" title="Program Structure" href="program_structure.html" /> 
 </head>
 
@@ -48,20 +48,21 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_courseTest.html">task_courseTest</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_motor.html">task_motor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_share.html">task_share</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_user.html">task_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_UserButton.html">task_UserButton</a></li>
 </ul>
 </li>
 </ul>
@@ -98,44 +99,10 @@
 <h1>Drivers<a class="headerlink" href="#drivers" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="IMU.html">IMU</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="IMU.html#IMU.IMU"><code class="docutils literal notranslate"><span class="pre">IMU</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.OPR_MODE"><code class="docutils literal notranslate"><span class="pre">IMU.OPR_MODE</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.CALIB_STAT"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_STAT</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.EULER_START"><code class="docutils literal notranslate"><span class="pre">IMU.EULER_START</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.GYRO_START"><code class="docutils literal notranslate"><span class="pre">IMU.GYRO_START</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.CALIB_START"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_START</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.CALIB_LEN"><code class="docutils literal notranslate"><span class="pre">IMU.CALIB_LEN</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.CONFIG_MODE"><code class="docutils literal notranslate"><span class="pre">IMU.CONFIG_MODE</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.NDOF"><code class="docutils literal notranslate"><span class="pre">IMU.NDOF</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.IMUPLUS"><code class="docutils literal notranslate"><span class="pre">IMU.IMUPLUS</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.COMPASS"><code class="docutils literal notranslate"><span class="pre">IMU.COMPASS</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.M4G"><code class="docutils literal notranslate"><span class="pre">IMU.M4G</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.NDOF_FMC_OFF"><code class="docutils literal notranslate"><span class="pre">IMU.NDOF_FMC_OFF</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.set_mode"><code class="docutils literal notranslate"><span class="pre">IMU.set_mode()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.get_cal_status"><code class="docutils literal notranslate"><span class="pre">IMU.get_cal_status()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.get_cal_coeffs"><code class="docutils literal notranslate"><span class="pre">IMU.get_cal_coeffs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.set_cal_coeffs"><code class="docutils literal notranslate"><span class="pre">IMU.set_cal_coeffs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.read_euler"><code class="docutils literal notranslate"><span class="pre">IMU.read_euler()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.heading"><code class="docutils literal notranslate"><span class="pre">IMU.heading()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.read_gyro"><code class="docutils literal notranslate"><span class="pre">IMU.read_gyro()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html#IMU.IMU.yaw_rate"><code class="docutils literal notranslate"><span class="pre">IMU.yaw_rate()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="motor_driver.html">motor_driver</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="motor_driver.html#motor_driver.motor_driver"><code class="docutils literal notranslate"><span class="pre">motor_driver</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html#motor_driver.motor_driver.enable"><code class="docutils literal notranslate"><span class="pre">motor_driver.enable()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html#motor_driver.motor_driver.disable"><code class="docutils literal notranslate"><span class="pre">motor_driver.disable()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html#motor_driver.motor_driver.set_effort"><code class="docutils literal notranslate"><span class="pre">motor_driver.set_effort()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IMU.html">imu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linesensors.html">line sensors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </div>
 </section>
@@ -145,7 +112,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="program_structure.html" class="btn btn-neutral float-left" title="Program Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="BumpSensor.html" class="btn btn-neutral float-right" title="BumpSensor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="HeadingHoldController.html" class="btn btn-neutral float-right" title="heading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

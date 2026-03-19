@@ -1,7 +1,7 @@
-line sensors
+heading
 ==================
 
-.. automodule:: linesensors
+.. automodule:: HeadingHoldController
    :members:
    :show-inheritance:
    :undoc-members:

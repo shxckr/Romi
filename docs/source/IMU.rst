@@ -1,4 +1,4 @@
-IMU
+imu
 ==========
 
 .. automodule:: IMU

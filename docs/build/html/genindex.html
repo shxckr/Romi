@@ -45,20 +45,21 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="program_structure.html">Program Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">IMU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_courseTest.html">task_courseTest</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_motor.html">task_motor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_share.html">task_share</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_user.html">task_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_UserButton.html">task_UserButton</a></li>
 </ul>
 </li>
 </ul>
@@ -110,6 +111,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
  
@@ -208,11 +210,13 @@
       </ul></li>
       <li><a href="IMU.html#IMU.IMU.get_cal_coeffs">get_cal_coeffs() (IMU method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="IMU.html#IMU.IMU.get_cal_status">get_cal_status() (IMU method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cotask.html#cotask.Task.get_trace">get_trace() (Task method)</a>
+</li>
+      <li><a href="HeadingHoldController.html#HeadingHoldController.HeadingHoldController.get_wheel_speeds">get_wheel_speeds() (HeadingHoldController method)</a>
 </li>
       <li><a href="cotask.html#cotask.Task.go">go() (Task method)</a>
 </li>
@@ -225,6 +229,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="IMU.html#IMU.IMU.heading">heading() (IMU method)</a>
+</li>
+      <li>
+    HeadingHoldController
+
+      <ul>
+        <li><a href="HeadingHoldController.html#module-HeadingHoldController">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="HeadingHoldController.html#HeadingHoldController.HeadingHoldController">HeadingHoldController (class in HeadingHoldController)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -259,6 +274,8 @@
       <ul>
         <li><a href="cotask.html#module-cotask">cotask</a>
 </li>
+        <li><a href="HeadingHoldController.html#module-HeadingHoldController">HeadingHoldController</a>
+</li>
         <li><a href="IMU.html#module-IMU">IMU</a>
 </li>
         <li><a href="motor_driver.html#module-motor_driver">motor_driver</a>
@@ -272,6 +289,8 @@
         <li><a href="task_share.html#module-task_share">task_share</a>
 </li>
         <li><a href="task_user.html#module-task_user">task_user</a>
+</li>
+        <li><a href="task_UserButton.html#module-task_UserButton">task_UserButton</a>
 </li>
       </ul></li>
   </ul></td>
@@ -362,6 +381,8 @@
 </li>
         <li><a href="task_observer.html#task_observer.task_observer.run">(task_observer method)</a>
 </li>
+        <li><a href="task_UserButton.html#task_UserButton.task_UButton.run">(task_UButton method)</a>
+</li>
         <li><a href="task_user.html#task_user.task_user.run">(task_user method)</a>
 </li>
       </ul></li>
@@ -439,6 +460,8 @@
         <li><a href="task_share.html#module-task_share">module</a>
 </li>
       </ul></li>
+      <li><a href="task_UserButton.html#task_UserButton.task_UButton">task_UButton (class in task_UserButton)</a>
+</li>
       <li>
     task_user
 
@@ -448,7 +471,22 @@
       </ul></li>
       <li><a href="task_user.html#task_user.task_user">task_user (class in task_user)</a>
 </li>
+      <li>
+    task_UserButton
+
+      <ul>
+        <li><a href="task_UserButton.html#module-task_UserButton">module</a>
+</li>
+      </ul></li>
       <li><a href="cotask.html#cotask.TaskList">TaskList (class in cotask)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="task_UserButton.html#task_UserButton.task_UButton.update">update() (task_UButton method)</a>
 </li>
   </ul></td>
 </tr></table>

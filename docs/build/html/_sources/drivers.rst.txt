@@ -2,10 +2,10 @@ Drivers
 ====
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   BumpSensor
-   IMU
-   encoder
-   linesensors
-   motor_driver
+   encoders
+   heading <HeadingHoldController>
+   imu <IMU>
+   line sensors <linesensors>
+   motors <motor_driver>

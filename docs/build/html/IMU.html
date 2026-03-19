@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IMU &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+  <title>imu &mdash; ME 405 Term Project 3/20/2026 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="encoder" href="encoder.html" />
-    <link rel="prev" title="BumpSensor" href="BumpSensor.html" /> 
+    <link rel="next" title="line sensors" href="linesensors.html" />
+    <link rel="prev" title="heading" href="HeadingHoldController.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,19 +48,18 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="drivers.html">Drivers</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="BumpSensor.html">BumpSensor</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">IMU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="encoder.html">encoder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">linesensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motor_driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_motor.html">task_motor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_share.html">task_share</a></li>
 <li class="toctree-l3"><a class="reference internal" href="task_user.html">task_user</a></li>
 </ul>
 </li>
@@ -85,7 +84,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
           <li class="breadcrumb-item"><a href="drivers.html">Drivers</a></li>
-      <li class="breadcrumb-item active">IMU</li>
+      <li class="breadcrumb-item active">imu</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/IMU.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="module-IMU">
-<span id="imu"></span><h1>IMU<a class="headerlink" href="#module-IMU" title="Link to this heading"></a></h1>
+<span id="imu"></span><h1>imu<a class="headerlink" href="#module-IMU" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="IMU.IMU">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">IMU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i2c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU.IMU" title="Link to this definition"></a></dt>
@@ -217,8 +216,8 @@ Returns (sys, gyr, acc, mag) each from 0–3.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="BumpSensor.html" class="btn btn-neutral float-left" title="BumpSensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="encoder.html" class="btn btn-neutral float-right" title="encoder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="HeadingHoldController.html" class="btn btn-neutral float-left" title="heading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="linesensors.html" class="btn btn-neutral float-right" title="line sensors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

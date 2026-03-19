@@ -1,7 +1,7 @@
-line sensors
+task_courseTest
 ==================
 
-.. automodule:: linesensors
+.. automodule:: task_courseTest
    :members:
    :show-inheritance:
    :undoc-members:

@@ -32,7 +32,7 @@ The GitHub repsoitory with all project files can be found here *add link*
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
    self
