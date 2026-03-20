@@ -1,5 +1,8 @@
-''' This file demonstrates an example UI task using a custom class with a
-    run method implemented as a generator
+'''This file implements a serial user-interface task for commanding and tuning
+a Romi robot system.
+
+The task reads commands from the USB serial port, updates shared variables,
+triggers calibration and motion tasks, and prints logged data for analysis.
 '''
 from pyb import USB_VCP
 from task_share import Share, Queue
@@ -117,8 +120,31 @@ class task_user:
         self._headingSh = shareHeading
         
     def run(self):
-        '''
-        Runs one iteration of the task
+        '''Run one iteration of the user-interface task.
+
+        This generator method implements the finite-state machine for the
+        serial interface. On each call, it checks for user input, processes
+        commands, updates gains or calibration flags, and prints collected
+        data when requested.
+
+        Yields:
+            int: The current state of the user-interface task.
+
+        State summary:
+            S0_INIT:
+                Print the startup message, help menu, and prompt.
+            S1_CMD:
+                Wait for and process single-character user commands.
+            S2_COL:
+                Wait for data collection to finish or for a quit command.
+            S3_DIS:
+                Print logged motor, centroid, and observer data.
+            S4_GAIN:
+                Ask the user which gain type to modify.
+            S5_digit:
+                Read and parse numeric keyboard input.
+            S6_Calibration:
+                Trigger and monitor line sensor calibration.
         '''
         while True:
             if self._state == S0_INIT: 

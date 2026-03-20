@@ -98,8 +98,10 @@
              
   <section id="module-task_user">
 <span id="task-user"></span><h1>task_user<a class="headerlink" href="#module-task_user" title="Link to this heading"></a></h1>
-<p>This file demonstrates an example UI task using a custom class with a
-run method implemented as a generator</p>
+<p>This file implements a serial user-interface task for commanding and tuning
+a Romi robot system.</p>
+<p>The task reads commands from the USB serial port, updates shared variables,
+triggers calibration and motion tasks, and prints logged data for analysis.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_user.task_user">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leftMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_meas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoneCalSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shareHeading</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_user.task_user" title="Link to this definition"></a></dt>
@@ -142,7 +144,35 @@ when calibration for dark</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="task_user.task_user.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_user.task_user.run" title="Link to this definition"></a></dt>
-<dd><p>Runs one iteration of the task</p>
+<dd><p>Run one iteration of the user-interface task.</p>
+<p>This generator method implements the finite-state machine for the
+serial interface. On each call, it checks for user input, processes
+commands, updates gains or calibration flags, and prints collected
+data when requested.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>int</em> – The current state of the user-interface task.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>State summary:</dt><dd><dl class="simple">
+<dt>S0_INIT:</dt><dd><p>Print the startup message, help menu, and prompt.</p>
+</dd>
+<dt>S1_CMD:</dt><dd><p>Wait for and process single-character user commands.</p>
+</dd>
+<dt>S2_COL:</dt><dd><p>Wait for data collection to finish or for a quit command.</p>
+</dd>
+<dt>S3_DIS:</dt><dd><p>Print logged motor, centroid, and observer data.</p>
+</dd>
+<dt>S4_GAIN:</dt><dd><p>Ask the user which gain type to modify.</p>
+</dd>
+<dt>S5_digit:</dt><dd><p>Read and parse numeric keyboard input.</p>
+</dd>
+<dt>S6_Calibration:</dt><dd><p>Trigger and monitor line sensor calibration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

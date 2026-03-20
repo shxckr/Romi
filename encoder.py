@@ -1,4 +1,4 @@
-''' This file implements a "dummy" class to use in place of encoder objects
+''' This file implements a  class to use in place of encoder objects
 '''
 from time import ticks_us, ticks_diff   # Use to get dt value in update()
 #from pyb import Timer
@@ -7,14 +7,20 @@ import pyb
 import math
 
 class encoder:
-    ''' A dummy class that can be instantiated in place of encoder objects
+    ''' A class that can be instantiated in place of encoder objects
     '''
     
     #def __init__(self):
     def __init__(self, tim, chA_pin, chB_pin):
-        ''' Initializes an encoder object '''
+        """Initialize the encoder object.
+          Args:
+            tim: Timer number used for encoder mode.
+            chA_pin: Pin connected to encoder channel A.
+            chB_pin: Pin connected to encoder channel B.
+        """
+        
 
-        self._position = 0
+        self._position  = 0
         self.position   = 0     # Total accumulated position of the encoder
         self.prev_count = 0     # Counter value from the most recent update
         self.delta      = 0     # Change in count between last two updates

@@ -1,3 +1,14 @@
+"""Course-navigation task for the robot state machine.
+
+This module defines a cooperative task which manages the robot's high-level
+course behavior. The task coordinates line following, heading-based driving,
+garage entry/exit maneuvers, and return-to-start logic by stepping through
+a sequence of predefined states.
+
+The task uses encoder distance, IMU heading, bump sensors, and line sensor
+feedback to determine state transitions and command wheel setpoints.
+"""
+
 import micropython
 from pyb import millis 
 from linesensors import LineSensors
@@ -22,9 +33,42 @@ S14_END                = micropython.const(14)
 
 class task_course:
 
+    """Cooperative task implementing the robot's course state machine.
+
+    This task manages the robot through a sequence of maneuvers including
+    line following, heading-hold motion, garage entry, collision-triggered
+    backup, turning, and final return behavior. The task interacts with
+    shared variables for wheel setpoints, motor-enable flags, sensor inputs,
+    and control mode flags.
+    """
     def __init__(self, sL_share, sR_share, collision_mode, yolo_mode,
              sp_left, sp_right, leftGo, rightGo, line_sensor,
              imu_heading_share, imu_yaw_share, ser, initHeadSh, shUB_flag, baseSh):
+         
+         """Initialize the course task and its state-machine resources.
+
+        Args:
+            sL_share: Shared variable containing left-wheel distance or arc length.
+            sR_share: Shared variable containing right-wheel distance or arc length.
+            collision_mode: Shared flag indicating bumper-triggered collision state.
+            yolo_mode: Shared flag used to enable or disable line-following behavior.
+            sp_left: Shared variable for the left wheel speed setpoint.
+            sp_right: Shared variable for the right wheel speed setpoint.
+            leftGo: Shared flag enabling the left motor task.
+            rightGo: Shared flag enabling the right motor task.
+            line_sensor: Line sensor driver object used for line detection.
+            imu_heading_share: Shared variable containing current IMU heading in degrees.
+            imu_yaw_share: Shared variable containing current IMU yaw rate.
+            ser: Serial interface used for debugging output.
+            initHeadSh: Shared variable storing the initial heading reference.
+            shUB_flag: Shared flag indicating the user button has been pressed.
+            baseSh: Shared variable for the base line-following speed.
+
+        Notes:
+            Multiple heading-hold controllers are initialized with different
+            target headings and base speeds for use in different states of
+            the course.
+         """
          self.sL_share = sL_share
          self.sR_share = sR_share
          self.collision_mode = collision_mode
@@ -77,6 +121,48 @@ class task_course:
     
 
     def run(self):
+        """Run the course state machine as a cooperative task.
+
+        This generator method executes one step of the course-control logic
+        each time it is scheduled. The task advances through a sequence of
+        states based on encoder distance, IMU heading, user-button input,
+        line-sensor behavior, and collision events.
+
+        Yields:
+            int: The current state number of the course state machine.
+
+        State summary:
+            S0_INIT:
+                Wait for the user button and initialize starting references.
+            S1_LINE:
+                Follow the line until the required travel distance is reached.
+            S2_EnterGarage:
+                Drive into the garage while holding a target heading.
+            S3_GARAGETURN:
+                Turn in place to align for the garage approach.
+            S4_GARAGESTRAIGHT:
+                Drive straight with heading hold until a collision is detected.
+            S5_BACKUP:
+                Reverse away from the obstacle while maintaining heading.
+            S6_OUTTURN:
+                Turn out of the garage area.
+            S7_CHECK2:
+                Continue heading-controlled motion until the next checkpoint.
+            S8_TURN:
+                Execute another turn maneuver.
+            S9_WIGGLE:
+                Drive forward through a line-following segment.
+            S10_HALFCIRCLE:
+                Continue forward until the half-circle segment is complete.
+            S11_HALFTURN:
+                Rotate to reorient toward the return path.
+            S12_TOSTART:
+                Drive toward the start region.
+            S13_Straight:
+                Drive straight with heading hold for the final segment.
+            S14_END:
+                Finish the course and return to the initial state.
+        """
         while True:
             if self._state == S0_INIT:
                 self.collision_mode.put(0)

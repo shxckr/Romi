@@ -1,8 +1,8 @@
-''' This file implements a "dummy" class to use in place of motor driver objects
+''' This file implements a  class to use in place of motor driver objects
 '''
 from pyb import Pin, Timer
 class motor_driver:
-    ''' A dummy class that can be instantiated inplace of motor driver objects
+    ''' A class that can be instantiated inplace of motor driver objects
     '''
     
     def __init__(self, tim, chan, PWM, DIR, nSLP):

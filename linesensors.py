@@ -2,22 +2,34 @@ import pyb
 import utime
 
 class LineSensors:
+    """Driver for a line sensor array using ADC readings."""
     def __init__(self, IN_PINS: list(str), samples=4):
+        """Initialize the line sensor array.
+
+        Args:
+            IN_PINS: List of pin names connected to the line sensors.
+            samples: Number of ADC readings to average for each sensor
+                to reduce noise.
+        """
         self.IN_PINS = IN_PINS
         self.adcs = [pyb.ADC(pyb.Pin(pin)) for pin in IN_PINS]
         self.samples = max(1, int(samples))
+        # Calibration values used for normalization.
+        # Lower readings correspond to the light background.
+        # Higher readings correspond to the dark line.
         self.mins = [970, 866, 762, 324, 322, 382, 683]
         self.maxs = [3309, 3344, 3128, 3203, 3146, 3305, 3303]
         # line sensors read lower numbers for white
         
         # Light Calibration: [970, 866, 762, 324, 322, 382, 683]
         # Dark Calibration: [2780, 2532, 2428, 2417, 2420, 2188, 2416]
-        '''Light Calibration: [1381, 974, 840, 383, 503, 670, 1044]
-        Dark Calibration: [3309, 3344, 3128, 3203, 3146, 3305, 3303]
-        '''
-
 
     def read_raw(self):
+        """Read averaged raw ADC values from all sensors.
+
+        Returns:
+            A tuple containing the averaged ADC reading from each sensor.
+        """
         vals = []
         for adc in self.adcs:
             s = 0
@@ -27,6 +39,11 @@ class LineSensors:
         return tuple(vals)
             
     def calibrateDark(self):
+        """Calibrate the sensors over the dark line surface.
+
+        This method records the highest observed readings for each sensor,
+        which are used as the dark-reference values for normalization.
+        """
         # --- Dark calibration ---
         sample_number=100
         self.maxs = [4095] * len(self.IN_PINS)  # reset maxs before calibration
@@ -37,9 +54,15 @@ class LineSensors:
         # self.maxs = [1908, 1706, 1725, 1725, 1725, 1369, 1807]
         print(f"maxs: {self.maxs}")
     def _getDark(self):
+        """Return the current dark calibration values (maxs)."""
         return self.maxs
     
     def calibrateLight(self):
+            """Calibrate the sensors over the dark line surface.
+
+        This method records the highest observed readings for each sensor,
+        which are used as the dark-reference values for normalization.
+        """        # --- Light calibration ---
             sample_number=100
             self.mins = [0] * len(self.IN_PINS)  # reset mins before calibration
             for _ in range(sample_number):
@@ -49,9 +72,20 @@ class LineSensors:
             print(f"mins: {self.mins}")
     
     def _getLight(self):
+        """Return the current light calibration values (mins)."""
         return self.mins
     
     def _normalize(self, val, vmin, vmax):
+        """Normalize one sensor reading to the range 0.0 to 1.0.
+        Args:
+            val: Raw ADC reading.
+            vmin: Calibration reading for the light surface.
+            vmax: Calibration reading for the dark surface.
+
+        Returns:
+            A float in the range [0.0, 1.0], where 0.0 corresponds to the
+            light calibration and 1.0 corresponds to the dark calibration.
+        """
         span = max(1, vmax - vmin)
         x = (val - vmin) / span
         if x < 0.0: x = 0.0
@@ -59,10 +93,28 @@ class LineSensors:
         return x
 
     def read_normalized(self):
+        """Read normalized values from all sensors.
+
+        Returns:
+            A list of normalized sensor values in the range [0.0, 1.0],
+            where 0.0 represents the light background and 1.0 represents
+            the dark line.
+        """
         raw = self.read_raw()
         return [self._normalize(raw[i], self.mins[i], self.maxs[i]) for i in range(len(self.IN_PINS))]
 
     def line_error(self, line_is_dark=True):
+        """Compute the line position error from the normalized readings.
+
+        Args:
+            line_is_dark: True if the line is darker than the background.
+                False if the line is lighter than the background.
+
+        Returns:
+            A value in the range [-1.0, 1.0], where 0.0 means the line is
+            centered, negative means the line is left of center, and
+            positive means the line is right of center.
+        """
         norm = self.read_normalized()
         # convert to "line strength" (bigger => more on the line)
         if line_is_dark:
@@ -79,6 +131,12 @@ class LineSensors:
         return pos
     
     def set_emitter_power(self, percent):
+        """Set the IR emitter power as a percentage from 0 to 100.
+
+        Args:
+            percent: Desired emitter power percentage.
+        """
+        """Set the power of the IR emitters as a percentage (0-100%)."""
         percent = max(0, min(100, percent))
         self.led_ch.pulse_width_percent(percent)
 

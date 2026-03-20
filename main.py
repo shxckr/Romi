@@ -1,3 +1,19 @@
+"""Main application file for the robot control system.
+
+This script initializes all hardware drivers, shared variables, queues,
+observer matrices, and cooperative tasks required for robot operation.
+It then adds the tasks to the scheduler and runs the main task loop until
+the program is interrupted.
+
+Subsystems initialized in this file include:
+    - Motor drivers and quadrature encoders
+    - Line sensor array
+    - Bump sensors and user button
+    - IMU interface
+    - State observer
+    - Motor control, line following, and course logic tasks
+"""
+
 from motor_driver import motor_driver
 from encoder      import encoder
 from task_motor   import task_motor
@@ -18,7 +34,12 @@ from task_courseTest import task_course
 from task_UserButton import task_UButton
 
 collect()
-# Build all driver objects first
+# ---------------------------------------------------------------------------
+# Hardware Driver Initialization
+# ---------------------------------------------------------------------------
+# Build all low-level driver objects before creating task objects. These
+# drivers provide the interface to motors, encoders, sensors, bump switches,
+# and the IMU.
 t = Timer(1, freq=10000)   # create shared Timer outside
 leftMotor    = motor_driver(t, 1, 'PA8', 'PB4',  'PB10')
 rightMotor   = motor_driver(t, 2, 'PA9', 'PB8',  'PB9')
@@ -26,6 +47,11 @@ leftEncoder  = encoder(2, 'PA1', 'PA0')
 rightEncoder = encoder(3, 'PA6', 'PA7')
 sensor_pins = ['PA4', 'PB0', 'PB1', 'PC4', 'PC5', 'PC2', 'PC3']
 sensors = LineSensors(sensor_pins, samples=4)
+# ---------------------------------------------------------------------------
+# Bump Sensor and User Button Pin Setup
+# ---------------------------------------------------------------------------
+# Left and right bump switches are configured as pulled-up digital inputs.
+# The user button is also configured as a pulled-up input.
 L0 = Pin('PB12', Pin.IN, pull=Pin.PULL_UP)  # bumper 3
 L1 = Pin('PC6', Pin.IN, pull=Pin.PULL_UP) # bumper 4
 L2 = Pin('PC8', Pin.IN, pull=Pin.PULL_UP) # bumper 5
@@ -40,6 +66,11 @@ bump_right_pins = [R0, R1, R2]
 USER_BUTTON = Pin('PC13', Pin.IN, pull=Pin.PULL_UP)
 
 # --- IMU setup ---
+# ---------------------------------------------------------------------------
+# IMU Initialization
+# ---------------------------------------------------------------------------
+# The IMU is connected over I2C and configured for fused heading output.
+# Saved calibration coefficients are loaded after startup.
 i2c = I2C(3, I2C.CONTROLLER, baudrate=400000)   
 print("I2C scan:", i2c.scan())
 
@@ -53,7 +84,13 @@ CAL = bytes([246, 255, 7, 0, 242, 255, 0, 0, 0, 0, 0, 0,
              255, 255, 254, 255, 1, 0, 232, 3, 0, 0])
 imu.set_cal_coeffs(CAL)
 print("Loaded saved calibration.")
-# Observer matrices (precomputed offline)
+# ---------------------------------------------------------------------------
+# Observer Model Matrices
+# ---------------------------------------------------------------------------
+# These discrete-time state-space matrices were computed offline and are used
+# by the observer task to estimate robot states such as position, heading,
+# and wheel angular velocities.
+
 A_D = ([
 [0.6132, 0.0000, 0.3113, 0.3113],
 [0.0000, 0.0005, 0.0000, 0.0000],
@@ -83,7 +120,12 @@ D_D =([
 [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ])
 
-# Build shares and queues
+# ---------------------------------------------------------------------------
+# Shared Variables and Queues
+# ---------------------------------------------------------------------------
+# Shares store scalar values exchanged between tasks. Queues store time-series
+# data for logging, plotting, or observer comparisons.
+
 leftMotorGo   = Share("B",     name="Left Mot. Go Flag")
 rightMotorGo  = Share("B",     name="Right Mot. Go Flag")
 share_kp      = Share("f",     name="kp value")
@@ -155,7 +197,12 @@ sL_yhat = Queue("f", 100, overwrite=True, name="Prediction sL")
 sL_meas = Queue("f", 100, overwrite=True, name="Measured sL")
 initHeadSh = Share("f", name="Initial heading")
 
-# Build task class objects (generator functions?)
+# ---------------------------------------------------------------------------
+# Task Object Initialization
+# ---------------------------------------------------------------------------
+# Each task object encapsulates a subsystem behavior. These objects are later
+# wrapped in cotask.Task instances and added to the cooperative scheduler.
+
 leftMotorTask  = task_motor(leftMotor, leftEncoder,
                             leftMotorGo, share_kp, share_ki, sp_left,
                             leftDataValues, leftTimeValues,
@@ -219,7 +266,14 @@ courseTask = task_course(
     baseSh
 )
 userButtonTask = task_UButton(USER_BUTTON, UB_share)
-### imu
+
+
+# ---------------------------------------------------------------------------
+# Scheduler Setup
+# ---------------------------------------------------------------------------
+# Each task is appended to the global task list with a chosen priority and
+# execution period in milliseconds.
+
 task_list.append(Task(imuTask.run, name="IMU Task",
                       priority=1, period=30, profile=False))
 task_list.append(Task(leftMotorTask.run, name="Left Mot. Task",  # this is where you call task and set priority/period
@@ -242,7 +296,12 @@ task_list.append(Task(courseTask.run,
                       period=30))
 task_list.append(Task(userButtonTask.run, name="User Button Task", priority=2, period=100))
 
-# Run the garbage collector preemptively
+# ---------------------------------------------------------------------------
+# Main Scheduler Loop
+# ---------------------------------------------------------------------------
+# Run the garbage collector before entering the main loop, then execute the
+# priority scheduler continuously until interrupted by the user.
+
 collect()
 
 # Run the scheduler until the user quits the program with Ctrl-C
