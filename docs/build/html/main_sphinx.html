@@ -97,8 +97,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="main">
-<h1>main<a class="headerlink" href="#main" title="Link to this heading"></a></h1>
+  <section id="module-main_sphinx">
+<span id="main"></span><h1>main<a class="headerlink" href="#module-main_sphinx" title="Link to this heading"></a></h1>
+<p>Main application file for the robot control system.</p>
+<p>This script initializes all hardware drivers, shared variables, queues,
+observer matrices, and cooperative tasks required for robot operation.
+It then adds the tasks to the scheduler and runs the main task loop until
+the program is interrupted.</p>
+<dl class="simple">
+<dt>Subsystems initialized in this file include:</dt><dd><ul class="simple">
+<li><p>Motor drivers and quadrature encoders</p></li>
+<li><p>Line sensor array</p></li>
+<li><p>Bump sensors and user button</p></li>
+<li><p>IMU interface</p></li>
+<li><p>State observer</p></li>
+<li><p>Motor control, line following, and course logic tasks</p></li>
+</ul>
+</dd>
+</dl>
 </section>
 
 
