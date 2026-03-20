@@ -1,5 +1,5 @@
 Performance
-================================
+===========
 
 Summary
 --------
@@ -12,3 +12,6 @@ Issues / Room for Improvement
 
 Video
 -----
+.. video:: _static/videos/run.mp4
+   :width: 600
+   :align: center

@@ -23,6 +23,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
+    "sphinxcontrib.video"
 ]
 
 templates_path = ['_templates']

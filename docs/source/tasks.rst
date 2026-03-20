@@ -1,5 +1,5 @@
 Tasks
-====
+=====
 
 .. toctree::
    :maxdepth: 1

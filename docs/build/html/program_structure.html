@@ -98,7 +98,7 @@
 <h1>Program Structure<a class="headerlink" href="#program-structure" title="Link to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository. The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot’s behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely.</p>
+<p>This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository. The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot’s behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely. All files from Dr. Ridgely can be found on his <a class="reference external" href="https://github.com/spluttflob/ME405-Support">GitHub Repository</a>.</p>
 </section>
 <section id="course-strategy">
 <h2>Course Strategy<a class="headerlink" href="#course-strategy" title="Link to this heading"></a></h2>
@@ -144,7 +144,6 @@ maybe other STD</em></p>
 <h2>Tasks and Drivers<a class="headerlink" href="#tasks-and-drivers" title="Link to this heading"></a></h2>
 <p>The drivers and tasks created for this program can be explored in depth using the navigation tree on the left or the links below. The methods and attributes that belong to each class are each described in breif in each tab.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="drivers.html">Drivers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>

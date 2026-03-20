@@ -3,7 +3,7 @@ Program Structure
 
 Overview
 --------
-This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository. The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot's behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely.
+This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository. The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot's behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely. All files from Dr. Ridgely can be found on his `GitHub Repository <https://github.com/spluttflob/ME405-Support>`_.
 
 Course Strategy
 --------------
@@ -56,7 +56,6 @@ The drivers and tasks created for this program can be explored in depth using th
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    drivers
    tasks
