@@ -18,9 +18,7 @@
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="motors" href="motor_driver.html" />
-    <link rel="prev" title="imu" href="IMU.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,14 +41,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">ME 405 Term Project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="drivers.html">Drivers</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="program_structure.html">Program Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
 <li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">line sensors</a></li>
 <li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
 </ul>
 </li>
@@ -84,8 +81,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
-          <li class="breadcrumb-item"><a href="drivers.html">Drivers</a></li>
       <li class="breadcrumb-item active">line sensors</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/linesensors.rst.txt" rel="nofollow"> View page source</a>
@@ -96,17 +91,99 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="line-sensors">
-<h1>line sensors<a class="headerlink" href="#line-sensors" title="Link to this heading"></a></h1>
+  <section id="module-linesensors_sphinx">
+<span id="line-sensors"></span><h1>line sensors<a class="headerlink" href="#module-linesensors_sphinx" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">LineSensors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IN_PINS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Driver for a line sensor array using ADC readings.</p>
+<p>Initialize the line sensor array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IN_PINS</strong> – List of pin names connected to the line sensors.</p></li>
+<li><p><strong>samples</strong> – Number of ADC readings to average for each sensor
+to reduce noise.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.read_raw">
+<span class="sig-name descname"><span class="pre">read_raw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.read_raw" title="Link to this definition"></a></dt>
+<dd><p>Read averaged raw ADC values from all sensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the averaged ADC reading from each sensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.calibrateDark">
+<span class="sig-name descname"><span class="pre">calibrateDark</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.calibrateDark" title="Link to this definition"></a></dt>
+<dd><p>Calibrate the sensors over the dark line surface.</p>
+<p>This method records the highest observed readings for each sensor,
+which are used as the dark-reference values for normalization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.calibrateLight">
+<span class="sig-name descname"><span class="pre">calibrateLight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.calibrateLight" title="Link to this definition"></a></dt>
+<dd><p>Calibrate the sensors over the dark line surface.</p>
+<p>This method records the highest observed readings for each sensor,
+which are used as the dark-reference values for normalization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.read_normalized">
+<span class="sig-name descname"><span class="pre">read_normalized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.read_normalized" title="Link to this definition"></a></dt>
+<dd><p>Read normalized values from all sensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of normalized sensor values in the range [0.0, 1.0],
+where 0.0 represents the light background and 1.0 represents
+the dark line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.line_error">
+<span class="sig-name descname"><span class="pre">line_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_is_dark</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.line_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the line position error from the normalized readings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>line_is_dark</strong> – True if the line is darker than the background.
+False if the line is lighter than the background.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value in the range [-1.0, 1.0], where 0.0 means the line is
+centered, negative means the line is left of center, and
+positive means the line is right of center.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linesensors_sphinx.LineSensors.set_emitter_power">
+<span class="sig-name descname"><span class="pre">set_emitter_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">percent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linesensors_sphinx.LineSensors.set_emitter_power" title="Link to this definition"></a></dt>
+<dd><p>Set the IR emitter power as a percentage from 0 to 100.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>percent</strong> – Desired emitter power percentage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="IMU.html" class="btn btn-neutral float-left" title="imu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="motor_driver.html" class="btn btn-neutral float-right" title="motors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

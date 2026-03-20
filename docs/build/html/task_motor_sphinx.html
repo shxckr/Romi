@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>task_motor &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=926f0b96"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="task_observer" href="task_observer_sphinx.html" />
+    <link rel="prev" title="task_linefollow" href="task_linefollow_sphinx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ME 405 Term Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">ME 405 Term Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="task_bumpsensor_sphinx.html">task_bumpsensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_courseTest_sphinx.html">task_courseTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_imu_sphinx.html">task_imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_linefollow_sphinx.html">task_linefollow</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">task_motor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_observer_sphinx.html">task_observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_user_sphinx.html">task_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ME 405 Term Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
+          <li class="breadcrumb-item"><a href="tasks.html">Tasks</a></li>
+      <li class="breadcrumb-item active">task_motor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/task_motor_sphinx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-task_motor_sphinx">
+<span id="task-motor"></span><h1>task_motor<a class="headerlink" href="#module-task_motor_sphinx" title="Link to this heading"></a></h1>
+<p>This file demonstrates an example motor task using a custom class with a
+run method implemented as a generator</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="task_motor_sphinx.task_motor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="motor_driver_sphinx.html#motor_driver_sphinx.motor_driver" title="motor_driver_sphinx.motor_driver"><span class="pre">motor_driver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">enc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="encoder_sphinx.html#encoder_sphinx.encoder" title="encoder_sphinx.encoder"><span class="pre">encoder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">goFlag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_setpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_effort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_motor_sphinx.task_motor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that represents a motor task. The task is responsible for reading
+data from an encoder, performing closed loop control, and actuating a motor.
+Multiple objects of this class can be created to work with multiple motors
+and encoders.</p>
+<p>Initializes a motor task object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mot</strong> (<a class="reference internal" href="motor_driver_sphinx.html#motor_driver_sphinx.motor_driver" title="motor_driver_sphinx.motor_driver"><em>motor_driver</em></a>) – A motor driver object</p></li>
+<li><p><strong>enc</strong> (<a class="reference internal" href="encoder_sphinx.html#encoder_sphinx.encoder" title="encoder_sphinx.encoder"><em>encoder</em></a>) – An encoder object</p></li>
+<li><p><strong>goFlag</strong> (<a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><em>Share</em></a>) – A share object representing a boolean flag to
+start data collection</p></li>
+<li><p><strong>dataValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store collected encoder
+position values</p></li>
+<li><p><strong>timeValues</strong> (<a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><em>Queue</em></a>) – A queue object used to store the time stamps
+associated with the collected encoder data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="task_motor_sphinx.task_motor.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_motor_sphinx.task_motor.run" title="Link to this definition"></a></dt>
+<dd><p>Runs one iteration of the task</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="task_linefollow_sphinx.html" class="btn btn-neutral float-left" title="task_linefollow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="task_observer_sphinx.html" class="btn btn-neutral float-right" title="task_observer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Fred Agregado, Samantha Kenney, Sara Chamness.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -43,6 +43,7 @@ html_theme_options = {
 html_static_path = ['_static']
 
 autodoc_member_order = "bysource"
+autodoc_default_options = {"show-inheritance": False}
 add_module_names = False
 autoclass_content = "both"
 autodoc_mock_imports = ["pyb", "utime", "micropython"]

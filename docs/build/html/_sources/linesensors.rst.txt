@@ -1,7 +1,7 @@
 line sensors
 ==================
 
-.. automodule:: linesensors
+.. automodule:: linesensors_sphinx
    :members:
    :show-inheritance:
    :undoc-members:

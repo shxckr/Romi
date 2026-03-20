@@ -4,8 +4,8 @@ Drivers
 .. toctree::
    :maxdepth: 1
 
-   encoders
-   heading <HeadingHoldController>
-   imu <IMU>
-   line sensors <linesensors>
-   motors <motor_driver>
+   encoder <encoder_sphinx>
+   heading <HeadingHoldController_sphinx>
+   imu <IMU_sphinx>
+   line sensors <linesensors_sphinx>
+   motors <motor_driver_sphinx>

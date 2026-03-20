@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>task_courseTest &mdash; ME 405 Term Project 3/20/2026 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=926f0b96"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="task_imu" href="task_imu_sphinx.html" />
+    <link rel="prev" title="task_bumpsensor" href="task_bumpsensor_sphinx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ME 405 Term Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">ME 405 Term Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="task_bumpsensor_sphinx.html">task_bumpsensor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">task_courseTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_imu_sphinx.html">task_imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_linefollow_sphinx.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_motor_sphinx.html">task_motor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_observer_sphinx.html">task_observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_user_sphinx.html">task_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ME 405 Term Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="program_structure.html">Program Structure</a></li>
+          <li class="breadcrumb-item"><a href="tasks.html">Tasks</a></li>
+      <li class="breadcrumb-item active">task_courseTest</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/task_courseTest_sphinx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-task_courseTest_sphinx">
+<span id="task-coursetest"></span><h1>task_courseTest<a class="headerlink" href="#module-task_courseTest_sphinx" title="Link to this heading"></a></h1>
+<p>Course-navigation task for the robot state machine.</p>
+<p>This module defines a cooperative task which manages the robot’s high-level
+course behavior. The task coordinates line following, heading-based driving,
+garage entry/exit maneuvers, and return-to-start logic by stepping through
+a sequence of predefined states.</p>
+<p>The task uses encoder distance, IMU heading, bump sensors, and line sensor
+feedback to determine state transitions and command wheel setpoints.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="task_courseTest_sphinx.task_course">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sL_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sR_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yolo_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_sensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_heading_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_yaw_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initHeadSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shUB_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseSh</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_courseTest_sphinx.task_course" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Cooperative task implementing the robot’s course state machine.</p>
+<p>This task manages the robot through a sequence of maneuvers including
+line following, heading-hold motion, garage entry, collision-triggered
+backup, turning, and final return behavior. The task interacts with
+shared variables for wheel setpoints, motor-enable flags, sensor inputs,
+and control mode flags.</p>
+<p>Initialize the course task and its state-machine resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sL_share</strong> – Shared variable containing left-wheel distance or arc length.</p></li>
+<li><p><strong>sR_share</strong> – Shared variable containing right-wheel distance or arc length.</p></li>
+<li><p><strong>collision_mode</strong> – Shared flag indicating bumper-triggered collision state.</p></li>
+<li><p><strong>yolo_mode</strong> – Shared flag used to enable or disable line-following behavior.</p></li>
+<li><p><strong>sp_left</strong> – Shared variable for the left wheel speed setpoint.</p></li>
+<li><p><strong>sp_right</strong> – Shared variable for the right wheel speed setpoint.</p></li>
+<li><p><strong>leftGo</strong> – Shared flag enabling the left motor task.</p></li>
+<li><p><strong>rightGo</strong> – Shared flag enabling the right motor task.</p></li>
+<li><p><strong>line_sensor</strong> – Line sensor driver object used for line detection.</p></li>
+<li><p><strong>imu_heading_share</strong> – Shared variable containing current IMU heading in degrees.</p></li>
+<li><p><strong>imu_yaw_share</strong> – Shared variable containing current IMU yaw rate.</p></li>
+<li><p><strong>ser</strong> – Serial interface used for debugging output.</p></li>
+<li><p><strong>initHeadSh</strong> – Shared variable storing the initial heading reference.</p></li>
+<li><p><strong>shUB_flag</strong> – Shared flag indicating the user button has been pressed.</p></li>
+<li><p><strong>baseSh</strong> – Shared variable for the base line-following speed.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Multiple heading-hold controllers are initialized with different
+target headings and base speeds for use in different states of
+the course.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="task_courseTest_sphinx.task_course.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_courseTest_sphinx.task_course.run" title="Link to this definition"></a></dt>
+<dd><p>Run the course state machine as a cooperative task.</p>
+<p>This generator method executes one step of the course-control logic
+each time it is scheduled. The task advances through a sequence of
+states based on encoder distance, IMU heading, user-button input,
+line-sensor behavior, and collision events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>int</em> – The current state number of the course state machine.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>State summary:</dt><dd><dl class="simple">
+<dt>S0_INIT:</dt><dd><p>Wait for the user button and initialize starting references.</p>
+</dd>
+<dt>S1_LINE:</dt><dd><p>Follow the line until the required travel distance is reached.</p>
+</dd>
+<dt>S2_EnterGarage:</dt><dd><p>Drive into the garage while holding a target heading.</p>
+</dd>
+<dt>S3_GARAGETURN:</dt><dd><p>Turn in place to align for the garage approach.</p>
+</dd>
+<dt>S4_GARAGESTRAIGHT:</dt><dd><p>Drive straight with heading hold until a collision is detected.</p>
+</dd>
+<dt>S5_BACKUP:</dt><dd><p>Reverse away from the obstacle while maintaining heading.</p>
+</dd>
+<dt>S6_OUTTURN:</dt><dd><p>Turn out of the garage area.</p>
+</dd>
+<dt>S7_CHECK2:</dt><dd><p>Continue heading-controlled motion until the next checkpoint.</p>
+</dd>
+<dt>S8_TURN:</dt><dd><p>Execute another turn maneuver.</p>
+</dd>
+<dt>S9_WIGGLE:</dt><dd><p>Drive forward through a line-following segment.</p>
+</dd>
+<dt>S10_HALFCIRCLE:</dt><dd><p>Continue forward until the half-circle segment is complete.</p>
+</dd>
+<dt>S11_HALFTURN:</dt><dd><p>Rotate to reorient toward the return path.</p>
+</dd>
+<dt>S12_TOSTART:</dt><dd><p>Drive toward the start region.</p>
+</dd>
+<dt>S13_Straight:</dt><dd><p>Drive straight with heading hold for the final segment.</p>
+</dd>
+<dt>S14_END:</dt><dd><p>Finish the course and return to the initial state.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="task_bumpsensor_sphinx.html" class="btn btn-neutral float-left" title="task_bumpsensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="task_imu_sphinx.html" class="btn btn-neutral float-right" title="task_imu" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Fred Agregado, Samantha Kenney, Sara Chamness.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

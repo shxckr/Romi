@@ -1,5 +1,5 @@
 encoder
-==============
+=======
 
 .. automodule:: encoder
    :members:
