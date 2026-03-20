@@ -12,16 +12,18 @@ Bump Sensors
 The bump sensors on BB are the standard Romi left and right bumper switch assemblies from Pololu (TI-RSLK MAX). The default state of the sensors is output high. When the switch is depressed, the output is driven low. All six bump sensors are wired to the microcontroller, but the software does not distinguish between the different sensors; the robot will have the same response regardless of which switch was depressed.
 
 
-Other Components 
+Other Components
 ----------------
+
 Other essential hardware components, used by every group in the class, include the following:
+
 - STM32 L476RG Nucleo Board
 - Shoe of Brian
 - BNO055 IMU
 
 Assembly
 --------
-All components are mounted to the Romi chassis with screws, standoffs, and nuts. A acrylic adapter (provided by the instructor) provieds an interface between the chasis and the development board.
+All components are mounted to the Romi chassis with screws, standoffs, and nuts. A acrylic adapter (provided by the instructor) provides an interface between the chasis and the development board.
 
 Wiring
 ----------
