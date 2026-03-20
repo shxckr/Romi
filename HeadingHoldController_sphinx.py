@@ -1,3 +1,4 @@
+""" This file defines a class used to control the robot's direction of motion based on heading measurements."""
 class HeadingHoldController:
     """PI controller for maintaining a desired robot heading.
 
@@ -19,15 +20,25 @@ class HeadingHoldController:
             min_speed: Minimum allowable wheel speed (currently unused).
             max_speed: Maximum magnitude of wheel speed.
         """
+        #: Shared variable containing the current measured heading in degrees.
         self.heading_share = heading_share
+        #: Desired heading relative to the initial heading offset, in degrees.
         self.target_heading = target_heading
+        #: Nominal forward wheel speed before heading correction is applied.
         self.base_speed = base_speed
+        #: Proportional gain for heading error correction.
         self.kp = kp
+        #: Integral gain for accumulated heading error correction.
         self.ki = ki
+        #: Minimum allowable wheel speed command.
         self.min_speed = min_speed
+        #: Maximum magnitude allowed for wheel speed commands.
         self.max_speed = max_speed
+        #: Shared variable storing the initial heading offset in degrees.
         self._initHeadSh = initHeadSh
+        #: Running sum of heading error used by the integral term.
         self._errSum = 0.0
+        #: Controller time step placeholder.
         self.dt = 0
     def _wrap_angle(self, angle):
         """Wrap an angle to the range [-180, 180] degrees.

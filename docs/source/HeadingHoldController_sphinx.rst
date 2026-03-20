@@ -3,4 +3,4 @@ heading
 
 .. automodule:: HeadingHoldController_sphinx
    :members:
-   :undoc-members:
+   :exclude-members: sleep_ms

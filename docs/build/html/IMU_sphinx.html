@@ -100,75 +100,22 @@
              
   <section id="module-IMU_sphinx">
 <span id="imu"></span><h1>imu<a class="headerlink" href="#module-IMU_sphinx" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="IMU_sphinx.sleep_ms">
-<span class="sig-name descname"><span class="pre">sleep_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.sleep_ms" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="IMU_sphinx.IMU">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">IMU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i2c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.IMU" title="Link to this definition"></a></dt>
 <dd><p>BNO055 IMU Driver</p>
 <p>Takes in a pyb.I2C object preconfigured in CONTROLLER mode.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.OPR_MODE">
-<span class="sig-name descname"><span class="pre">OPR_MODE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">61</span></span><a class="headerlink" href="#IMU_sphinx.IMU.OPR_MODE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="IMU_sphinx.IMU.i2c">
+<span class="sig-name descname"><span class="pre">i2c</span></span><a class="headerlink" href="#IMU_sphinx.IMU.i2c" title="Link to this definition"></a></dt>
+<dd><p>I2C bus object used to communicate with the BNO055.</p>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.CALIB_STAT">
-<span class="sig-name descname"><span class="pre">CALIB_STAT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></span><a class="headerlink" href="#IMU_sphinx.IMU.CALIB_STAT" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.EULER_START">
-<span class="sig-name descname"><span class="pre">EULER_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></span><a class="headerlink" href="#IMU_sphinx.IMU.EULER_START" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.GYRO_START">
-<span class="sig-name descname"><span class="pre">GYRO_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></span><a class="headerlink" href="#IMU_sphinx.IMU.GYRO_START" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.CALIB_START">
-<span class="sig-name descname"><span class="pre">CALIB_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">85</span></span><a class="headerlink" href="#IMU_sphinx.IMU.CALIB_START" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.CALIB_LEN">
-<span class="sig-name descname"><span class="pre">CALIB_LEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></span><a class="headerlink" href="#IMU_sphinx.IMU.CALIB_LEN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.CONFIG_MODE">
-<span class="sig-name descname"><span class="pre">CONFIG_MODE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#IMU_sphinx.IMU.CONFIG_MODE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.NDOF">
-<span class="sig-name descname"><span class="pre">NDOF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></span><a class="headerlink" href="#IMU_sphinx.IMU.NDOF" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.IMUPLUS">
-<span class="sig-name descname"><span class="pre">IMUPLUS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></span><a class="headerlink" href="#IMU_sphinx.IMU.IMUPLUS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.COMPASS">
-<span class="sig-name descname"><span class="pre">COMPASS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></span><a class="headerlink" href="#IMU_sphinx.IMU.COMPASS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.M4G">
-<span class="sig-name descname"><span class="pre">M4G</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></span><a class="headerlink" href="#IMU_sphinx.IMU.M4G" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.NDOF_FMC_OFF">
-<span class="sig-name descname"><span class="pre">NDOF_FMC_OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></span><a class="headerlink" href="#IMU_sphinx.IMU.NDOF_FMC_OFF" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="IMU_sphinx.IMU.addr">
+<span class="sig-name descname"><span class="pre">addr</span></span><a class="headerlink" href="#IMU_sphinx.IMU.addr" title="Link to this definition"></a></dt>
+<dd><p>7-bit I2C address of the IMU.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="IMU_sphinx.IMU.set_mode">
@@ -182,16 +129,6 @@
 <dd><p>Retrieve and parse calibration status.
 Returns (sys, gyr, acc, mag) each from 0–3.</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.get_cal_coeffs">
-<span class="sig-name descname"><span class="pre">get_cal_coeffs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.IMU.get_cal_coeffs" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.set_cal_coeffs">
-<span class="sig-name descname"><span class="pre">set_cal_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.IMU.set_cal_coeffs" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="IMU_sphinx.IMU.read_euler">
@@ -210,11 +147,6 @@ Returns (sys, gyr, acc, mag) each from 0–3.</p>
 <span class="sig-name descname"><span class="pre">read_gyro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.IMU.read_gyro" title="Link to this definition"></a></dt>
 <dd><p>Returns (gx, gy, gz) in degrees/second.</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="IMU_sphinx.IMU.yaw_rate">
-<span class="sig-name descname"><span class="pre">yaw_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IMU_sphinx.IMU.yaw_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

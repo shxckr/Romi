@@ -57,21 +57,31 @@ class encoder:
         :param chB_pin: Pin connected to encoder channel B.
         """
         
-
+        #: Internal position accumulator placeholder.
         self._position  = 0
+        #: Total accumulated encoder count in ticks since the last zero().
         self.position   = 0     # Total accumulated position of the encoder
+         #: Most recent raw timer counter value.
         self.prev_count = 0     # Counter value from the most recent update
+        #: Change in encoder counts measured during the last update().
         self.delta      = 0     # Change in count between last two updates
+        #: Time interval in seconds between the two most recent update() calls.
         self.dt         = 0     # Amount of time between last two updates
         
 
+        #: Hardware timer configured in encoder mode.
         self.tim = pyb.Timer(tim, period=0xFFFF, prescaler=0)
+        #: Timer auto-reload period value.
         self._period = self.tim.period()
+        #: Total number of timer counts in one full counter cycle.
         self._counts_per_cycle = self._period + 1   ## Ar+1
+        #: Half of the counter range, used for overflow and underflow correction.
         self._half_range = self._counts_per_cycle // 2  ## (Ar+1)/2
         # -----------------------------------------------
 
+        #: Pin connected to encoder channel A.
         self.chA_pin = chA_pin if isinstance(chA_pin, pyb.Pin) else pyb.Pin(chA_pin)
+        #: Pin connected to encoder channel B.
         self.chB_pin = chB_pin if isinstance(chB_pin, pyb.Pin) else pyb.Pin(chB_pin)
 
         self.tim.channel(1, pyb.Timer.ENC_AB, pin=self.chA_pin)
@@ -79,6 +89,7 @@ class encoder:
 
          # Initialize previous values
         self.prev_count = self.tim.counter()
+        #: Timestamp in microseconds of the previous update() call.
         self._prev_time = ticks_us()
 
 

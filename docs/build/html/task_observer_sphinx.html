@@ -100,23 +100,6 @@
              
   <section id="module-task_observer_sphinx">
 <span id="task-observer"></span><h1>task_observer<a class="headerlink" href="#module-task_observer_sphinx" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="task_observer_sphinx.dot_mv">
-<span class="sig-name descname"><span class="pre">dot_mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_observer_sphinx.dot_mv" title="Link to this definition"></a></dt>
-<dd><p>Matrix-vector multiply. M: list-of-lists (r x c), v: list (c). Returns list (r).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="task_observer_sphinx.vec_add">
-<span class="sig-name descname"><span class="pre">vec_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_observer_sphinx.vec_add" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="task_observer_sphinx.normalize_angle_rad">
-<span class="sig-name descname"><span class="pre">normalize_angle_rad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_observer_sphinx.normalize_angle_rad" title="Link to this definition"></a></dt>
-<dd><p>Normalize to [-pi, pi).</p>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="task_observer_sphinx.task_observer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_observer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left_encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_heading_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_yaw_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_left_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_right_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_shares</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_meas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sR_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Dd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publish_yhat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yhat_shares</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_in_degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_observer_sphinx.task_observer" title="Link to this definition"></a></dt>
@@ -160,11 +143,6 @@ u_star = [uL, uR, y0, y1, y2, y3]^T</p>
 <dd><p>Publish state estimate to shares using the assignment’s state ordering:
 xhat = [x, v, psi, omega] (adjust if your state ordering differs!)</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="task_observer_sphinx.task_observer.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_observer_sphinx.task_observer.run" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

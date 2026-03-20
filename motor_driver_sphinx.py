@@ -23,12 +23,17 @@ class motor_driver:
     
     def __init__(self, tim, chan, PWM, DIR, nSLP):
         ''' Initializes a motor driver object'''
+        #: Sleep-control output pin for enabling or disabling the motor driver.
         self.nSLP_pin = Pin(nSLP, mode=Pin.OUT_PP, value=0)
+        #: Direction-control output pin for setting motor rotation direction.
         self.DIR_pin  = Pin(DIR,  mode=Pin.OUT_PP)
         # Make PWM a Pin here (works whether PWM is 'PA8' or Pin('PA8'))
+        #: PWM output pin connected to the motor driver's speed input.
         self.PWM_pin = Pin(PWM)
         # Use the standard stm32 API
+        #: Timer channel configured for PWM duty-cycle control.
         self.PWM_chan = tim.channel(chan, Timer.PWM, pin=self.PWM_pin, pulse_width_percent=0)
+        #: True when the motor driver is enabled and allowed to drive the motor.
         self.enabled = False
     
     def enable(self):

@@ -32,8 +32,11 @@ class IMU:
         """
         Takes in a pyb.I2C object preconfigured in CONTROLLER mode.
         """
+        #: I2C bus object used to communicate with the BNO055.
         self.i2c = i2c
+        #: 7-bit I2C address of the IMU.
         self.addr = addr
+        #: Cached operating mode last requested by the driver.
         self._mode = None
 
     # -------------------------------------------------

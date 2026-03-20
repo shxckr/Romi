@@ -17,4 +17,4 @@ To complete the bonus challenges, the robot must move plastic cups into/out of t
 
 ## Project Website
 
-The project website is linked [here](file:///C:/Users/saram/OneDrive%20-%20Cal%20Poly/ME%20405/Romi/Romi/docs/build/html/performance.html). Explore the website to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!
+The project website is linked [here](https://shxckr.github.io/Romi/). Explore the website to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!

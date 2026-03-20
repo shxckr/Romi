@@ -40,13 +40,18 @@ class LineSensors:
             samples: Number of ADC readings to average for each sensor
                 to reduce noise.
         """
+        #: List of microcontroller pin names connected to the line sensors.
         self.IN_PINS = IN_PINS
+         #: ADC objects, one for each line sensor input pin.
         self.adcs = [pyb.ADC(pyb.Pin(pin)) for pin in IN_PINS]
+        #: Number of ADC samples averaged per sensor reading.
         self.samples = max(1, int(samples))
         # Calibration values used for normalization.
         # Lower readings correspond to the light background.
         # Higher readings correspond to the dark line.
+        #: Calibration readings for the light surface, one per sensor.
         self.mins = [970, 866, 762, 324, 322, 382, 683]
+        #: Calibration readings for the dark surface, one per sensor.
         self.maxs = [3309, 3344, 3128, 3203, 3146, 3305, 3303]
         # line sensors read lower numbers for white
         
