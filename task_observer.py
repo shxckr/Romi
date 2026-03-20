@@ -1,3 +1,4 @@
+'''task_observer file creates the holds the observer class which is used to create and interface with observer objects'''
 import math
 from utime import ticks_us, ticks_diff
 
@@ -18,6 +19,7 @@ def dot_mv(M, v):
     return out
 
 def vec_add(a, b):
+    '''adds two vectors'''
     if len(a) != len(b):
         raise ValueError("vec_add dim mismatch: {} vs {}".format(len(a), len(b)))
     return [ai + bi for ai, bi in zip(a, b)]
@@ -40,8 +42,6 @@ class task_observer:
 
     Notes:
     - Units must match your MATLAB model.
-    - If MATLAB used radians, you MUST convert IMU deg -> rad here (default does).
-    - Encoders should be in meters (or radians) consistently with MATLAB.
     """
     def __init__(self,
                  left_encoder, right_encoder,
@@ -54,7 +54,7 @@ class task_observer:
                  publish_yhat=False,
                  yhat_shares=None,
                  imu_in_degrees=True):
-        
+        '''initializes '''
         self.left_enc = left_encoder
         self.right_enc = right_encoder
         self._sL_share = sL_share
@@ -79,13 +79,10 @@ class task_observer:
 
         self.Ad = Ad
         self.Bd = Bd
-
-        # Optional output model (debug)
         self.Cd = Cd
         self.Dd = Dd
         self.publish_yhat = publish_yhat
         self.yhat_shares = yhat_shares or {}
-        # self._statePredTime = statePredTime
         self._statePredX = statePredX
         self._statePredY = statePredY
         self._leftMotorGo = leftMotorGo
@@ -93,9 +90,6 @@ class task_observer:
         self._sL_yhat = sL_yhat
         self._sL_meas = sL_meas
         self._statetime = statetime
-        # self._statePredSL = statePredSL
-        # self._stateMeasXL = stateMeasXL
-        # infer dimensions
         self.nx = len(self.Ad)
         if self.nx == 0 or len(self.Ad[0]) != self.nx:
             raise ValueError("Ad must be square (nx x nx).")
@@ -120,10 +114,6 @@ class task_observer:
         # For the assignment, y has 4 elements: [xL, xR, psi, omega]
         self.ny = 4
 
-        # We expect u_star = [uL, uR, y...] -> length 2 + 4 = 6
-        # If your MATLAB export differs, we'll still build u_star to match Bd width.
-        # But by default we build the assignment ordering.
-        # You can adjust the packing in read_inputs() if needed.
     
     def read_inputs(self):
         """Read encoder + IMU + inputs, return (u_star, y_meas_dict)."""
@@ -190,37 +180,21 @@ class task_observer:
         Ax = dot_mv(self.Ad, self.xhat)
         Bu = dot_mv(self.Bd, u_star)
         self.xhat = vec_add(Ax, Bu)
-
-        # Extract estimated velocity and heading
-        #v = self.xhat[1] # make sure index matches your state order
         psi = self.xhat[1]
-
         now = ticks_us()
         dt = ticks_diff(now, self._last_t_us) / 1_000_000.0
         self.sim_time += dt
         self._last_t_us = now
 
-        # Optional: clamp dt so one glitch doesn't explode your integration
+        # clamp dt so one glitch doesn't explode your integration
         if dt <= 0 or dt > 5*self.Ts_nom:
             dt = self.Ts_nom
         
         v = (self.xhat[0]-self.xhatPrev)/dt
         self.xhatPrev = self.xhat[0]
-        
-
-        # Dead-reckoning integration
-        # self.X += self.Ts * v * math.cos(psi)
-        # self.Y += self.Ts * v * math.sin(psi)
         self.X += dt * v * math.cos(psi)
         self.Y += dt * v * math.sin(psi)
         self.idx += 1
-        # if self.idx == 10:
-        #     if not self._statePredX.full():
-        #         self._statetime.put(self.sim_time)
-        #         self._statePredX.put(self.X)
-        #         self._statePredY.put(self.Y)
-        #         # self.idx = 0 
-
 
     def compute_yhat(self, u_star):
         """Optional estimated output yhat = Cd*xhat + Dd*u_star"""
@@ -229,17 +203,11 @@ class task_observer:
         Cx = dot_mv(self.Cd, self.xhat)
         Du = dot_mv(self.Dd, u_star)
         self.yhat = vec_add(Cx, Du)
-        # if self.idx == 10:  # new
-        #     if not self._sL_yhat.full():
-        #         self._sL_yhat.put(self.yhat[0])
-        #         self.idx = 0 # new
-        #     return self.yhat
 
     def publish(self):
         """Publish state estimate to shares using the assignment’s state ordering:
            xhat = [x, v, psi, omega] (adjust if your state ordering differs!)
         """
-        # If your MATLAB state ordering is different, change these indices.
         try:
             self.out['s'].put(self.xhat[0])
             self.out['psi'].put(normalize_angle_rad(self.xhat[1]))
@@ -253,20 +221,12 @@ class task_observer:
             pass
 
     def run(self):
+        '''runs one instance of the observer task'''
         while True:
             try:
                 u_star, meas = self.read_inputs()
-                
                 self.step(u_star)
-                #self._stateMeasXL.put(meas['xL'])
-                #if self._leftMotorGo.get() and self._rightMotorGo.get():
-                    #print(f"xhat:\n\r s:{self.xhat[0]} psi:{self.xhat[1]} omega_L:{self.xhat[2]}, omega_R:{self.xhat[3]}\n\r X:{self.X}, Y:{self.Y}\n\r\r")
-                
                 self.publish()
-                #self._statePredX.put(self.X)
-                #self._statePredY.put(self.Y)
-# self._statePredTime.put( idk man insert some tickdiff stuff :)
-                # Optional yhat publishing for comparison/plotting
                 if self.publish_yhat:
                     yhat = self.compute_yhat(u_star)
                     if yhat is not None:
@@ -277,7 +237,6 @@ class task_observer:
                         if 'xR_hat' in sh: sh['xR_hat'].put(yhat[1])
                         if 'psi_hat' in sh: sh['psi_hat'].put(normalize_angle_rad(yhat[2]))
                         if 'omega_hat' in sh: sh['omega_hat'].put(yhat[3])
-                        #self._statePredSL.put(yhat[3])
             except Exception as e:
                 # Don’t let the task silently die — print once per failure
                 print("Observer error:", e)
