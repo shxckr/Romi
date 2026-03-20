@@ -75,11 +75,15 @@ class IMU:
     # CALIBRATION COEFFICIENTS
     # -------------------------------------------------
     def _read_u8(self, reg):
+        '''read bytes from imu as unsigned 8 bit integer through I2C'''
         buf = bytearray(1)
         self.i2c.mem_read(buf, self.addr, reg)
         return buf[0]
 
     def get_cal_coeffs(self):
+        """
+        Retrieve 22-byte calibration coefficients as binary data.
+        """
         prev = self._read_u8(self.OPR_MODE)  # read actual chip mode
 
         self.i2c.mem_write(self.CONFIG_MODE, self.addr, self.OPR_MODE)
@@ -92,49 +96,11 @@ class IMU:
         time.sleep_ms(20)
 
         return bytes(buf)
-    # def get_cal_coeffs(self):
-    #     """
-    #     Retrieve 22-byte calibration coefficients as binary data.
-    #     """
-    #     prev = self._mode
-
-    #     # Must be in CONFIG mode
-    #     self.i2c.mem_write(self.CONFIG_MODE, self.addr, self.OPR_MODE)
-    #     time.sleep_ms(20)
-
-    #     buf = bytearray(self.CALIB_LEN)
-    #     self.i2c.mem_read(buf, self.addr, self.CALIB_START)
-
-    #     # Restore previous mode
-    #     if prev is not None:
-    #         self.i2c.mem_write(prev, self.addr, self.OPR_MODE)
-    #         time.sleep_ms(20)
-
-    #     return bytes(buf)
 
     def set_cal_coeffs(self, coeffs):
-        # """
-        # Write 22-byte calibration coefficients back to IMU.
-        # """
-        # if not isinstance(coeffs, (bytes, bytearray)):
-        #     raise TypeError("coeffs must be bytes or bytearray")
-        # if len(coeffs) != self.CALIB_LEN:
-        #     raise ValueError("coeffs must be exactly 22 bytes")
-
-        # prev = self._mode
-
-        # # Enter CONFIG mode
-        # self.i2c.mem_write(self.CONFIG_MODE, self.addr, self.OPR_MODE)
-        # time.sleep_ms(20)
-
-        # # Write block
-        # self.i2c.mem_write(coeffs, self.addr, self.CALIB_START)
-        # time.sleep_ms(20)
-
-        # # Restore previous mode
-        # if prev is not None:
-        #     self.i2c.mem_write(prev, self.addr, self.OPR_MODE)
-        #     time.sleep_ms(20)
+        """
+        Write 22-byte calibration coefficients back to IMU.
+        """
         if not isinstance(coeffs, (bytes, bytearray)):
             raise TypeError("coeffs must be bytes or bytearray")
         if len(coeffs) != self.CALIB_LEN:
@@ -209,17 +175,9 @@ class IMU:
         return gx / 16.0, gy / 16.0, gz / 16.0
 
     def yaw_rate(self):
-        # """
-        # Returns yaw rate (Z gyro) in degrees/second.
-        # """
-        # buf = bytearray(6)
-        # self.i2c.mem_read(buf, self.addr, self.GYRO_START)
-
-        # gz = buf[4] | (buf[5] << 8)
-        # if gz & 0x8000:
-        #     gz -= 0x10000
-
-        # return gz / 16.0
+        """
+        Returns yaw rate (Z gyro) in degrees/second.
+        """
         buf = bytearray(2)
         self.i2c.mem_read(buf, self.addr, self.GYRO_START + 4)  # Z LSB at +4
         gz = buf[0] | (buf[1] << 8)
