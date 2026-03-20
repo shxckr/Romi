@@ -25,10 +25,13 @@ Robot Design and Repository
 ---------------------------
 Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!
 
-The GitHub repsoitory with all project files can be found here *add link*
+The GitHub repsoitory with all project files can be found `Here <https://github.com/spluttflob/ME405-Support>`_.
 
+.. figure:: ../_static/images/BB_pic.jpeg
+   :width: 400px
+   :align: center
 
-*add photo of romi and maybe the course*
+   Our team's robot (BB)
 
 
 .. toctree::

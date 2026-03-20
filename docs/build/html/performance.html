@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="task_UserButton" href="task_UserButton.html" /> 
+    <link rel="prev" title="main" href="main_sphinx.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,23 +47,25 @@
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="program_structure.html">Program Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController.html">heading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="IMU.html">imu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linesensors.html">line sensors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motor_driver.html">motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController_sphinx.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU_sphinx.html">imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver_sphinx.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="task_bumpsensor.html">task_bumpsensor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_courseTest.html">task_courseTest</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_imu.html">task_imu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_linefollow.html">task_linefollow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_motor.html">task_motor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_observer.html">task_observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_user.html">task_user</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_UserButton.html">task_UserButton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_bumpsensor_sphinx.html">task_bumpsensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_courseTest_sphinx.html">task_courseTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_imu_sphinx.html">task_imu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_linefollow_sphinx.html">task_linefollow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_motor_sphinx.html">task_motor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_observer_sphinx.html">task_observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_user_sphinx.html">task_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="main_sphinx.html">main</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Performance</a></li>
@@ -97,22 +99,24 @@
 <h1>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h1>
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
-<p>This project implements a modular control system for the Pololu
-Romi robot using MicroPython.</p>
-</section>
-<section id="issues-room-for-improvement">
-<h2>Issues / Room for Improvement<a class="headerlink" href="#issues-room-for-improvement" title="Link to this heading"></a></h2>
+<p>On demo day, BB made it to all five checkpoints on two of the three runs. The other run it made it to four of the five. It moved slowly compared to other teams robots, but the logic and methods implemented were repeatable and fairly reliable.</p>
 </section>
 <section id="video">
 <h2>Video<a class="headerlink" href="#video" title="Link to this heading"></a></h2>
+<p>The following video shows BB completing the course on demo day.</p>
 <div  class="sphinx-contrib-video-container align-center"><video controls="True" preload="auto" width="600"><source src="_images/run.mp4" type="video/mp4"></video></div></section>
+<section id="issues-room-for-improvement">
+<h2>Issues / Room for Improvement<a class="headerlink" href="#issues-room-for-improvement" title="Link to this heading"></a></h2>
+<p>Most of the issues our team encountered were related to tuning calibration rather than logic. It took time to determine the appropriate gains and setpoint speed for line-following the on the squiggly segment of the track. We also ran into memory shortage issues. Running the garbage collector and removing unnecessary queues helped clear space and maximize memory efficiency.</p>
+<p>Given more time, we would have sought to make BB complete the course faster and implement more states to complete the bonus cup challenges. We also would have configured a bluetooth module for wireless startup and UI. It also would have been interesting to experiment with the imu and observer outputs. We did not do extensive testing using the state estimator as the feedback for position control, but it would be an interesting experiment.</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="task_UserButton.html" class="btn btn-neutral float-left" title="task_UserButton" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="main_sphinx.html" class="btn btn-neutral float-left" title="main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

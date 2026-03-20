@@ -3,7 +3,7 @@ Performance
 
 Summary
 --------
-On demo day, BB made it to all five checkpoints on two of the three runs. The other run it made it to four of the five. It moved slowly compared to other teams robots, but the logic and methods implemented were repeatable and fairly reliable.
+On demo day, BB made it to all five checkpoints on two of the three runs. The other run it made it to four of the five. It moved slowly compared to other teams robots (~ 1 min 20 sec to complete the course), but the logic and methods implemented were repeatable and reliable.
 
 Video
 -----
