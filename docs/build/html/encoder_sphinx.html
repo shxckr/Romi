@@ -115,6 +115,48 @@
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#encoder_sphinx.encoder.position" title="Link to this definition"></a></dt>
+<dd><p>Total accumulated encoder count in ticks since the last zero().</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><a class="headerlink" href="#encoder_sphinx.encoder.delta" title="Link to this definition"></a></dt>
+<dd><p>Change in encoder counts measured during the last update().</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><a class="headerlink" href="#encoder_sphinx.encoder.dt" title="Link to this definition"></a></dt>
+<dd><p>Time interval in seconds between the two most recent update() calls.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.tim">
+<span class="sig-name descname"><span class="pre">tim</span></span><a class="headerlink" href="#encoder_sphinx.encoder.tim" title="Link to this definition"></a></dt>
+<dd><p>Hardware timer configured in encoder mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.chA_pin">
+<span class="sig-name descname"><span class="pre">chA_pin</span></span><a class="headerlink" href="#encoder_sphinx.encoder.chA_pin" title="Link to this definition"></a></dt>
+<dd><p>Pin connected to encoder channel A.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.chB_pin">
+<span class="sig-name descname"><span class="pre">chB_pin</span></span><a class="headerlink" href="#encoder_sphinx.encoder.chB_pin" title="Link to this definition"></a></dt>
+<dd><p>Pin connected to encoder channel B.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="encoder_sphinx.encoder.prev_count">
+<span class="sig-name descname"><span class="pre">prev_count</span></span><a class="headerlink" href="#encoder_sphinx.encoder.prev_count" title="Link to this definition"></a></dt>
+<dd><p>Most recent raw timer counter value.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="encoder_sphinx.encoder.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cbSRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder_sphinx.encoder.update" title="Link to this definition"></a></dt>

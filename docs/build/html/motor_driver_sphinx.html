@@ -106,6 +106,36 @@
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">motor_driver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PWM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DIR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSLP</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motor_driver_sphinx.motor_driver" title="Link to this definition"></a></dt>
 <dd><p>A class that can be instantiated inplace of motor driver objects</p>
 <p>Initializes a motor driver object</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.nSLP_pin">
+<span class="sig-name descname"><span class="pre">nSLP_pin</span></span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.nSLP_pin" title="Link to this definition"></a></dt>
+<dd><p>Sleep-control output pin for enabling or disabling the motor driver.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.DIR_pin">
+<span class="sig-name descname"><span class="pre">DIR_pin</span></span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.DIR_pin" title="Link to this definition"></a></dt>
+<dd><p>Direction-control output pin for setting motor rotation direction.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.PWM_pin">
+<span class="sig-name descname"><span class="pre">PWM_pin</span></span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.PWM_pin" title="Link to this definition"></a></dt>
+<dd><p>PWM output pin connected to the motor driver’s speed input.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.PWM_chan">
+<span class="sig-name descname"><span class="pre">PWM_chan</span></span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.PWM_chan" title="Link to this definition"></a></dt>
+<dd><p>Timer channel configured for PWM duty-cycle control.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.enabled" title="Link to this definition"></a></dt>
+<dd><p>True when the motor driver is enabled and allowed to drive the motor.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="motor_driver_sphinx.motor_driver.enable">
 <span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#motor_driver_sphinx.motor_driver.enable" title="Link to this definition"></a></dt>

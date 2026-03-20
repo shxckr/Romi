@@ -123,6 +123,54 @@ Heading error is wrapped to the range [-180, 180] degrees.</p>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.heading_share">
+<span class="sig-name descname"><span class="pre">heading_share</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.heading_share" title="Link to this definition"></a></dt>
+<dd><p>Shared variable containing the current measured heading in degrees.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.target_heading">
+<span class="sig-name descname"><span class="pre">target_heading</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.target_heading" title="Link to this definition"></a></dt>
+<dd><p>Desired heading relative to the initial heading offset, in degrees.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.base_speed">
+<span class="sig-name descname"><span class="pre">base_speed</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.base_speed" title="Link to this definition"></a></dt>
+<dd><p>Nominal forward wheel speed before heading correction is applied.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.kp">
+<span class="sig-name descname"><span class="pre">kp</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.kp" title="Link to this definition"></a></dt>
+<dd><p>Proportional gain for heading error correction.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.ki">
+<span class="sig-name descname"><span class="pre">ki</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.ki" title="Link to this definition"></a></dt>
+<dd><p>Integral gain for accumulated heading error correction.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.min_speed">
+<span class="sig-name descname"><span class="pre">min_speed</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.min_speed" title="Link to this definition"></a></dt>
+<dd><p>Minimum allowable wheel speed command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.max_speed">
+<span class="sig-name descname"><span class="pre">max_speed</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.max_speed" title="Link to this definition"></a></dt>
+<dd><p>Maximum magnitude allowed for wheel speed commands.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.dt" title="Link to this definition"></a></dt>
+<dd><p>Controller time step placeholder.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.get_wheel_speeds">
 <span class="sig-name descname"><span class="pre">get_wheel_speeds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.get_wheel_speeds" title="Link to this definition"></a></dt>
