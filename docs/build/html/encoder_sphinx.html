@@ -100,26 +100,21 @@
              
   <section id="module-encoder_sphinx">
 <span id="encoder"></span><h1>encoder<a class="headerlink" href="#module-encoder_sphinx" title="Link to this heading"></a></h1>
-<p>This file implements a  class to use in place of encoder objects</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="encoder_sphinx.ticks_us">
-<span class="sig-name descname"><span class="pre">ticks_us</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#encoder_sphinx.ticks_us" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="encoder_sphinx.ticks_diff">
-<span class="sig-name descname"><span class="pre">ticks_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder_sphinx.ticks_diff" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<p>This file defines a class used to create and manage encoder objects.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="encoder_sphinx.encoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chA_pin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chB_pin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder_sphinx.encoder" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class that can be instantiated in place of encoder objects</p>
-<p>Initialize the encoder object.
-:param tim: Timer number used for encoder mode.
-:param chA_pin: Pin connected to encoder channel A.
-:param chB_pin: Pin connected to encoder channel B.</p>
+<dd><p>A class that can be used to instantiate encoder objects.</p>
+<p>Initialize the encoder object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tim</strong> – Timer number used for encoder mode.</p></li>
+<li><p><strong>chA_pin</strong> – Pin connected to encoder channel A.</p></li>
+<li><p><strong>chB_pin</strong> – Pin connected to encoder channel B.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="encoder_sphinx.encoder.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cbSRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#encoder_sphinx.encoder.update" title="Link to this definition"></a></dt>

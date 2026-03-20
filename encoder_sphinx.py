@@ -1,4 +1,4 @@
-''' This file implements a  class to use in place of encoder objects
+''' This file defines a class used to create and manage encoder objects.
 '''
 try:
     from time import ticks_us, ticks_diff
@@ -45,16 +45,16 @@ except ImportError:
 import math
 
 class encoder:
-    ''' A class that can be instantiated in place of encoder objects
+    ''' A class that can be used to instantiate encoder objects.
     '''
     
     #def __init__(self):
     def __init__(self, tim, chA_pin, chB_pin):
         """Initialize the encoder object.
-          Args:
-            tim: Timer number used for encoder mode.
-            chA_pin: Pin connected to encoder channel A.
-            chB_pin: Pin connected to encoder channel B.
+
+        :param tim: Timer number used for encoder mode.
+        :param chA_pin: Pin connected to encoder channel A.
+        :param chB_pin: Pin connected to encoder channel B.
         """
         
 

@@ -27,13 +27,6 @@ Use the navigation sidebar to learn more about the design of our team's robot (a
 
 The GitHub repsoitory with all project files can be found `Here <https://github.com/spluttflob/ME405-Support>`_.
 
-.. figure:: ../_static/images/BB_pic.jpeg
-   :width: 400px
-   :align: center
-
-   Our team's robot (BB)
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

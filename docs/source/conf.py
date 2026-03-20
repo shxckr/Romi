@@ -23,7 +23,9 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
-    "sphinxcontrib.video"
+    "sphinxcontrib.video",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.githubpages",
 ]
 
 templates_path = ['_templates']
@@ -43,7 +45,7 @@ html_theme_options = {
 html_static_path = ['_static']
 
 autodoc_member_order = "bysource"
-autodoc_default_options = {"show-inheritance": False}
+autodoc_default_options = {}
 add_module_names = False
 autoclass_content = "both"
 autodoc_mock_imports = ["pyb", "utime", "micropython"]

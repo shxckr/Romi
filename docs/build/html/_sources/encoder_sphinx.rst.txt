@@ -3,4 +3,4 @@ encoder
 
 .. automodule:: encoder_sphinx
    :members:
-   :undoc-members:
+   :exclude-members: ticks_us, ticks_diff

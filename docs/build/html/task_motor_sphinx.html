@@ -49,7 +49,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController_sphinx.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU_sphinx.html">imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver_sphinx.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
@@ -63,6 +66,7 @@
 <li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="main_sphinx.html">main</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
@@ -101,8 +105,7 @@ run method implemented as a generator</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_motor_sphinx.task_motor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="motor_driver_sphinx.html#motor_driver_sphinx.motor_driver" title="motor_driver_sphinx.motor_driver"><span class="pre">motor_driver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">enc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="encoder_sphinx.html#encoder_sphinx.encoder" title="encoder_sphinx.encoder"><span class="pre">encoder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">goFlag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_setpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeValues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_effort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_motor_sphinx.task_motor" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class that represents a motor task. The task is responsible for reading
+<dd><p>A class that represents a motor task. The task is responsible for reading
 data from an encoder, performing closed loop control, and actuating a motor.
 Multiple objects of this class can be created to work with multiple motors
 and encoders.</p>

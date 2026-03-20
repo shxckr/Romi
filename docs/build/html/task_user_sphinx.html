@@ -49,7 +49,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController_sphinx.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU_sphinx.html">imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver_sphinx.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
@@ -63,6 +66,7 @@
 <li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="main_sphinx.html">main</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
@@ -103,8 +107,7 @@ triggers calibration and motion tasks, and prints logged data for analysis.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_user_sphinx.task_user">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leftMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightMotorGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightDataValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightTimeValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statePredY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sL_meas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoneCalSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shareHeading</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_user_sphinx.task_user" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class that represents a UI task. The task is responsible for reading user
+<dd><p>A class that represents a UI task. The task is responsible for reading user
 input over a serial port, parsing the input for single-character commands,
 and then manipulating shared variables to communicate with other tasks based
 on the user commands.</p>

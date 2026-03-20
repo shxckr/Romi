@@ -49,7 +49,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="program_structure.html">Program Structure</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drivers.html">Drivers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="encoder_sphinx.html">encoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HeadingHoldController_sphinx.html">heading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IMU_sphinx.html">imu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="linesensors_sphinx.html">line sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor_driver_sphinx.html">motors</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="tasks.html">Tasks</a><ul class="current">
@@ -63,6 +66,7 @@
 <li class="toctree-l3"><a class="reference internal" href="task_UserButton_sphinx.html">task_UserButton</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="main_sphinx.html">main</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
@@ -106,8 +110,7 @@ feedback to determine state transitions and command wheel setpoints.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_courseTest_sphinx.task_course">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sL_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sR_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yolo_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_sensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_heading_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_yaw_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initHeadSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shUB_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseSh</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_courseTest_sphinx.task_course" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Cooperative task implementing the robot’s course state machine.</p>
+<dd><p>Cooperative task implementing the robot’s course state machine.</p>
 <p>This task manages the robot through a sequence of maneuvers including
 line following, heading-hold motion, garage entry, collision-triggered
 backup, turning, and final return behavior. The task interacts with
