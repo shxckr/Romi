@@ -100,7 +100,6 @@
              
   <section id="module-HeadingHoldController_sphinx">
 <span id="heading"></span><h1>heading<a class="headerlink" href="#module-HeadingHoldController_sphinx" title="Link to this heading"></a></h1>
-<p>This file defines a class used to control the robot’s direction of motion based on heading measurements.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">HeadingHoldController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heading_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initHeadSh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_heading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ki</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController" title="Link to this definition"></a></dt>
@@ -109,20 +108,6 @@
 aligned with a target heading using proportional-integral control.
 Heading error is wrapped to the range [-180, 180] degrees.</p>
 <p>Initialize the heading hold controller.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>heading_share</strong> – Shared variable containing the current heading (degrees).</p></li>
-<li><p><strong>initHeadSh</strong> – Shared variable storing the initial heading offset (degrees).</p></li>
-<li><p><strong>target_heading</strong> – Desired heading relative to the initial heading (degrees).</p></li>
-<li><p><strong>base_speed</strong> – Nominal forward speed for both wheels.</p></li>
-<li><p><strong>kp</strong> – Proportional gain.</p></li>
-<li><p><strong>ki</strong> – Integral gain.</p></li>
-<li><p><strong>min_speed</strong> – Minimum allowable wheel speed (currently unused).</p></li>
-<li><p><strong>max_speed</strong> – Maximum magnitude of wheel speed.</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="HeadingHoldController_sphinx.HeadingHoldController.heading_share">
 <span class="sig-name descname"><span class="pre">heading_share</span></span><a class="headerlink" href="#HeadingHoldController_sphinx.HeadingHoldController.heading_share" title="Link to this definition"></a></dt>

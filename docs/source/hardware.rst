@@ -29,4 +29,9 @@ Wiring
 ----------
 The wiring diagram for the microcontroller is depicted below.
 
-*add wiring diagram*
+.. figure:: _static/images/WiringDiagram.jpg
+   :width: 450px
+   :align: center
+   :scale: 110%
+
+   Wiring diagram

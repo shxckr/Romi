@@ -103,10 +103,22 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="task_bumpsensor_sphinx.task_bumpsensor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_bumpsensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left_pins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_pins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightGo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_bumpsensor_sphinx.task_bumpsensor" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p>This class allows easy integration of an array of bump sensors seperated into left and right sides. It
+creates a bump sensor object that raises a flag to tell other tasks when a bump sensor is hit.</p>
+<p>Arguements:
+left_pins: list of pins connected to the left bump sensors on Romi
+right_pins: list of pins connected to the right bump sensors on Romi
+sp_left: a share that allows the bump sensors to alter the set point of the left motor
+sp_right: a share that allows the bump sensors to alter the set point of the right motor
+collition_mode: a share that acts as a flag that is set true if any of the bump sensors are hit
+leftGo: a share that acts aa a boolean flag to allow the left motor to run when set high (1)
+rightGo: a share that acts as a boolean flag to allow the right motor to run when set high (1)</p>
+<p>Initializes a bump sensor object</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="task_bumpsensor_sphinx.task_bumpsensor.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_bumpsensor_sphinx.task_bumpsensor.run" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>runs one instance of polling the bump sensors</p>
+</dd></dl>
 
 </dd></dl>
 

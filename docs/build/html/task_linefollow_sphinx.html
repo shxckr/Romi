@@ -100,6 +100,7 @@
              
   <section id="module-task_linefollow_sphinx">
 <span id="task-linefollow"></span><h1>task_linefollow<a class="headerlink" href="#module-task_linefollow_sphinx" title="Link to this heading"></a></h1>
+<p>This file contains the instructions for Romi’s line following task.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="task_linefollow_sphinx.task_linefollow">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">task_linefollow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="linesensors_sphinx.html#linesensors_sphinx.LineSensors" title="linesensors_sphinx.LineSensors"><span class="pre">LineSensors</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">leftGo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightGo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_left</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp_right</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroidTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Queue" title="task_share.Queue"><span class="pre">Queue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_calD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">yolo_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_lineKi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoneCalSh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseSh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="task_share.html#task_share.Share" title="task_share.Share"><span class="pre">Share</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#task_linefollow_sphinx.task_linefollow" title="Link to this definition"></a></dt>
@@ -111,10 +112,31 @@ spR = base + turn</p>
 </dd>
 </dl>
 <p>Writes spL/spR into Shares used by motor controllers.</p>
+<p>Initializes the task_linefollow which works by using the readings from IR sensors, normalizes the readings according
+to the light and dark calibrations, calculates the centroid of the line as an error distance from the center of the IR
+sensor array, and setting the appropriate setpoints of the left and right motors according to a Proportional Intetegral
+controller.</p>
+<p>Arguements:
+sensors: an array object of IR sensers
+leftGo: a boolean share that determines when the left motor is allowed to run (high if enabled)
+rightGo: a boolean share that determines when the right motor is allowed to run (high if enabled)
+sp_left: a float share that determines the setpoint of the left motor
+sp_right: a float share that determines the setpoint of the right motor
+centroidData: a float queue that stores the position of the centroid relative to the center of Romi’s sensors
+centroidTime: a queue that stores time stamps for centroid data readings
+share_calL: a boolean flag that is high when a request is sent to calibrate the IR sensors for Light readings
+share_calD: a boolean flag that is high when a request is sent to calibrate the IR sensors for Dark readings
+collision_mode: a boolean flag that is high when the motors are controlled by the bumpsensors
+yolo_mode: a boolean flag that is high when the motors are being controled by courseTest Task
+share_lineKp: a float share that holds the proportional gain for line following
+share_lineKi: a float share that holds the integral gain for line following
+DoneCalSh: a boolean share that tells the UI task when calibration is done
+baseSh: a float share that holed the base speed of Romi in mm/s</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="task_linefollow_sphinx.task_linefollow.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#task_linefollow_sphinx.task_linefollow.run" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Runs one iteration of the line following task</p>
+</dd></dl>
 
 </dd></dl>
 

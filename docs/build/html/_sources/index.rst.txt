@@ -28,7 +28,7 @@ Use the navigation sidebar to learn more about the design of our team's robot (a
 The GitHub repsoitory with all project files can be found `here <https://github.com/shxckr/Romi>`_.
 
 .. figure:: _static/images/BB.jpg
-   :width: 300px
+   :width: 350px
    :align: center
    :scale: 100%
 
