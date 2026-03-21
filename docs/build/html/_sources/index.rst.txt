@@ -11,7 +11,7 @@ The robots in this course use the Romi kit from Pololu and several other Pololu 
 
 Course Description
 ------------------
-The course is defined by black marks printed on white grid paper. For most of the course, a thick line defines a path between checkpoints. Infrared sensors can be used to detect the line, enabling the robot to navigate the couse via line following. Curves in the lines require fast feedback and tightly tuned control. The section of the course with no line is referred to as the "parking garage." In this section the robot must use an alternative means of navigation to maneuver under an aluminum structure. At the end of the parking garage is a wall. The robot must successfully correct its motion after hitting and/or detecting the wall. To complete the bounus challenges, the robot must move plastic cups into/out of the dashed circles on the course.
+The course is defined by black marks printed on white grid paper. For most of the course, a thick line defines a path between checkpoints. Infrared sensors can be used to detect the line, enabling the robot to navigate the couse via line following. The section of the course with no line is referred to as the "parking garage." In this section, the robot must use an alternative means of navigation to maneuver under an aluminum structure. At the end of the parking garage is a wall. The robot must successfully correct its motion after hitting and/or detecting the wall. To complete the bounus challenges, the robot must move plastic cups into/out of the dashed circles on the course.
 
 .. figure:: _static/images/game_track_print.jpg
    :width: 400px
@@ -26,6 +26,13 @@ Robot Design and Repository
 Use the navigation sidebar to learn more about the design of our team's robot (affectionately called BB, or Bumble Bee) and its performance on the course!
 
 The GitHub repsoitory with all project files can be found `here <https://github.com/shxckr/Romi>`_.
+
+.. figure:: _static/images/BB.jpg
+   :width: 300px
+   :align: center
+   :scale: 100%
+
+   Our team's robot, BB
 
 .. toctree::
    :maxdepth: 2

@@ -3,7 +3,7 @@ Program Structure
 
 Overview
 --------
-This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository (`linked here <https://github.com/spluttflob/ME405-Support>`_). The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot's behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely. All files from Dr. Ridgely can be found on his GitHub repository.
+This project implements a modular control system for the robot using MicroPython on an STM32 Nucleo development board. The microcontroller uses customized firmware files provided by Dr. John Ridgely. The files are available on his ME 405 repository (`linked here <https://github.com/spluttflob/ME405-Support>`_). The program is comprised of several hardware drivers and task files. The drivers are software classes that handle hardware configuruation, allowing for higher-level logic in the tasks. The tasks utilize functions created in the drivers to implement the logic that controls the robot's behavior. They control motor speed, read and respond to sensor data, run the state estimator, and respond to user input. All objects in the program are instantiated in a single file called main, which runs each time the robot is powered on. A scheduler file implements cooperative multitasking, running task objects based on their assigned priority and period. The scheduler driver and task can also be found in the documentation provided by Dr. Ridgely.
 
 Course Strategy
 --------------
@@ -32,7 +32,7 @@ Line Following
 ~~~~~~~~~~~~~~
 Most of the course is navigated by line following. Readings from the IR sensor array are used to calculate the normalized centroid of the reflectance intensity. The centroid gives a quantitatve representation of the position error relative to the center of the line. This error is fed into a PI controller that corrects the position by adjusting the setpoints for the left and right motor speeds.
 
-The line follow task is disabled in sections of the course that utilize other navigation strategies. When certain states are reached, a flag is raised to signal that linefollowing should be turned off. The line follow task checks this flag before each run and only runs if the flag is false. This happens a few times throughout the course, in the parking garage, for instance, and towards the end of the course when the robot returns to the starting position.
+The line follow task is disabled in sections of the course that utilize other navigation strategies. When these states are reached, a flag is raised to signal that linefollowing should be turned off. The line follow task checks this flag before each run and only runs if the flag is false. This happens a few times throughout the course, in the parking garage, for instance, and towards the end of the course when the robot returns to the starting position.
 
 Heading Control
 ~~~~~~~~~~~~~~~
@@ -52,7 +52,7 @@ maybe other STD*
 
 Tasks and Drivers
 ----------
-The drivers and tasks created for this program can be explored in depth using the navigation tree on the left or the links below. The methods and attributes that belong to each class are each described in breif in each tab.
+The drivers and tasks created for this program can be explored in depth using the navigation tree on the left or the links below. The methods and attributes that belong to each class are each described in brief in each tab.
 
 .. toctree::
    :maxdepth: 1

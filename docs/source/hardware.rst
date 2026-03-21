@@ -27,4 +27,6 @@ All components are mounted to the Romi chassis with screws, standoffs, and nuts.
 
 Wiring
 ----------
+The wiring diagram for the microcontroller is depicted below.
+
 *add wiring diagram*

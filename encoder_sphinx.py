@@ -51,10 +51,6 @@ class encoder:
     #def __init__(self):
     def __init__(self, tim, chA_pin, chB_pin):
         """Initialize the encoder object.
-
-        :param tim: Timer number used for encoder mode.
-        :param chA_pin: Pin connected to encoder channel A.
-        :param chB_pin: Pin connected to encoder channel B.
         """
         
         #: Internal position accumulator placeholder.
@@ -123,10 +119,7 @@ class encoder:
         self.position += self.delta
         self.prev_count = count
     def get_position(self):
-        ''' Returns the current position of the encoder
-        
-        Returns:
-            int The current position of the encoder in units of ticks
+        ''' Returns the current position of the encoder in units of ticks
         '''
         return self.position * (math.pi * 70) / 1440
     def get_velocity(self):

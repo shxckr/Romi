@@ -34,11 +34,6 @@ class LineSensors:
     """Driver for a line sensor array using ADC readings."""
     def __init__(self, IN_PINS, samples=4):
         """Initialize the line sensor array.
-
-        Args:
-            IN_PINS: List of pin names connected to the line sensors.
-            samples: Number of ADC readings to average for each sensor
-                to reduce noise.
         """
         #: List of microcontroller pin names connected to the line sensors.
         self.IN_PINS = IN_PINS

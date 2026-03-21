@@ -1,4 +1,3 @@
-""" This file defines a class used to control the robot's direction of motion based on heading measurements."""
 class HeadingHoldController:
     """PI controller for maintaining a desired robot heading.
 
@@ -9,16 +8,6 @@ class HeadingHoldController:
     def __init__(self, heading_share, initHeadSh, target_heading=180.0,
                  base_speed=180.0, kp=2.0, ki=0,min_speed=100.0, max_speed=300.0):
         """Initialize the heading hold controller.
-
-        Args:
-            heading_share: Shared variable containing the current heading (degrees).
-            initHeadSh: Shared variable storing the initial heading offset (degrees).
-            target_heading: Desired heading relative to the initial heading (degrees).
-            base_speed: Nominal forward speed for both wheels.
-            kp: Proportional gain.
-            ki: Integral gain.
-            min_speed: Minimum allowable wheel speed (currently unused).
-            max_speed: Maximum magnitude of wheel speed.
         """
         #: Shared variable containing the current measured heading in degrees.
         self.heading_share = heading_share
