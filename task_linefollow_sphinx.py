@@ -1,3 +1,6 @@
+'''
+This file contains the instructions for Romi's line following task.
+'''
 try:
     import micropython
 except Exception:
@@ -47,6 +50,31 @@ class task_linefollow:
                  sp_left: Share, sp_right: Share, centroidData: Queue,centroidTime: Queue,
                  share_calL, share_calD, collision_mode:Share, yolo_mode:Share, share_lineKp: Share, share_lineKi: Share,
                  DoneCalSh: Share, baseSh: Share):
+        '''
+        Initializes the task_linefollow which works by using the readings from IR sensors, normalizes the readings according
+        to the light and dark calibrations, calculates the centroid of the line as an error distance from the center of the IR 
+        sensor array, and setting the appropriate setpoints of the left and right motors according to a Proportional Intetegral 
+        controller.
+        
+        Arguements:
+        sensors: an array object of IR sensers
+        leftGo: a boolean share that determines when the left motor is allowed to run (high if enabled)
+        rightGo: a boolean share that determines when the right motor is allowed to run (high if enabled)
+        sp_left: a float share that determines the setpoint of the left motor
+        sp_right: a float share that determines the setpoint of the right motor
+        centroidData: a float queue that stores the position of the centroid relative to the center of Romi's sensors
+        centroidTime: a queue that stores time stamps for centroid data readings
+        share_calL: a boolean flag that is high when a request is sent to calibrate the IR sensors for Light readings
+        share_calD: a boolean flag that is high when a request is sent to calibrate the IR sensors for Dark readings
+        collision_mode: a boolean flag that is high when the motors are controlled by the bumpsensors
+        yolo_mode: a boolean flag that is high when the motors are being controled by courseTest Task
+        share_lineKp: a float share that holds the proportional gain for line following
+        share_lineKi: a float share that holds the integral gain for line following
+        DoneCalSh: a boolean share that tells the UI task when calibration is done
+        baseSh: a float share that holed the base speed of Romi in mm/s
+        
+        
+        '''
 
         self._state = S0_INIT
         self.collision_mode = collision_mode    # collision detection flag
@@ -75,11 +103,15 @@ class task_linefollow:
 
     @staticmethod
     def _clamp(x, lo, hi):
+        '''limits the setpoints of each wheel to remain within the range [lo, hi]'''
         if x < lo: return lo
         if x > hi: return hi
         return x
 
     def run(self):
+        '''
+        Runs one iteration of the line following task
+        '''
         while True:
             if self.collision_mode.get() == 1:
                 # bumper is in charge; do NOT write sp_left/sp_right
