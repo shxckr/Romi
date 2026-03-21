@@ -43,12 +43,10 @@ Diagrams
 --------
 The task diagram below outlines the flow of information between tasks.
 
-*task diagram*
-
-The state-transition diagram below outlines the logic implemented by the course task to navigate the track.
-
-*course task STD
-maybe other STD*
+.. figure:: _static/images/TaskDiagram.jpg
+   :width: 450px
+   :align: center
+   :scale: 110%
 
 Tasks and Drivers
 ----------
